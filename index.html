@@ -105,7 +105,7 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 16px;
+            gap: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
             border: 1px solid #e2ecf5;
         }
@@ -126,7 +126,7 @@
             padding: 6px 24px;
             gap: 12px;
             flex: 1;
-            min-width: 200px;
+            min-width: 180px;
             border: 1px solid #e2eaf1;
         }
         .search-field i {
@@ -145,17 +145,17 @@
         }
 
         .filter-select {
-            padding: 10px 20px;
+            padding: 10px 18px;
             border-radius: 48px;
             border: 1px solid #e2eaf1;
             background: #f8fafd;
             font-family: inherit;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 500;
             color: #1a5c7a;
             cursor: pointer;
             outline: none;
-            min-width: 150px;
+            min-width: 140px;
             transition: 0.15s;
         }
         .filter-select:focus {
@@ -172,6 +172,21 @@
             color: #1a5c7a;
             white-space: nowrap;
         }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .status-registered { background: #e3f2fd; color: #1565c0; }
+        .status-special { background: #f3e5f5; color: #6a1b9a; }
+        .status-visa { background: #e8f5e9; color: #2e7d32; }
+        .status-approved { background: #fff8e1; color: #f57f17; }
+        .status-canceled { background: #ffebee; color: #c62828; }
+        .status-postponed { background: #fff3e0; color: #e65100; }
 
         .loading-overlay {
             position: fixed;
@@ -611,7 +626,19 @@
                 <input type="text" id="searchGlobal" placeholder="جستجو در تمام اطلاعات...">
             </div>
             <select class="filter-select" id="cartableFilter">
-                <option value="all">همه</option>
+                <option value="all">همه کارتابل‌ها</option>
+            </select>
+            <select class="filter-select" id="statusFilter">
+                <option value="all">همه وضعیت‌ها</option>
+                <option value="ثبت اولیه">✅ ثبت اولیه</option>
+                <option value="ثبت اختصاص">🟣 ثبت اختصاص</option>
+                <option value="ثبت روادید">🟢 ثبت روادید</option>
+                <option value="تایید روادید">📋 تایید روادید</option>
+                <option value="کنسل شد">❌ کنسل شد</option>
+                <option value="به تعویق افتاد">⏳ به تعویق افتاد</option>
+            </select>
+            <select class="filter-select" id="relatedFilter">
+                <option value="all">همه مربوط نفر</option>
             </select>
         </div>
         <div class="counter-badge" id="recordsCounter">۰ مشتری</div>
@@ -637,6 +664,8 @@
                     <th style="min-width: 130px;">کد پیگیری</th>
                     <th style="min-width: 130px;">کد اختصاصی</th>
                     <th style="min-width: 130px;">کد رهگیری</th>
+                    <th style="min-width: 120px;">وضعیت</th>
+                    <th style="min-width: 110px;">مربوط نفر</th>
                     <th style="min-width: 100px;">کارتابل</th>
                     <th style="min-width: 110px;">مبلغ کل (AFN)</th>
                     <th style="min-width: 110px;">رسید کل (AFN)</th>
@@ -645,7 +674,7 @@
                 </tr>
             </thead>
             <tbody id="tableDynamicBody">
-                <tr><td colspan="21" style="text-align:center; padding:48px;">در حال اتصال به دیتابیس...<br><div class="spinner" style="width:30px;height:30px;margin:10px auto;"></div></td></tr>
+                <tr><td colspan="23" style="text-align:center; padding:48px;">در حال اتصال به دیتابیس...<br><div class="spinner" style="width:30px;height:30px;margin:10px auto;"></div></td></tr>
             </tbody>
         </table>
     </div>
@@ -677,26 +706,32 @@
     const database = getDatabase(app);
     const customersRef = ref(database, 'visa_customers');
     const cartablesRef = ref(database, 'visa_cartables');
+    const relatedRef = ref(database, 'visa_related');
 
     const defaultCartables = ['سید محمد', 'سید حسن', 'محمد افشار', 'مهدی', 'سید عبدالله'];
     let cartableList = [];
+
+    // مربوط نفرها خالی شروع می‌شود
+    let relatedList = [];
+
+    const statusOptions = ['ثبت اولیه', 'ثبت اختصاص', 'ثبت روادید', 'تایید روادید', 'کنسل شد', 'به تعویق افتاد'];
 
     let customers = [];
     let currentPage = 1;
     const rowsPerPage = 15;
     let searchKeyword = "";
     let selectedCartable = "all";
+    let selectedStatus = "all";
+    let selectedRelated = "all";
 
     // بارگذاری کارتابل‌ها از Firebase
     function loadCartablesFromFirebase() {
         onValue(cartablesRef, (snapshot) => {
             const data = snapshot.val();
             if(data) {
-                // اگر کارتابل‌ها به صورت آرایه ذخیره شده باشند
                 if(Array.isArray(data)) {
                     cartableList = data;
                 } else {
-                    // اگر به صورت آبجکت ذخیره شده باشند
                     const keys = Object.keys(data);
                     cartableList = [];
                     for(var i = 0; i < keys.length; i++) {
@@ -704,31 +739,25 @@
                     }
                 }
             } else {
-                // اگر هیچ کارتابلی در دیتابیس نبود، کارتابل‌های پیش‌فرض را اضافه می‌کنیم
                 cartableList = [...defaultCartables];
                 saveCartablesToFirebase();
             }
             updateFilterOptions();
         }, (error) => {
             console.error("خطا در بارگذاری کارتابل‌ها:", error);
-            // در صورت خطا، از کارتابل‌های پیش‌فرض استفاده می‌کنیم
             cartableList = [...defaultCartables];
             updateFilterOptions();
         });
     }
 
-    // ذخیره کارتابل‌ها در Firebase
     async function saveCartablesToFirebase() {
         try {
             await set(cartablesRef, cartableList);
-            showToast('کارتابل‌ها ذخیره شدند');
         } catch(error) {
             console.error("خطا در ذخیره کارتابل‌ها:", error);
-            alert("خطا در ذخیره کارتابل‌ها");
         }
     }
 
-    // افزودن کارتابل جدید به Firebase
     async function addCartableToFirebase(newCartable) {
         if(cartableList.indexOf(newCartable) !== -1) {
             alert('این کارتابل قبلاً وجود دارد');
@@ -741,11 +770,58 @@
         return true;
     }
 
+    // بارگذاری مربوط نفرها از Firebase (خالی)
+    function loadRelatedFromFirebase() {
+        onValue(relatedRef, (snapshot) => {
+            const data = snapshot.val();
+            if(data) {
+                if(Array.isArray(data)) {
+                    relatedList = data;
+                } else {
+                    const keys = Object.keys(data);
+                    relatedList = [];
+                    for(var i = 0; i < keys.length; i++) {
+                        relatedList.push(data[keys[i]]);
+                    }
+                }
+            } else {
+                // خالی می‌گذاریم
+                relatedList = [];
+                saveRelatedToFirebase();
+            }
+            updateRelatedFilterOptions();
+        }, (error) => {
+            console.error("خطا در بارگذاری مربوط نفرها:", error);
+            relatedList = [];
+            updateRelatedFilterOptions();
+        });
+    }
+
+    async function saveRelatedToFirebase() {
+        try {
+            await set(relatedRef, relatedList);
+        } catch(error) {
+            console.error("خطا در ذخیره مربوط نفرها:", error);
+        }
+    }
+
+    async function addRelatedToFirebase(newRelated) {
+        if(relatedList.indexOf(newRelated) !== -1) {
+            alert('این مربوط نفر قبلاً وجود دارد');
+            return false;
+        }
+        relatedList.push(newRelated);
+        await saveRelatedToFirebase();
+        updateRelatedFilterOptions();
+        showToast('مربوط نفر "' + newRelated + '" اضافه شد');
+        return true;
+    }
+
     function updateFilterOptions() {
         const select = document.getElementById('cartableFilter');
         if(!select) return;
         const currentValue = select.value;
-        select.innerHTML = '<option value="all">همه</option>';
+        select.innerHTML = '<option value="all">همه کارتابل‌ها</option>';
         for(var i = 0; i < cartableList.length; i++) {
             var option = document.createElement('option');
             option.value = cartableList[i];
@@ -757,6 +833,25 @@
         } else {
             select.value = 'all';
             selectedCartable = 'all';
+        }
+    }
+
+    function updateRelatedFilterOptions() {
+        const select = document.getElementById('relatedFilter');
+        if(!select) return;
+        const currentValue = select.value;
+        select.innerHTML = '<option value="all">همه مربوط نفر</option>';
+        for(var i = 0; i < relatedList.length; i++) {
+            var option = document.createElement('option');
+            option.value = relatedList[i];
+            option.text = relatedList[i];
+            select.appendChild(option);
+        }
+        if(currentValue && relatedList.indexOf(currentValue) !== -1) {
+            select.value = currentValue;
+        } else {
+            select.value = 'all';
+            selectedRelated = 'all';
         }
     }
 
@@ -775,6 +870,29 @@
             return parts[0] + '/' + parts[1] + '/' + parts[2];
         }
         return dateStr;
+    }
+
+    function getStatusBadge(status) {
+        if(!status) return '<span class="status-badge status-registered">✅ ثبت اولیه</span>';
+        const map = {
+            'ثبت اولیه': 'status-registered',
+            'ثبت اختصاص': 'status-special',
+            'ثبت روادید': 'status-visa',
+            'تایید روادید': 'status-approved',
+            'کنسل شد': 'status-canceled',
+            'به تعویق افتاد': 'status-postponed'
+        };
+        const iconMap = {
+            'ثبت اولیه': '✅',
+            'ثبت اختصاص': '🟣',
+            'ثبت روادید': '🟢',
+            'تایید روادید': '📋',
+            'کنسل شد': '❌',
+            'به تعویق افتاد': '⏳'
+        };
+        const cls = map[status] || 'status-registered';
+        const icon = iconMap[status] || '✅';
+        return `<span class="status-badge ${cls}">${icon} ${status}</span>`;
     }
 
     function showToast(message) {
@@ -845,6 +963,18 @@
             });
         }
         
+        if(selectedStatus !== 'all') {
+            list = list.filter(function(c) {
+                return c.status === selectedStatus;
+            });
+        }
+        
+        if(selectedRelated !== 'all') {
+            list = list.filter(function(c) {
+                return c.related === selectedRelated;
+            });
+        }
+        
         if(searchKeyword.trim()) {
             var kw = searchKeyword.trim().toLowerCase();
             var filtered = [];
@@ -863,6 +993,8 @@
                    (c.cartable && c.cartable.toLowerCase().indexOf(kw) !== -1) ||
                    (c.job && c.job.toLowerCase().indexOf(kw) !== -1) ||
                    (c.date && c.date.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.status && c.status.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.related && c.related.toLowerCase().indexOf(kw) !== -1) ||
                    (c.fatherName && c.fatherName.toLowerCase().indexOf(kw) !== -1) ||
                    (c.grandFatherName && c.grandFatherName.toLowerCase().indexOf(kw) !== -1) ||
                    (c.motherName && c.motherName.toLowerCase().indexOf(kw) !== -1)) {
@@ -899,7 +1031,7 @@
         if(!tbody) return;
         
         if(pageItems.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="21" style="text-align:center; padding:48px;">✨ هیچ مشتری یافت نشد</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="23" style="text-align:center; padding:48px;">✨ هیچ مشتری یافت نشد</td></tr>';
             document.getElementById("recordsCounter").innerHTML = "۰ مشتری";
             document.getElementById("pageInfoText").innerHTML = "صفحه ۰ از ۰";
             return;
@@ -910,6 +1042,7 @@
             var cust = pageItems[i];
             var rowNumber = filtered.length - (start + i);
             var totals = calculateTotals(cust);
+            var statusBadge = getStatusBadge(cust.status || 'ثبت اولیه');
             
             html += '<tr>' +
                 '<td data-copy="ردیف" data-copy-value="' + rowNumber + '">' + rowNumber + '</td>' +
@@ -928,6 +1061,8 @@
                 '<td data-copy="کد پیگیری" data-copy-value="' + (cust.trackingCode1 || '') + '"><span class="code-hidden" data-fullcode="' + (cust.trackingCode1 || '') + '">' + hideCode(cust.trackingCode1) + '</span></td>' +
                 '<td data-copy="کد اختصاصی" data-copy-value="' + (cust.specialCode || '') + '"><span class="code-hidden" data-fullcode="' + (cust.specialCode || '') + '">' + hideCode(cust.specialCode) + '</span></td>' +
                 '<td data-copy="کد رهگیری" data-copy-value="' + (cust.trackingCode2 || '') + '"><span class="code-hidden" data-fullcode="' + (cust.trackingCode2 || '') + '">' + hideCode(cust.trackingCode2) + '</span></td>' +
+                '<td data-copy="وضعیت" data-copy-value="' + (cust.status || 'ثبت اولیه') + '">' + statusBadge + '</td>' +
+                '<td data-copy="مربوط نفر" data-copy-value="' + (cust.related || '') + '">' + (cust.related || '-') + '</td>' +
                 '<td data-copy="کارتابل" data-copy-value="' + (cust.cartable || '') + '">' + (cust.cartable || '-') + '</td>' +
                 '<td data-copy="مبلغ کل" data-copy-value="' + (cust.amount || '0') + ' افغانی" class="afghani-symbol">' + formatAfghani(cust.amount) + '</td>' +
                 '<td data-copy="رسید کل" data-copy-value="' + totals.totalReceipt + ' افغانی" class="afghani-symbol">' + formatAfghani(totals.totalReceipt) + '</td>' +
@@ -1002,10 +1137,9 @@
     
     async function loadFromFirebase() {
         showLoading(true);
-        // بارگذاری کارتابل‌ها
         loadCartablesFromFirebase();
+        loadRelatedFromFirebase();
         
-        // بارگذاری مشتریان
         onValue(customersRef, (snapshot) => {
             const data = snapshot.val();
             customers = [];
@@ -1026,6 +1160,9 @@
                     const cust = tempCustomers[j];
                     if(!cust.createdAt) {
                         cust.createdAt = baseTime + (j * 1000 * 60 * 60 * 24 * 30);
+                    }
+                    if(!cust.status) {
+                        cust.status = 'ثبت اولیه';
                     }
                     customers.push(cust);
                 }
@@ -1055,7 +1192,11 @@
             }
         } catch(error) {
             console.error(error);
-            alert("خطا در ذخیره اطلاعات");
+            if(error.code === 'PERMISSION_DENIED') {
+                alert("خطا: دسترسی به دیتابیس وجود ندارد. لطفاً قوانین Firebase را تنظیم کنید.");
+            } else {
+                alert("خطا در ذخیره اطلاعات: " + error.message);
+            }
         }
         showLoading(false);
     }
@@ -1175,8 +1316,8 @@
             "تاریخ", "date", "تخلص", "lastName", "اسم", "firstName", "نام پدر", "fatherName",
             "نام پدر کلان", "grandFatherName", "نام مادر", "motherName", "تماس AF", "phoneAF", "تماس ایران", "phoneIran",
             "آدرس افغانستان", "addressAF", "آدرس ایران", "addressIran", "شغل", "job", "توضیحات", "description", 
-            "کد رهگیری", "trackingCode1", "کد اختصاصی", "specialCode", "کد رهگیری", "trackingCode2",
-            "کارتابل", "cartable", "مبلغ کل (AFN)", "amount"
+            "کد پیگیری", "trackingCode1", "کد اختصاصی", "specialCode", "کد رهگیری", "trackingCode2",
+            "وضعیت", "status", "مربوط نفر", "related", "کارتابل", "cartable", "مبلغ کل (AFN)", "amount"
         ];
         
         var gridHtml = '<div class="form-grid-double">';
@@ -1188,6 +1329,32 @@
             if(fieldName === 'date') {
                 value = value || today;
                 gridHtml += '<div class="field-group-simple"><label>' + label + ' (میلادی)</label><input type="text" name="' + fieldName + '" value="' + value + '" placeholder="مثال: 2024-01-15"></div>';
+            } else if(fieldName === 'status') {
+                var statusOptionsHtml = '';
+                var statusList = ['ثبت اولیه', 'ثبت اختصاص', 'ثبت روادید', 'تایید روادید', 'کنسل شد', 'به تعویق افتاد'];
+                for(var s = 0; s < statusList.length; s++) {
+                    var selected = (value === statusList[s]) ? 'selected' : '';
+                    var icon = '';
+                    if(statusList[s] === 'ثبت اولیه') icon = '✅';
+                    else if(statusList[s] === 'ثبت اختصاص') icon = '🟣';
+                    else if(statusList[s] === 'ثبت روادید') icon = '🟢';
+                    else if(statusList[s] === 'تایید روادید') icon = '📋';
+                    else if(statusList[s] === 'کنسل شد') icon = '❌';
+                    else if(statusList[s] === 'به تعویق افتاد') icon = '⏳';
+                    statusOptionsHtml += '<option value="' + statusList[s] + '" ' + selected + '>' + icon + ' ' + statusList[s] + '</option>';
+                }
+                gridHtml += '<div class="field-group-simple"><label>' + label + '</label><select name="' + fieldName + '">' + statusOptionsHtml + '</select></div>';
+            } else if(fieldName === 'related') {
+                var relatedOptionsHtml = '';
+                for(var r = 0; r < relatedList.length; r++) {
+                    var selected = (value === relatedList[r]) ? 'selected' : '';
+                    relatedOptionsHtml += '<option value="' + relatedList[r] + '" ' + selected + '>' + relatedList[r] + '</option>';
+                }
+                gridHtml += '<div class="field-group-simple"><label>' + label + '</label>' +
+                    '<div class="field-with-button">' +
+                    '<select name="' + fieldName + '" id="relatedSelect">' + relatedOptionsHtml + '</select>' +
+                    '<button type="button" class="add-btn" id="addRelatedBtn" title="افزودن مربوط نفر جدید"><i class="fas fa-plus"></i></button>' +
+                    '</div></div>';
             } else if(fieldName === 'cartable') {
                 var optionsHtml = '';
                 for(var c = 0; c < cartableList.length; c++) {
@@ -1223,11 +1390,24 @@
             if(newCartable && newCartable.trim() !== '') {
                 newCartable = newCartable.trim();
                 await addCartableToFirebase(newCartable);
-                // به‌روزرسانی select
                 var select = document.getElementById("cartableSelect");
                 var option = document.createElement('option');
                 option.value = newCartable;
                 option.text = newCartable;
+                option.selected = true;
+                select.appendChild(option);
+            }
+        };
+        
+        document.getElementById("addRelatedBtn").onclick = async function() {
+            var newRelated = prompt("نام مربوط نفر جدید را وارد کنید:");
+            if(newRelated && newRelated.trim() !== '') {
+                newRelated = newRelated.trim();
+                await addRelatedToFirebase(newRelated);
+                var select = document.getElementById("relatedSelect");
+                var option = document.createElement('option');
+                option.value = newRelated;
+                option.text = newRelated;
                 option.selected = true;
                 select.appendChild(option);
             }
@@ -1246,6 +1426,7 @@
                 alert("لطفاً نام مشتری را وارد کنید");
                 return;
             }
+            if(!formData.status) formData.status = 'ثبت اولیه';
             
             if(isEdit && cust) {
                 await saveCustomerToFirebase(formData, cust.firebaseId);
@@ -1264,6 +1445,18 @@
     
     document.getElementById("cartableFilter").addEventListener("change", (e) => {
         selectedCartable = e.target.value;
+        currentPage = 1;
+        renderFullData();
+    });
+    
+    document.getElementById("statusFilter").addEventListener("change", (e) => {
+        selectedStatus = e.target.value;
+        currentPage = 1;
+        renderFullData();
+    });
+    
+    document.getElementById("relatedFilter").addEventListener("change", (e) => {
+        selectedRelated = e.target.value;
         currentPage = 1;
         renderFullData();
     });
