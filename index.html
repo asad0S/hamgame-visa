@@ -800,6 +800,7 @@
     async function saveRelatedToFirebase() {
         try {
             await set(relatedRef, relatedList);
+            console.log("مربوط نفرها در دیتابیس ذخیره شد:", relatedList);
         } catch(error) {
             console.error("خطا در ذخیره مربوط نفرها:", error);
         }
@@ -811,10 +812,17 @@
             return false;
         }
         relatedList.push(newRelated);
-        await saveRelatedToFirebase();
-        updateRelatedFilterOptions();
-        showToast('مربوط نفر "' + newRelated + '" اضافه شد');
-        return true;
+        try {
+            await set(relatedRef, relatedList);
+            updateRelatedFilterOptions();
+            showToast('مربوط نفر "' + newRelated + '" در دیتابیس ذخیره شد');
+            console.log("مربوط نفر جدید در دیتابیس ذخیره شد:", newRelated);
+            return true;
+        } catch(error) {
+            console.error("خطا در ذخیره مربوط نفر:", error);
+            alert("خطا در ذخیره مربوط نفر در دیتابیس");
+            return false;
+        }
     }
 
     function updateFilterOptions() {
@@ -1403,13 +1411,15 @@
             var newRelated = prompt("نام مربوط نفر جدید را وارد کنید:");
             if(newRelated && newRelated.trim() !== '') {
                 newRelated = newRelated.trim();
-                await addRelatedToFirebase(newRelated);
-                var select = document.getElementById("relatedSelect");
-                var option = document.createElement('option');
-                option.value = newRelated;
-                option.text = newRelated;
-                option.selected = true;
-                select.appendChild(option);
+                var result = await addRelatedToFirebase(newRelated);
+                if(result) {
+                    var select = document.getElementById("relatedSelect");
+                    var option = document.createElement('option');
+                    option.value = newRelated;
+                    option.text = newRelated;
+                    option.selected = true;
+                    select.appendChild(option);
+                }
             }
         };
         
