@@ -185,6 +185,7 @@
         .status-special { background: #f3e5f5; color: #6a1b9a; }
         .status-visa { background: #e8f5e9; color: #2e7d32; }
         .status-approved { background: #fff8e1; color: #f57f17; }
+        .status-done { background: #e0f7fa; color: #00695c; }
         .status-canceled { background: #ffebee; color: #c62828; }
         .status-postponed { background: #fff3e0; color: #e65100; }
 
@@ -634,6 +635,7 @@
                 <option value="ثبت اختصاص">🟣 ثبت اختصاص</option>
                 <option value="ثبت روادید">🟢 ثبت روادید</option>
                 <option value="تایید روادید">📋 تایید روادید</option>
+                <option value="ویزه شده">🛂 ویزه شده</option>
                 <option value="کنسل شد">❌ کنسل شد</option>
                 <option value="به تعویق افتاد">⏳ به تعویق افتاد</option>
             </select>
@@ -714,7 +716,7 @@
     // مربوط نفرها خالی شروع می‌شود
     let relatedList = [];
 
-    const statusOptions = ['ثبت اولیه', 'ثبت اختصاص', 'ثبت روادید', 'تایید روادید', 'کنسل شد', 'به تعویق افتاد'];
+    const statusOptions = ['ثبت اولیه', 'ثبت اختصاص', 'ثبت روادید', 'تایید روادید', 'ویزه شده', 'کنسل شد', 'به تعویق افتاد'];
 
     let customers = [];
     let currentPage = 1;
@@ -887,6 +889,7 @@
             'ثبت اختصاص': 'status-special',
             'ثبت روادید': 'status-visa',
             'تایید روادید': 'status-approved',
+            'ویزه شده': 'status-done',
             'کنسل شد': 'status-canceled',
             'به تعویق افتاد': 'status-postponed'
         };
@@ -895,6 +898,7 @@
             'ثبت اختصاص': '🟣',
             'ثبت روادید': '🟢',
             'تایید روادید': '📋',
+            'ویزه شده': '🛂',
             'کنسل شد': '❌',
             'به تعویق افتاد': '⏳'
         };
@@ -1339,7 +1343,7 @@
                 gridHtml += '<div class="field-group-simple"><label>' + label + ' (میلادی)</label><input type="text" name="' + fieldName + '" value="' + value + '" placeholder="مثال: 2024-01-15"></div>';
             } else if(fieldName === 'status') {
                 var statusOptionsHtml = '';
-                var statusList = ['ثبت اولیه', 'ثبت اختصاص', 'ثبت روادید', 'تایید روادید', 'کنسل شد', 'به تعویق افتاد'];
+                var statusList = ['ثبت اولیه', 'ثبت اختصاص', 'ثبت روادید', 'تایید روادید', 'ویزه شده', 'کنسل شد', 'به تعویق افتاد'];
                 for(var s = 0; s < statusList.length; s++) {
                     var selected = (value === statusList[s]) ? 'selected' : '';
                     var icon = '';
@@ -1347,6 +1351,7 @@
                     else if(statusList[s] === 'ثبت اختصاص') icon = '🟣';
                     else if(statusList[s] === 'ثبت روادید') icon = '🟢';
                     else if(statusList[s] === 'تایید روادید') icon = '📋';
+                    else if(statusList[s] === 'ویزه شده') icon = '🛂';
                     else if(statusList[s] === 'کنسل شد') icon = '❌';
                     else if(statusList[s] === 'به تعویق افتاد') icon = '⏳';
                     statusOptionsHtml += '<option value="' + statusList[s] + '" ' + selected + '>' + icon + ' ' + statusList[s] + '</option>';
