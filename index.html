@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>سامانه ملت ویزا </title>
+    <title>سامانه ملت ویزا | مدیریت جامع</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -74,6 +74,12 @@
             font-weight: 500;
         }
 
+        .header-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
         .btn-modern {
             background: linear-gradient(105deg, #0f4b64, #0a3a4f);
             border: none;
@@ -94,6 +100,22 @@
             transform: translateY(-3px);
             background: linear-gradient(105deg, #166d8f, #0e5270);
             box-shadow: 0 14px 24px -6px rgba(0,0,0,0.2);
+        }
+
+        .btn-employer {
+            background: linear-gradient(105deg, #1a6b4a, #0f4f35);
+        }
+        .btn-employer:hover {
+            background: linear-gradient(105deg, #228a5e, #156b47);
+        }
+
+        .btn-back {
+            background: linear-gradient(105deg, #6b6b6b, #4a4a4a);
+            padding: 10px 24px;
+            font-size: 0.85rem;
+        }
+        .btn-back:hover {
+            background: linear-gradient(105deg, #8a8a8a, #5a5a5a);
         }
 
         .nav-search {
@@ -575,7 +597,51 @@
         }
         .afghani-symbol { color: #1d7e5c; }
         .remain-af { color: #bc6f2c; }
-        
+
+        .employer-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 28px;
+            overflow: hidden;
+        }
+        .employer-table thead tr {
+            background: #0a2a3f;
+        }
+        .employer-table th {
+            padding: 20px 12px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 0.3px;
+            color: white !important;
+            text-align: center;
+            white-space: nowrap;
+            background: #0a2a3f;
+            border-bottom: 2px solid #1c4e6e;
+        }
+        .employer-table td {
+            padding: 16px 12px;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #1c4055;
+            border-bottom: 1px solid #eff3f8;
+            background-color: white;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .employer-table tbody tr:hover td {
+            background-color: #eef4fc !important;
+        }
+
+        .page-content {
+            display: block;
+        }
+        .page-content.hidden {
+            display: none;
+        }
+
         .toast-message {
             position: fixed;
             bottom: 30px;
@@ -594,13 +660,15 @@
             70% { opacity: 1; }
             100% { opacity: 0; transform: translateX(-50%) translateY(-20px); visibility: hidden; }
         }
-        
+
         @media (max-width: 1200px) {
-            .visa-master-table th {
+            .visa-master-table th,
+            .employer-table th {
                 font-size: 0.8rem;
                 padding: 15px 8px;
             }
-            .visa-master-table td {
+            .visa-master-table td,
+            .employer-table td {
                 padding: 12px 8px;
                 font-size: 0.8rem;
             }
@@ -608,83 +676,141 @@
     </style>
 </head>
 <body>
-<div class="master-container">
-    <div class="header-elegant">
-        <div class="brand">
-            <div class="brand-icon"><i class="fas fa-globe-asia"></i></div>
-            <div class="brand-text">
-                <h1>سامانه ملت ویزا</h1>
-                <p>سیستم مدیریت هوشمند مشتریان</p>
+<div class="master-container" id="app">
+    <!-- ======================== صفحه اصلی مشتریان ======================== -->
+    <div id="mainPage" class="page-content">
+        <div class="header-elegant">
+            <div class="brand">
+                <div class="brand-icon"><i class="fas fa-globe-asia"></i></div>
+                <div class="brand-text">
+                    <h1>سامانه ملت ویزا</h1>
+                    <p>سیستم مدیریت هوشمند مشتریان</p>
+                </div>
+            </div>
+            <div class="header-buttons">
+                <button class="btn-modern btn-employer" id="openEmployerPageBtn"><i class="fas fa-users"></i> اطلاعات کارفرمایان</button>
+                <button class="btn-modern" id="openCreateModalBtn"><i class="fas fa-user-plus"></i> ثبت مشتری جدید</button>
             </div>
         </div>
-        <button class="btn-modern" id="openCreateModalBtn"><i class="fas fa-user-plus"></i> ثبت مشتری جدید</button>
-    </div>
 
-    <div class="nav-search">
-        <div class="search-wrapper">
-            <div class="search-field">
-                <i class="fas fa-search"></i>
-                <input type="text" id="searchGlobal" placeholder="جستجو در تمام اطلاعات...">
+        <div class="nav-search">
+            <div class="search-wrapper">
+                <div class="search-field">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchGlobal" placeholder="جستجو در تمام اطلاعات...">
+                </div>
+                <select class="filter-select" id="cartableFilter">
+                    <option value="all">همه کارتابل‌ها</option>
+                </select>
+                <select class="filter-select" id="statusFilter">
+                    <option value="all">همه وضعیت‌ها</option>
+                    <option value="ثبت اولیه">✅ ثبت اولیه</option>
+                    <option value="ثبت اختصاص">🟣 ثبت اختصاص</option>
+                    <option value="ثبت روادید">🟢 ثبت روادید</option>
+                    <option value="تایید روادید">📋 تایید روادید</option>
+                    <option value="ویزه شده">🛂 ویزه شده</option>
+                    <option value="کنسل شد">❌ کنسل شد</option>
+                    <option value="به تعویق افتاد">⏳ به تعویق افتاد</option>
+                </select>
+                <select class="filter-select" id="relatedFilter">
+                    <option value="all">همه مربوط نفر</option>
+                </select>
             </div>
-            <select class="filter-select" id="cartableFilter">
-                <option value="all">همه کارتابل‌ها</option>
-            </select>
-            <select class="filter-select" id="statusFilter">
-                <option value="all">همه وضعیت‌ها</option>
-                <option value="ثبت اولیه">✅ ثبت اولیه</option>
-                <option value="ثبت اختصاص">🟣 ثبت اختصاص</option>
-                <option value="ثبت روادید">🟢 ثبت روادید</option>
-                <option value="تایید روادید">📋 تایید روادید</option>
-                <option value="ویزه شده">🛂 ویزه شده</option>
-                <option value="کنسل شد">❌ کنسل شد</option>
-                <option value="به تعویق افتاد">⏳ به تعویق افتاد</option>
-            </select>
-            <select class="filter-select" id="relatedFilter">
-                <option value="all">همه مربوط نفر</option>
-            </select>
+            <div class="counter-badge" id="recordsCounter">۰ مشتری</div>
         </div>
-        <div class="counter-badge" id="recordsCounter">۰ مشتری</div>
+
+        <div class="table-responsive">
+            <table class="visa-master-table" id="mainVisaTable">
+                <thead>
+                    <tr>
+                        <th style="min-width: 60px;">ردیف</th>
+                        <th style="min-width: 120px;">تاریخ</th>
+                        <th style="min-width: 100px;">تخلص</th>
+                        <th style="min-width: 100px;">اسم</th>
+                        <th style="min-width: 100px;">نام پدر</th>
+                        <th style="min-width: 120px;">نام پدر کلان</th>
+                        <th style="min-width: 100px;">نام مادر</th>
+                        <th style="min-width: 110px;">تماس AF</th>
+                        <th style="min-width: 110px;">تماس ایران</th>
+                        <th style="min-width: 180px;">آدرس افغانستان</th>
+                        <th style="min-width: 180px;">آدرس ایران</th>
+                        <th style="min-width: 100px;">شغل</th>
+                        <th style="min-width: 120px;">توضیحات</th>
+                        <th style="min-width: 130px;">کد پیگیری</th>
+                        <th style="min-width: 130px;">کد اختصاصی</th>
+                        <th style="min-width: 130px;">کد رهگیری</th>
+                        <th style="min-width: 120px;">وضعیت</th>
+                        <th style="min-width: 110px;">مربوط نفر</th>
+                        <th style="min-width: 100px;">کارتابل</th>
+                        <th style="min-width: 110px;">مبلغ کل (AFN)</th>
+                        <th style="min-width: 110px;">رسید کل (AFN)</th>
+                        <th style="min-width: 110px;">باقی (AFN)</th>
+                        <th style="min-width: 100px;">عملیات</th>
+                    </tr>
+                </thead>
+                <tbody id="tableDynamicBody">
+                    <tr><td colspan="23" style="text-align:center; padding:48px;">در حال اتصال به دیتابیس...<br><div class="spinner" style="width:30px;height:30px;margin:10px auto;"></div></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination-panel">
+            <button class="page-button" id="prevPageBtn"><i class="fas fa-chevron-right"></i> قبلی</button>
+            <span class="page-info" id="pageInfoText">صفحه 1 از 1</span>
+            <button class="page-button" id="nextPageBtn">بعدی <i class="fas fa-chevron-left"></i></button>
+        </div>
     </div>
 
-    <div class="table-responsive">
-        <table class="visa-master-table" id="mainVisaTable">
-            <thead>
-                <tr>
-                    <th style="min-width: 60px;">ردیف</th>
-                    <th style="min-width: 120px;">تاریخ</th>
-                    <th style="min-width: 100px;">تخلص</th>
-                    <th style="min-width: 100px;">اسم</th>
-                    <th style="min-width: 100px;">نام پدر</th>
-                    <th style="min-width: 120px;">نام پدر کلان</th>
-                    <th style="min-width: 100px;">نام مادر</th>
-                    <th style="min-width: 110px;">تماس AF</th>
-                    <th style="min-width: 110px;">تماس ایران</th>
-                    <th style="min-width: 180px;">آدرس افغانستان</th>
-                    <th style="min-width: 180px;">آدرس ایران</th>
-                    <th style="min-width: 100px;">شغل</th>
-                    <th style="min-width: 120px;">توضیحات</th>
-                    <th style="min-width: 130px;">کد پیگیری</th>
-                    <th style="min-width: 130px;">کد اختصاصی</th>
-                    <th style="min-width: 130px;">کد رهگیری</th>
-                    <th style="min-width: 120px;">وضعیت</th>
-                    <th style="min-width: 110px;">مربوط نفر</th>
-                    <th style="min-width: 100px;">کارتابل</th>
-                    <th style="min-width: 110px;">مبلغ کل (AFN)</th>
-                    <th style="min-width: 110px;">رسید کل (AFN)</th>
-                    <th style="min-width: 110px;">باقی (AFN)</th>
-                    <th style="min-width: 100px;">عملیات</th>
-                </tr>
-            </thead>
-            <tbody id="tableDynamicBody">
-                <tr><td colspan="23" style="text-align:center; padding:48px;">در حال اتصال به دیتابیس...<br><div class="spinner" style="width:30px;height:30px;margin:10px auto;"></div></td></tr>
-            </tbody>
-        </table>
-    </div>
+    <!-- ======================== صفحه کارفرمایان ======================== -->
+    <div id="employerPage" class="page-content hidden">
+        <div class="header-elegant">
+            <div class="brand">
+                <div class="brand-icon"><i class="fas fa-users"></i></div>
+                <div class="brand-text">
+                    <h1>مدیریت کارفرمایان</h1>
+                    <p>ثبت و مدیریت اطلاعات کارفرمایان</p>
+                </div>
+            </div>
+            <div class="header-buttons">
+                <button class="btn-modern btn-back" id="backToMainBtn"><i class="fas fa-arrow-right"></i> بازگشت</button>
+                <button class="btn-modern" id="openEmployerCreateBtn"><i class="fas fa-user-plus"></i> ثبت کارفرما</button>
+            </div>
+        </div>
 
-    <div class="pagination-panel">
-        <button class="page-button" id="prevPageBtn"><i class="fas fa-chevron-right"></i> قبلی</button>
-        <span class="page-info" id="pageInfoText">صفحه 1 از 1</span>
-        <button class="page-button" id="nextPageBtn">بعدی <i class="fas fa-chevron-left"></i></button>
+        <div class="nav-search">
+            <div class="search-wrapper">
+                <div class="search-field">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchEmployer" placeholder="جستجو در کارفرمایان...">
+                </div>
+            </div>
+            <div class="counter-badge" id="employerCounter">۰ کارفرما</div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="employer-table" id="employerTable">
+                <thead>
+                    <tr>
+                        <th style="min-width: 60px;">ردیف</th>
+                        <th style="min-width: 150px;">نام کارفرما</th>
+                        <th style="min-width: 130px;">نام کاربری</th>
+                        <th style="min-width: 120px;">رمز</th>
+                        <th style="min-width: 130px;">شماره تماس</th>
+                        <th style="min-width: 150px;">کد پستی</th>
+                        <th style="min-width: 100px;">عملیات</th>
+                    </tr>
+                </thead>
+                <tbody id="employerTableBody">
+                    <tr><td colspan="7" style="text-align:center; padding:48px;">در حال اتصال به دیتابیس...<br><div class="spinner" style="width:30px;height:30px;margin:10px auto;"></div></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination-panel">
+            <button class="page-button" id="prevEmployerBtn"><i class="fas fa-chevron-right"></i> قبلی</button>
+            <span class="page-info" id="employerPageInfo">صفحه 1 از 1</span>
+            <button class="page-button" id="nextEmployerBtn">بعدی <i class="fas fa-chevron-left"></i></button>
+        </div>
     </div>
 </div>
 
@@ -709,16 +835,14 @@
     const customersRef = ref(database, 'visa_customers');
     const cartablesRef = ref(database, 'visa_cartables');
     const relatedRef = ref(database, 'visa_related');
+    const employersRef = ref(database, 'visa_employers');
 
     const defaultCartables = ['سید محمد', 'سید حسن', 'محمد افشار', 'مهدی', 'سید عبدالله'];
     let cartableList = [];
-
-    // مربوط نفرها خالی شروع می‌شود
     let relatedList = [];
 
-    const statusOptions = ['ثبت اولیه', 'ثبت اختصاص', 'ثبت روادید', 'تایید روادید', 'ویزه شده', 'کنسل شد', 'به تعویق افتاد'];
-
     let customers = [];
+    let employers = [];
     let currentPage = 1;
     const rowsPerPage = 15;
     let searchKeyword = "";
@@ -726,187 +850,11 @@
     let selectedStatus = "all";
     let selectedRelated = "all";
 
-    // بارگذاری کارتابل‌ها از Firebase
-    function loadCartablesFromFirebase() {
-        onValue(cartablesRef, (snapshot) => {
-            const data = snapshot.val();
-            if(data) {
-                if(Array.isArray(data)) {
-                    cartableList = data;
-                } else {
-                    const keys = Object.keys(data);
-                    cartableList = [];
-                    for(var i = 0; i < keys.length; i++) {
-                        cartableList.push(data[keys[i]]);
-                    }
-                }
-            } else {
-                cartableList = [...defaultCartables];
-                saveCartablesToFirebase();
-            }
-            updateFilterOptions();
-        }, (error) => {
-            console.error("خطا در بارگذاری کارتابل‌ها:", error);
-            cartableList = [...defaultCartables];
-            updateFilterOptions();
-        });
-    }
+    let employerPage = 1;
+    const employerRowsPerPage = 15;
+    let employerSearch = "";
 
-    async function saveCartablesToFirebase() {
-        try {
-            await set(cartablesRef, cartableList);
-        } catch(error) {
-            console.error("خطا در ذخیره کارتابل‌ها:", error);
-        }
-    }
-
-    async function addCartableToFirebase(newCartable) {
-        if(cartableList.indexOf(newCartable) !== -1) {
-            alert('این کارتابل قبلاً وجود دارد');
-            return false;
-        }
-        cartableList.push(newCartable);
-        await saveCartablesToFirebase();
-        updateFilterOptions();
-        showToast('کارتابل "' + newCartable + '" اضافه شد');
-        return true;
-    }
-
-    // بارگذاری مربوط نفرها از Firebase (خالی)
-    function loadRelatedFromFirebase() {
-        onValue(relatedRef, (snapshot) => {
-            const data = snapshot.val();
-            if(data) {
-                if(Array.isArray(data)) {
-                    relatedList = data;
-                } else {
-                    const keys = Object.keys(data);
-                    relatedList = [];
-                    for(var i = 0; i < keys.length; i++) {
-                        relatedList.push(data[keys[i]]);
-                    }
-                }
-            } else {
-                // خالی می‌گذاریم
-                relatedList = [];
-                saveRelatedToFirebase();
-            }
-            updateRelatedFilterOptions();
-        }, (error) => {
-            console.error("خطا در بارگذاری مربوط نفرها:", error);
-            relatedList = [];
-            updateRelatedFilterOptions();
-        });
-    }
-
-    async function saveRelatedToFirebase() {
-        try {
-            await set(relatedRef, relatedList);
-            console.log("مربوط نفرها در دیتابیس ذخیره شد:", relatedList);
-        } catch(error) {
-            console.error("خطا در ذخیره مربوط نفرها:", error);
-        }
-    }
-
-    async function addRelatedToFirebase(newRelated) {
-        if(relatedList.indexOf(newRelated) !== -1) {
-            alert('این مربوط نفر قبلاً وجود دارد');
-            return false;
-        }
-        relatedList.push(newRelated);
-        try {
-            await set(relatedRef, relatedList);
-            updateRelatedFilterOptions();
-            showToast('مربوط نفر "' + newRelated + '" در دیتابیس ذخیره شد');
-            console.log("مربوط نفر جدید در دیتابیس ذخیره شد:", newRelated);
-            return true;
-        } catch(error) {
-            console.error("خطا در ذخیره مربوط نفر:", error);
-            alert("خطا در ذخیره مربوط نفر در دیتابیس");
-            return false;
-        }
-    }
-
-    function updateFilterOptions() {
-        const select = document.getElementById('cartableFilter');
-        if(!select) return;
-        const currentValue = select.value;
-        select.innerHTML = '<option value="all">همه کارتابل‌ها</option>';
-        for(var i = 0; i < cartableList.length; i++) {
-            var option = document.createElement('option');
-            option.value = cartableList[i];
-            option.text = cartableList[i];
-            select.appendChild(option);
-        }
-        if(currentValue && cartableList.indexOf(currentValue) !== -1) {
-            select.value = currentValue;
-        } else {
-            select.value = 'all';
-            selectedCartable = 'all';
-        }
-    }
-
-    function updateRelatedFilterOptions() {
-        const select = document.getElementById('relatedFilter');
-        if(!select) return;
-        const currentValue = select.value;
-        select.innerHTML = '<option value="all">همه مربوط نفر</option>';
-        for(var i = 0; i < relatedList.length; i++) {
-            var option = document.createElement('option');
-            option.value = relatedList[i];
-            option.text = relatedList[i];
-            select.appendChild(option);
-        }
-        if(currentValue && relatedList.indexOf(currentValue) !== -1) {
-            select.value = currentValue;
-        } else {
-            select.value = 'all';
-            selectedRelated = 'all';
-        }
-    }
-
-    function getTodayGregorian() {
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = String(today.getMonth() + 1).padStart(2, '0');
-        const day = String(today.getDate()).padStart(2, '0');
-        return year + '-' + month + '-' + day;
-    }
-
-    function formatGregorianDate(dateStr) {
-        if(!dateStr) return '-';
-        const parts = dateStr.split('-');
-        if(parts.length === 3) {
-            return parts[0] + '/' + parts[1] + '/' + parts[2];
-        }
-        return dateStr;
-    }
-
-    function getStatusBadge(status) {
-        if(!status) return '<span class="status-badge status-registered">✅ ثبت اولیه</span>';
-        const map = {
-            'ثبت اولیه': 'status-registered',
-            'ثبت اختصاص': 'status-special',
-            'ثبت روادید': 'status-visa',
-            'تایید روادید': 'status-approved',
-            'ویزه شده': 'status-done',
-            'کنسل شد': 'status-canceled',
-            'به تعویق افتاد': 'status-postponed'
-        };
-        const iconMap = {
-            'ثبت اولیه': '✅',
-            'ثبت اختصاص': '🟣',
-            'ثبت روادید': '🟢',
-            'تایید روادید': '📋',
-            'ویزه شده': '🛂',
-            'کنسل شد': '❌',
-            'به تعویق افتاد': '⏳'
-        };
-        const cls = map[status] || 'status-registered';
-        const icon = iconMap[status] || '✅';
-        return `<span class="status-badge ${cls}">${icon} ${status}</span>`;
-    }
-
+    // ======================== توابع کمکی ========================
     function showToast(message) {
         var existingToast = document.querySelector('.toast-message');
         if(existingToast) existingToast.remove();
@@ -941,95 +889,320 @@
         });
     }
 
-    function formatAddressForDisplay(text, maxLen) {
-        if(!text) return '-';
-        if(text.length <= maxLen) return text;
-        return text;
-    }
-
-    function hideCode(fullCode) {
-        if(!fullCode || fullCode === '-') return '-';
-        if(fullCode.length <= 6) return fullCode;
-        return fullCode.substring(0, 6) + '•••';
-    }
-
-    function calculateTotals(cust) {
-        var totalReceipt = 0;
-        if(cust.transactions && cust.transactions.length > 0) {
-            for(var i = 0; i < cust.transactions.length; i++) {
-                totalReceipt += parseInt(cust.transactions[i].amount) || 0;
+    // ======================== کارفرمایان ========================
+    function loadEmployersFromFirebase() {
+        onValue(employersRef, (snapshot) => {
+            const data = snapshot.val();
+            employers = [];
+            if(data) {
+                const keys = Object.keys(data);
+                for(var i = 0; i < keys.length; i++) {
+                    const key = keys[i];
+                    const emp = data[key];
+                    emp.firebaseId = key;
+                    employers.push(emp);
+                }
             }
-        }
-        var totalAmount = parseInt(cust.amount) || 0;
-        var remaining = totalAmount - totalReceipt;
-        if(remaining < 0) remaining = 0;
-        return { totalReceipt: totalReceipt, remaining: remaining };
+            renderEmployerTable();
+        }, (error) => {
+            console.error("خطا در بارگذاری کارفرمایان:", error);
+            employers = [];
+            renderEmployerTable();
+        });
     }
 
-    function getFilteredList() {
-        var list = [...customers];
-        
-        if(selectedCartable !== 'all') {
-            list = list.filter(function(c) {
-                return c.cartable === selectedCartable;
-            });
-        }
-        
-        if(selectedStatus !== 'all') {
-            list = list.filter(function(c) {
-                return c.status === selectedStatus;
-            });
-        }
-        
-        if(selectedRelated !== 'all') {
-            list = list.filter(function(c) {
-                return c.related === selectedRelated;
-            });
-        }
-        
-        if(searchKeyword.trim()) {
-            var kw = searchKeyword.trim().toLowerCase();
+    function getFilteredEmployers() {
+        var list = [...employers];
+        if(employerSearch.trim()) {
+            var kw = employerSearch.trim().toLowerCase();
             var filtered = [];
             for(var i = 0; i < list.length; i++) {
-                var c = list[i];
-                if((c.firstName && c.firstName.toLowerCase().indexOf(kw) !== -1) ||
-                   (c.lastName && c.lastName.toLowerCase().indexOf(kw) !== -1) ||
-                   (c.trackingCode1 && c.trackingCode1.toLowerCase().indexOf(kw) !== -1) ||
-                   (c.trackingCode2 && c.trackingCode2.toLowerCase().indexOf(kw) !== -1) ||
-                   (c.specialCode && c.specialCode.toLowerCase().indexOf(kw) !== -1) ||
-                   (c.phoneAF && c.phoneAF.toLowerCase().indexOf(kw) !== -1) ||
-                   (c.phoneIran && c.phoneIran.toLowerCase().indexOf(kw) !== -1) ||
-                   (c.addressAF && c.addressAF.toLowerCase().indexOf(kw) !== -1) ||
-                   (c.addressIran && c.addressIran.toLowerCase().indexOf(kw) !== -1) ||
-                   (c.description && c.description.toLowerCase().indexOf(kw) !== -1) ||
-                   (c.cartable && c.cartable.toLowerCase().indexOf(kw) !== -1) ||
-                   (c.job && c.job.toLowerCase().indexOf(kw) !== -1) ||
-                   (c.date && c.date.toLowerCase().indexOf(kw) !== -1) ||
-                   (c.status && c.status.toLowerCase().indexOf(kw) !== -1) ||
-                   (c.related && c.related.toLowerCase().indexOf(kw) !== -1) ||
-                   (c.fatherName && c.fatherName.toLowerCase().indexOf(kw) !== -1) ||
-                   (c.grandFatherName && c.grandFatherName.toLowerCase().indexOf(kw) !== -1) ||
-                   (c.motherName && c.motherName.toLowerCase().indexOf(kw) !== -1)) {
-                    filtered.push(c);
+                var e = list[i];
+                if((e.employerName && e.employerName.toLowerCase().indexOf(kw) !== -1) ||
+                   (e.username && e.username.toLowerCase().indexOf(kw) !== -1) ||
+                   (e.phone && e.phone.toLowerCase().indexOf(kw) !== -1) ||
+                   (e.postalCode && e.postalCode.toLowerCase().indexOf(kw) !== -1)) {
+                    filtered.push(e);
                 }
             }
             list = filtered;
         }
-        
         list.sort(function(a, b) {
             var timeA = a.createdAt || 0;
             var timeB = b.createdAt || 0;
             return timeB - timeA;
         });
-        
         return list;
     }
 
-    function formatAfghani(amount) {
-        if(!amount && amount !== 0) return "۰";
-        var num = parseInt(amount.toString().replace(/,/g, '')) || 0;
-        return num.toLocaleString('fa-IR') + " ؋";
+    function renderEmployerTable() {
+        var filtered = getFilteredEmployers();
+        var totalPages = Math.ceil(filtered.length / employerRowsPerPage) || 1;
+        if(employerPage > totalPages) employerPage = totalPages;
+        if(employerPage < 1) employerPage = 1;
+        var start = (employerPage - 1) * employerRowsPerPage;
+        var pageItems = filtered.slice(start, start + employerRowsPerPage);
+
+        var tbody = document.getElementById("employerTableBody");
+        if(!tbody) return;
+
+        if(pageItems.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:48px;">✨ هیچ کارفرمایی یافت نشد</td></tr>';
+            document.getElementById("employerCounter").innerHTML = "۰ کارفرما";
+            document.getElementById("employerPageInfo").innerHTML = "صفحه ۰ از ۰";
+            return;
+        }
+
+        var html = "";
+        for(var i = 0; i < pageItems.length; i++) {
+            var emp = pageItems[i];
+            var rowNumber = filtered.length - (start + i);
+            html += '<tr>' +
+                '<td data-copy="ردیف" data-copy-value="' + rowNumber + '">' + rowNumber + '</td>' +
+                '<td data-copy="نام کارفرما" data-copy-value="' + (emp.employerName || '') + '">' + (emp.employerName || '-') + '</td>' +
+                '<td data-copy="نام کاربری" data-copy-value="' + (emp.username || '') + '">' + (emp.username || '-') + '</td>' +
+                '<td data-copy="رمز" data-copy-value="' + (emp.password || '') + '">' + (emp.password || '-') + '</td>' +
+                '<td data-copy="شماره تماس" data-copy-value="' + (emp.phone || '') + '">' + (emp.phone || '-') + '</td>' +
+                '<td data-copy="کد پستی" data-copy-value="' + (emp.postalCode || '') + '">' + (emp.postalCode || '-') + '</td>' +
+                '<td><div class="action-flex">' +
+                '<button class="action-icon edit" data-id="' + (emp.firebaseId || emp.id) + '" title="ویرایش"><i class="fas fa-edit"></i></button>' +
+                '<button class="action-icon delete" data-id="' + (emp.firebaseId || emp.id) + '" title="حذف"><i class="fas fa-trash-alt"></i></button>' +
+                '</div></td>' +
+                '</tr>';
+        }
+        tbody.innerHTML = html;
+        document.getElementById("employerCounter").innerHTML = filtered.length + " کارفرما";
+        document.getElementById("employerPageInfo").innerHTML = "صفحه " + employerPage + " از " + totalPages;
+        document.getElementById("prevEmployerBtn").disabled = (employerPage === 1);
+        document.getElementById("nextEmployerBtn").disabled = (employerPage === totalPages);
+
+        var allCells = tbody.querySelectorAll('td');
+        for(var j = 0; j < allCells.length; j++) {
+            var cell = allCells[j];
+            var isActionCell = cell.querySelector('.action-flex') !== null;
+            if(!isActionCell) {
+                cell.style.cursor = 'copy';
+                cell.ondblclick = (function(c) {
+                    return function(e) {
+                        e.stopPropagation();
+                        var copyLabel = c.getAttribute('data-copy');
+                        var copyValue = c.getAttribute('data-copy-value');
+                        if(copyValue && copyValue !== '') {
+                            copyToClipboard(copyValue, copyLabel);
+                        } else {
+                            var textValue = c.innerText.trim();
+                            if(textValue && textValue !== '-' && textValue !== '') {
+                                copyToClipboard(textValue, copyLabel);
+                            }
+                        }
+                    };
+                })(cell);
+            }
+        }
+
+        document.querySelectorAll('#employerTableBody .action-icon.edit').forEach(btn => {
+            btn.onclick = (e) => { e.stopPropagation(); openEditEmployerModal(btn.getAttribute('data-id')); };
+        });
+        document.querySelectorAll('#employerTableBody .action-icon.delete').forEach(btn => {
+            btn.onclick = (e) => { 
+                e.stopPropagation(); 
+                if(confirm("حذف شود؟")) {
+                    deleteEmployer(btn.getAttribute('data-id'));
+                }
+            };
+        });
     }
+
+    async function saveEmployerToFirebase(employerData, firebaseId = null) {
+        showLoading(true);
+        try {
+            if(!firebaseId) {
+                employerData.createdAt = Date.now();
+                const newRef = push(employersRef);
+                await set(newRef, employerData);
+                showToast('کارفرما با موفقیت ثبت شد');
+            } else {
+                await update(ref(database, `visa_employers/${firebaseId}`), employerData);
+                showToast('کارفرما با موفقیت ویرایش شد');
+            }
+        } catch(error) {
+            console.error(error);
+            alert("خطا در ذخیره اطلاعات: " + error.message);
+        }
+        showLoading(false);
+        loadEmployersFromFirebase();
+    }
+
+    async function deleteEmployer(firebaseId) {
+        showLoading(true);
+        try {
+            await remove(ref(database, `visa_employers/${firebaseId}`));
+            showToast('کارفرما حذف شد');
+            loadEmployersFromFirebase();
+        } catch(error) {
+            console.error(error);
+            alert("خطا در حذف");
+        }
+        showLoading(false);
+    }
+
+    function openNewEmployerModal() { showEmployerModal(null); }
+
+    function openEditEmployerModal(firebaseId) {
+        var employer = employers.find(e => e.firebaseId === firebaseId);
+        if(employer) showEmployerModal(employer);
+    }
+
+    function showEmployerModal(emp) {
+        var existing = document.querySelector('.modal-overlay-smooth');
+        if(existing) existing.remove();
+        var isEdit = (emp !== null);
+        var modalDiv = document.createElement('div');
+        modalDiv.className = 'modal-overlay-smooth';
+
+        var allFields = [
+            "نام کارفرما", "employerName", "نام کاربری", "username", "رمز", "password",
+            "شماره تماس", "phone", "کد پستی", "postalCode"
+        ];
+
+        var gridHtml = '<div class="form-grid-double">';
+        for(var i = 0; i < allFields.length; i += 2) {
+            var label = allFields[i];
+            var fieldName = allFields[i+1];
+            var value = emp ? (emp[fieldName] || '') : '';
+            var required = (fieldName === 'employerName') ? 'required' : '';
+            gridHtml += '<div class="field-group-simple"><label>' + label + (required ? ' *' : '') + '</label><input type="text" name="' + fieldName + '" value="' + (value || '') + '" ' + required + ' placeholder="' + (required ? 'الزامی' : 'اختیاری') + '"></div>';
+        }
+        gridHtml += '</div>';
+
+        modalDiv.innerHTML = '<div class="modal-card-sleek">' +
+            '<div class="modal-header-sleek"><h3><i class="fas fa-' + (isEdit ? 'user-edit' : 'user-plus') + '"></i> ' + (isEdit ? 'ویرایش کارفرما' : 'ثبت کارفرما') + '</h3><div class="close-modal-x" id="closeEmpModal">✕</div></div>' +
+            '<div class="info-note"><i class="fas fa-info-circle"></i> فقط نام کارفرما الزامی است.</div>' +
+            '<form id="empForm">' + gridHtml + '<button type="submit" class="submit-gold">' + (isEdit ? 'ذخیره تغییرات' : 'ثبت کارفرما') + '</button></form>' +
+            '</div>';
+        document.body.appendChild(modalDiv);
+
+        document.getElementById("closeEmpModal").onclick = () => modalDiv.remove();
+        modalDiv.addEventListener('click', (e) => { if(e.target === modalDiv) modalDiv.remove(); });
+
+        var form = modalDiv.querySelector("#empForm");
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            var formData = {};
+            for(var i = 0; i < allFields.length; i += 2) {
+                var name = allFields[i+1];
+                var input = form.querySelector('[name="' + name + '"]');
+                if(input) formData[name] = input.value;
+            }
+            if(!formData.employerName) {
+                alert("لطفاً نام کارفرما را وارد کنید");
+                return;
+            }
+            if(isEdit && emp) {
+                await saveEmployerToFirebase(formData, emp.firebaseId);
+            } else {
+                await saveEmployerToFirebase(formData);
+            }
+            modalDiv.remove();
+        };
+    }
+
+    // ======================== کدهای مشتریان (همانند قبل) ========================
+    function loadCartablesFromFirebase() {
+        onValue(cartablesRef, (snapshot) => {
+            const data = snapshot.val();
+            if(data) {
+                if(Array.isArray(data)) { cartableList = data; }
+                else { const keys = Object.keys(data); cartableList = []; for(var i=0; i<keys.length; i++) cartableList.push(data[keys[i]]); }
+            } else { cartableList = [...defaultCartables]; saveCartablesToFirebase(); }
+            updateFilterOptions();
+        }, (error) => { console.error("خطا در بارگذاری کارتابل‌ها:", error); cartableList = [...defaultCartables]; updateFilterOptions(); });
+    }
+
+    async function saveCartablesToFirebase() { try { await set(cartablesRef, cartableList); } catch(e) { console.error(e); } }
+
+    async function addCartableToFirebase(newCartable) {
+        if(cartableList.indexOf(newCartable) !== -1) { alert('این کارتابل قبلاً وجود دارد'); return false; }
+        cartableList.push(newCartable); await saveCartablesToFirebase(); updateFilterOptions(); showToast('کارتابل "' + newCartable + '" اضافه شد'); return true;
+    }
+
+    function loadRelatedFromFirebase() {
+        onValue(relatedRef, (snapshot) => {
+            const data = snapshot.val();
+            if(data) { if(Array.isArray(data)) { relatedList = data; } else { const keys = Object.keys(data); relatedList = []; for(var i=0; i<keys.length; i++) relatedList.push(data[keys[i]]); } }
+            else { relatedList = []; saveRelatedToFirebase(); }
+            updateRelatedFilterOptions();
+        }, (error) => { console.error("خطا در بارگذاری مربوط نفرها:", error); relatedList = []; updateRelatedFilterOptions(); });
+    }
+
+    async function saveRelatedToFirebase() { try { await set(relatedRef, relatedList); } catch(e) { console.error(e); } }
+
+    async function addRelatedToFirebase(newRelated) {
+        if(relatedList.indexOf(newRelated) !== -1) { alert('این مربوط نفر قبلاً وجود دارد'); return false; }
+        relatedList.push(newRelated); await saveRelatedToFirebase(); updateRelatedFilterOptions(); showToast('مربوط نفر "' + newRelated + '" اضافه شد'); return true;
+    }
+
+    function updateFilterOptions() {
+        const select = document.getElementById('cartableFilter'); if(!select) return;
+        const currentValue = select.value;
+        select.innerHTML = '<option value="all">همه کارتابل‌ها</option>';
+        for(var i=0; i<cartableList.length; i++) { var option = document.createElement('option'); option.value = cartableList[i]; option.text = cartableList[i]; select.appendChild(option); }
+        if(currentValue && cartableList.indexOf(currentValue) !== -1) { select.value = currentValue; } else { select.value = 'all'; selectedCartable = 'all'; }
+    }
+
+    function updateRelatedFilterOptions() {
+        const select = document.getElementById('relatedFilter'); if(!select) return;
+        const currentValue = select.value;
+        select.innerHTML = '<option value="all">همه مربوط نفر</option>';
+        for(var i=0; i<relatedList.length; i++) { var option = document.createElement('option'); option.value = relatedList[i]; option.text = relatedList[i]; select.appendChild(option); }
+        if(currentValue && relatedList.indexOf(currentValue) !== -1) { select.value = currentValue; } else { select.value = 'all'; selectedRelated = 'all'; }
+    }
+
+    function getTodayGregorian() { const today = new Date(); return today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0'); }
+
+    function formatGregorianDate(dateStr) { if(!dateStr) return '-'; const parts = dateStr.split('-'); if(parts.length === 3) return parts[0] + '/' + parts[1] + '/' + parts[2]; return dateStr; }
+
+    function getStatusBadge(status) {
+        if(!status) return '<span class="status-badge status-registered">✅ ثبت اولیه</span>';
+        const map = { 'ثبت اولیه': 'status-registered', 'ثبت اختصاص': 'status-special', 'ثبت روادید': 'status-visa', 'تایید روادید': 'status-approved', 'ویزه شده': 'status-done', 'کنسل شد': 'status-canceled', 'به تعویق افتاد': 'status-postponed' };
+        const iconMap = { 'ثبت اولیه': '✅', 'ثبت اختصاص': '🟣', 'ثبت روادید': '🟢', 'تایید روادید': '📋', 'ویزه شده': '🛂', 'کنسل شد': '❌', 'به تعویق افتاد': '⏳' };
+        const cls = map[status] || 'status-registered'; const icon = iconMap[status] || '✅';
+        return `<span class="status-badge ${cls}">${icon} ${status}</span>`;
+    }
+
+    function formatAddressForDisplay(text, maxLen) { if(!text) return '-'; if(text.length <= maxLen) return text; return text; }
+
+    function hideCode(fullCode) { if(!fullCode || fullCode === '-') return '-'; if(fullCode.length <= 6) return fullCode; return fullCode.substring(0,6) + '•••'; }
+
+    function calculateTotals(cust) { var totalReceipt = 0; if(cust.transactions && cust.transactions.length > 0) { for(var i=0; i<cust.transactions.length; i++) { totalReceipt += parseInt(cust.transactions[i].amount) || 0; } } var totalAmount = parseInt(cust.amount) || 0; var remaining = totalAmount - totalReceipt; if(remaining < 0) remaining = 0; return { totalReceipt: totalReceipt, remaining: remaining }; }
+
+    function getFilteredList() {
+        var list = [...customers];
+        if(selectedCartable !== 'all') { list = list.filter(c => c.cartable === selectedCartable); }
+        if(selectedStatus !== 'all') { list = list.filter(c => c.status === selectedStatus); }
+        if(selectedRelated !== 'all') { list = list.filter(c => c.related === selectedRelated); }
+        if(searchKeyword.trim()) {
+            var kw = searchKeyword.trim().toLowerCase(); var filtered = [];
+            for(var i=0; i<list.length; i++) { var c = list[i];
+                if((c.firstName && c.firstName.toLowerCase().indexOf(kw) !== -1) || (c.lastName && c.lastName.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.trackingCode1 && c.trackingCode1.toLowerCase().indexOf(kw) !== -1) || (c.trackingCode2 && c.trackingCode2.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.specialCode && c.specialCode.toLowerCase().indexOf(kw) !== -1) || (c.phoneAF && c.phoneAF.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.phoneIran && c.phoneIran.toLowerCase().indexOf(kw) !== -1) || (c.addressAF && c.addressAF.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.addressIran && c.addressIran.toLowerCase().indexOf(kw) !== -1) || (c.description && c.description.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.cartable && c.cartable.toLowerCase().indexOf(kw) !== -1) || (c.job && c.job.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.date && c.date.toLowerCase().indexOf(kw) !== -1) || (c.status && c.status.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.related && c.related.toLowerCase().indexOf(kw) !== -1) || (c.fatherName && c.fatherName.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.grandFatherName && c.grandFatherName.toLowerCase().indexOf(kw) !== -1) || (c.motherName && c.motherName.toLowerCase().indexOf(kw) !== -1)) {
+                    filtered.push(c);
+                }
+            }
+            list = filtered;
+        }
+        list.sort(function(a,b) { var timeA = a.createdAt || 0; var timeB = b.createdAt || 0; return timeB - timeA; });
+        return list;
+    }
+
+    function formatAfghani(amount) { if(!amount && amount !== 0) return "۰"; var num = parseInt(amount.toString().replace(/,/g,'')) || 0; return num.toLocaleString('fa-IR') + " ؋"; }
 
     function renderFullData() {
         var filtered = getFilteredList();
@@ -1038,24 +1211,12 @@
         if(currentPage < 1) currentPage = 1;
         var start = (currentPage - 1) * rowsPerPage;
         var pageItems = filtered.slice(start, start + rowsPerPage);
-        
         var tbody = document.getElementById("tableDynamicBody");
         if(!tbody) return;
-        
-        if(pageItems.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="23" style="text-align:center; padding:48px;">✨ هیچ مشتری یافت نشد</td></tr>';
-            document.getElementById("recordsCounter").innerHTML = "۰ مشتری";
-            document.getElementById("pageInfoText").innerHTML = "صفحه ۰ از ۰";
-            return;
-        }
-
+        if(pageItems.length === 0) { tbody.innerHTML = '<tr><td colspan="23" style="text-align:center; padding:48px;">✨ هیچ مشتری یافت نشد</td></tr>'; document.getElementById("recordsCounter").innerHTML = "۰ مشتری"; document.getElementById("pageInfoText").innerHTML = "صفحه ۰ از ۰"; return; }
         var html = "";
-        for(var i = 0; i < pageItems.length; i++) {
-            var cust = pageItems[i];
-            var rowNumber = filtered.length - (start + i);
-            var totals = calculateTotals(cust);
-            var statusBadge = getStatusBadge(cust.status || 'ثبت اولیه');
-            
+        for(var i=0; i<pageItems.length; i++) {
+            var cust = pageItems[i]; var rowNumber = filtered.length - (start + i); var totals = calculateTotals(cust); var statusBadge = getStatusBadge(cust.status || 'ثبت اولیه');
             html += '<tr>' +
                 '<td data-copy="ردیف" data-copy-value="' + rowNumber + '">' + rowNumber + '</td>' +
                 '<td data-copy="تاریخ" data-copy-value="' + (cust.date || '') + '">' + formatGregorianDate(cust.date) + '</td>' +
@@ -1091,175 +1252,64 @@
         document.getElementById("pageInfoText").innerHTML = "صفحه " + currentPage + " از " + totalPages;
         document.getElementById("prevPageBtn").disabled = (currentPage === 1);
         document.getElementById("nextPageBtn").disabled = (currentPage === totalPages);
-        
+
         var allCells = tbody.querySelectorAll('td');
-        for(var j = 0; j < allCells.length; j++) {
-            var cell = allCells[j];
-            var isActionCell = cell.querySelector('.action-flex') !== null;
+        for(var j=0; j<allCells.length; j++) {
+            var cell = allCells[j]; var isActionCell = cell.querySelector('.action-flex') !== null;
             if(!isActionCell) {
                 cell.style.cursor = 'copy';
                 cell.ondblclick = (function(c) {
-                    return function(e) {
-                        e.stopPropagation();
-                        var copyLabel = c.getAttribute('data-copy');
-                        var copyValue = c.getAttribute('data-copy-value');
-                        if(copyValue && copyValue !== '') {
-                            copyToClipboard(copyValue, copyLabel);
-                        } else {
-                            var textValue = c.innerText.trim();
-                            if(textValue && textValue !== '-' && textValue !== '') {
-                                copyToClipboard(textValue, copyLabel);
-                            }
-                        }
-                    };
+                    return function(e) { e.stopPropagation(); var copyLabel = c.getAttribute('data-copy'); var copyValue = c.getAttribute('data-copy-value'); if(copyValue && copyValue !== '') { copyToClipboard(copyValue, copyLabel); } else { var textValue = c.innerText.trim(); if(textValue && textValue !== '-' && textValue !== '') { copyToClipboard(textValue, copyLabel); } } };
                 })(cell);
             }
         }
-        
+
         var codeSpans = tbody.querySelectorAll('.code-hidden');
-        for(var k = 0; k < codeSpans.length; k++) {
-            codeSpans[k].ondblclick = function(e) {
-                e.stopPropagation();
-                var fullCode = this.getAttribute('data-fullcode');
-                if(fullCode && fullCode !== '') {
-                    copyToClipboard(fullCode, 'کد');
-                }
-            };
+        for(var k=0; k<codeSpans.length; k++) {
+            codeSpans[k].ondblclick = function(e) { e.stopPropagation(); var fullCode = this.getAttribute('data-fullcode'); if(fullCode && fullCode !== '') { copyToClipboard(fullCode, 'کد'); } };
         }
-        
         attachButtonEvents(tbody);
     }
-    
+
     function attachButtonEvents(container) {
-        container.querySelectorAll('.action-icon.transaction').forEach(btn => {
-            btn.onclick = (e) => { e.stopPropagation(); openTransactionModal(btn.getAttribute('data-id')); };
-        });
-        container.querySelectorAll('.action-icon.edit').forEach(btn => {
-            btn.onclick = (e) => { e.stopPropagation(); openEditModal(btn.getAttribute('data-id')); };
-        });
-        container.querySelectorAll('.action-icon.delete').forEach(btn => {
-            btn.onclick = (e) => { 
-                e.stopPropagation(); 
-                if(confirm("حذف شود؟")) {
-                    deleteCustomer(btn.getAttribute('data-id'));
-                }
-            };
-        });
+        container.querySelectorAll('.action-icon.transaction').forEach(btn => { btn.onclick = (e) => { e.stopPropagation(); openTransactionModal(btn.getAttribute('data-id')); }; });
+        container.querySelectorAll('.action-icon.edit').forEach(btn => { btn.onclick = (e) => { e.stopPropagation(); openEditModal(btn.getAttribute('data-id')); }; });
+        container.querySelectorAll('.action-icon.delete').forEach(btn => { btn.onclick = (e) => { e.stopPropagation(); if(confirm("حذف شود؟")) { deleteCustomer(btn.getAttribute('data-id')); } }; });
     }
-    
+
     async function loadFromFirebase() {
         showLoading(true);
         loadCartablesFromFirebase();
         loadRelatedFromFirebase();
-        
+        loadEmployersFromFirebase();
+
         onValue(customersRef, (snapshot) => {
             const data = snapshot.val();
             customers = [];
             if(data) {
-                const keys = Object.keys(data);
-                const tempCustomers = [];
-                for(var i = 0; i < keys.length; i++) {
-                    const key = keys[i];
-                    const cust = data[key];
-                    cust.firebaseId = key;
-                    tempCustomers.push(cust);
-                }
-                
-                const now = Date.now();
-                const baseTime = now - (tempCustomers.length * 1000 * 60 * 60 * 24 * 30);
-                
-                for(var j = 0; j < tempCustomers.length; j++) {
-                    const cust = tempCustomers[j];
-                    if(!cust.createdAt) {
-                        cust.createdAt = baseTime + (j * 1000 * 60 * 60 * 24 * 30);
-                    }
-                    if(!cust.status) {
-                        cust.status = 'ثبت اولیه';
-                    }
-                    customers.push(cust);
-                }
+                const keys = Object.keys(data); const tempCustomers = [];
+                for(var i=0; i<keys.length; i++) { const key = keys[i]; const cust = data[key]; cust.firebaseId = key; tempCustomers.push(cust); }
+                const now = Date.now(); const baseTime = now - (tempCustomers.length * 1000 * 60 * 60 * 24 * 30);
+                for(var j=0; j<tempCustomers.length; j++) { const cust = tempCustomers[j]; if(!cust.createdAt) { cust.createdAt = baseTime + (j * 1000 * 60 * 60 * 24 * 30); } if(!cust.status) { cust.status = 'ثبت اولیه'; } customers.push(cust); }
             }
             showLoading(false);
             renderFullData();
-        }, (error) => {
-            showLoading(false);
-            console.error(error);
-            alert("خطا در اتصال به دیتابیس");
-        });
+        }, (error) => { showLoading(false); console.error(error); alert("خطا در اتصال به دیتابیس"); });
     }
-    
-    async function saveCustomerToFirebase(customerData, firebaseId = null) {
-        showLoading(true);
-        try {
-            if(!firebaseId) {
-                customerData.createdAt = Date.now();
-            }
-            if(firebaseId) {
-                await update(ref(database, `visa_customers/${firebaseId}`), customerData);
-                showToast('مشتری با موفقیت ویرایش شد');
-            } else {
-                const newRef = push(customersRef);
-                await set(newRef, customerData);
-                showToast('مشتری با موفقیت ثبت شد');
-            }
-        } catch(error) {
-            console.error(error);
-            if(error.code === 'PERMISSION_DENIED') {
-                alert("خطا: دسترسی به دیتابیس وجود ندارد. لطفاً قوانین Firebase را تنظیم کنید.");
-            } else {
-                alert("خطا در ذخیره اطلاعات: " + error.message);
-            }
-        }
-        showLoading(false);
-    }
-    
-    async function deleteCustomer(firebaseId) {
-        showLoading(true);
-        try {
-            await remove(ref(database, `visa_customers/${firebaseId}`));
-            showToast('مشتری حذف شد');
-        } catch(error) {
-            console.error(error);
-            alert("خطا در حذف");
-        }
-        showLoading(false);
-    }
-    
-    async function updateTransactions(firebaseId, transactions) {
-        showLoading(true);
-        try {
-            await update(ref(database, `visa_customers/${firebaseId}`), { transactions: transactions });
-            showToast('رسید ثبت شد');
-        } catch(error) {
-            console.error(error);
-            alert("خطا در ثبت رسید");
-        }
-        showLoading(false);
-    }
-    
+
+    async function saveCustomerToFirebase(customerData, firebaseId = null) { showLoading(true); try { if(!firebaseId) { customerData.createdAt = Date.now(); const newRef = push(customersRef); await set(newRef, customerData); showToast('مشتری با موفقیت ثبت شد'); } else { await update(ref(database, `visa_customers/${firebaseId}`), customerData); showToast('مشتری با موفقیت ویرایش شد'); } } catch(error) { console.error(error); alert("خطا در ذخیره اطلاعات: " + error.message); } showLoading(false); }
+
+    async function deleteCustomer(firebaseId) { showLoading(true); try { await remove(ref(database, `visa_customers/${firebaseId}`)); showToast('مشتری حذف شد'); } catch(error) { console.error(error); alert("خطا در حذف"); } showLoading(false); }
+
+    async function updateTransactions(firebaseId, transactions) { showLoading(true); try { await update(ref(database, `visa_customers/${firebaseId}`), { transactions: transactions }); showToast('رسید ثبت شد'); } catch(error) { console.error(error); alert("خطا در ثبت رسید"); } showLoading(false); }
+
     function openTransactionModal(firebaseId) {
-        var cust = customers.find(c => c.firebaseId === firebaseId);
-        if(!cust) return;
-        
-        var existing = document.querySelector('.modal-overlay-smooth');
-        if(existing) existing.remove();
-        
-        var totals = calculateTotals(cust);
-        var today = getTodayGregorian();
+        var cust = customers.find(c => c.firebaseId === firebaseId); if(!cust) return;
+        var existing = document.querySelector('.modal-overlay-smooth'); if(existing) existing.remove();
+        var totals = calculateTotals(cust); var today = getTodayGregorian();
         var transactionsHtml = '<div class="transactions-list"><h4 style="margin-bottom:16px;"><i class="fas fa-history"></i> تاریخچه رسیدها</h4>';
-        
-        if(!cust.transactions || cust.transactions.length === 0) {
-            transactionsHtml += '<div style="padding:20px; text-align:center; color:#999;">هیچ رسیدی ثبت نشده است</div>';
-        } else {
-            for(var i = cust.transactions.length - 1; i >= 0; i--) {
-                var t = cust.transactions[i];
-                transactionsHtml += '<div class="transaction-item">' +
-                    '<div><span class="transaction-date">📅 ' + formatGregorianDate(t.date) + '</span><div class="transaction-desc">' + (t.description || 'بدون توضیح') + '</div></div>' +
-                    '<div><span class="transaction-amount">' + formatAfghani(t.amount) + '</span></div>' +
-                    '<button class="delete-trans" data-trans-index="' + i + '"><i class="fas fa-trash-can"></i></button>' +
-                    '</div>';
-            }
-        }
+        if(!cust.transactions || cust.transactions.length === 0) { transactionsHtml += '<div style="padding:20px; text-align:center; color:#999;">هیچ رسیدی ثبت نشده است</div>'; }
+        else { for(var i=cust.transactions.length-1; i>=0; i--) { var t = cust.transactions[i]; transactionsHtml += '<div class="transaction-item"><div><span class="transaction-date">📅 ' + formatGregorianDate(t.date) + '</span><div class="transaction-desc">' + (t.description || 'بدون توضیح') + '</div></div><div><span class="transaction-amount">' + formatAfghani(t.amount) + '</span></div><button class="delete-trans" data-trans-index="' + i + '"><i class="fas fa-trash-can"></i></button></div>'; } }
         transactionsHtml += '<div class="total-paid">مجموع رسیدها: <strong>' + formatAfghani(totals.totalReceipt) + '</strong> | باقیمانده: ' + formatAfghani(totals.remaining) + '</div>';
         transactionsHtml += '<hr style="margin:15px 0;"><h4><i class="fas fa-plus-circle"></i> ثبت رسید جدید</h4>' +
             '<div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:12px;">' +
@@ -1268,224 +1318,80 @@
             '<input type="text" id="transDesc" placeholder="توضیح (اختیاری)" style="flex:2; padding:10px; border-radius:24px; border:1px solid #ddd;">' +
             '<button id="addReceiptBtn" style="background:#0a2a3f; color:white; border:none; padding:0 24px; border-radius:40px; cursor:pointer;">➕ افزودن</button>' +
             '</div>';
-        
-        var modalDiv = document.createElement('div');
-        modalDiv.className = 'modal-overlay-smooth';
-        modalDiv.innerHTML = '<div class="modal-card-sleek modal-card-large">' +
-            '<div class="modal-header-sleek"><h3><i class="fas fa-receipt"></i> مدیریت رسیدها · ' + cust.firstName + ' ' + cust.lastName + '</h3><div class="close-modal-x" id="closeTransModal">✕</div></div>' +
-            '<div style="padding:0 0 20px 0;">' + transactionsHtml + '</div>' +
-            '<button class="submit-gold" id="closeTransBtn" style="margin-bottom:30px;">بستن</button>' +
-            '</div>';
+        var modalDiv = document.createElement('div'); modalDiv.className = 'modal-overlay-smooth'; modalDiv.innerHTML = '<div class="modal-card-sleek modal-card-large"><div class="modal-header-sleek"><h3><i class="fas fa-receipt"></i> مدیریت رسیدها · ' + cust.firstName + ' ' + cust.lastName + '</h3><div class="close-modal-x" id="closeTransModal">✕</div></div><div style="padding:0 0 20px 0;">' + transactionsHtml + '</div><button class="submit-gold" id="closeTransBtn" style="margin-bottom:30px;">بستن</button></div>';
         document.body.appendChild(modalDiv);
-        
         var closeModal = () => modalDiv.remove();
         document.getElementById("closeTransModal").onclick = closeModal;
         document.getElementById("closeTransBtn").onclick = closeModal;
         modalDiv.addEventListener('click', (e) => { if(e.target === modalDiv) closeModal(); });
-        
-        document.getElementById("addReceiptBtn").onclick = async () => {
-            var date = document.getElementById("transDate").value.trim();
-            var amount = document.getElementById("transAmount").value.trim();
-            var desc = document.getElementById("transDesc").value.trim() || "";
-            if(!date) { alert("تاریخ را وارد کنید"); return; }
-            if(!amount || isNaN(parseInt(amount))) { alert("مبلغ معتبر وارد کنید"); return; }
-            var newTransaction = { date: date, amount: parseInt(amount).toString(), description: desc };
-            var newTransactions = cust.transactions ? [...cust.transactions, newTransaction] : [newTransaction];
-            await updateTransactions(firebaseId, newTransactions);
-            closeModal();
-        };
-        
-        modalDiv.querySelectorAll('.delete-trans').forEach(btn => {
-            btn.onclick = async (e) => {
-                e.stopPropagation();
-                var idx = parseInt(btn.getAttribute('data-trans-index'));
-                if(confirm("حذف این رسید؟")) {
-                    var newTransactions = cust.transactions.filter((_, i) => i !== idx);
-                    await updateTransactions(firebaseId, newTransactions);
-                    closeModal();
-                }
-            };
-        });
+        document.getElementById("addReceiptBtn").onclick = async () => { var date = document.getElementById("transDate").value.trim(); var amount = document.getElementById("transAmount").value.trim(); var desc = document.getElementById("transDesc").value.trim() || ""; if(!date) { alert("تاریخ را وارد کنید"); return; } if(!amount || isNaN(parseInt(amount))) { alert("مبلغ معتبر وارد کنید"); return; } var newTransaction = { date: date, amount: parseInt(amount).toString(), description: desc }; var newTransactions = cust.transactions ? [...cust.transactions, newTransaction] : [newTransaction]; await updateTransactions(firebaseId, newTransactions); closeModal(); };
+        modalDiv.querySelectorAll('.delete-trans').forEach(btn => { btn.onclick = async (e) => { e.stopPropagation(); var idx = parseInt(btn.getAttribute('data-trans-index')); if(confirm("حذف این رسید؟")) { var newTransactions = cust.transactions.filter((_, i) => i !== idx); await updateTransactions(firebaseId, newTransactions); closeModal(); } }; });
     }
-    
-    function openEditModal(firebaseId) {
-        var customer = customers.find(c => c.firebaseId === firebaseId);
-        if(customer) showCustomerModal(customer);
-    }
-    
+
+    function openEditModal(firebaseId) { var customer = customers.find(c => c.firebaseId === firebaseId); if(customer) showCustomerModal(customer); }
     function openNewModal() { showCustomerModal(null); }
-    
+
     function showCustomerModal(cust) {
-        var existing = document.querySelector('.modal-overlay-smooth');
-        if(existing) existing.remove();
-        var isEdit = (cust !== null);
-        var modalDiv = document.createElement('div');
-        modalDiv.className = 'modal-overlay-smooth';
-        
+        var existing = document.querySelector('.modal-overlay-smooth'); if(existing) existing.remove();
+        var isEdit = (cust !== null); var modalDiv = document.createElement('div'); modalDiv.className = 'modal-overlay-smooth';
         var today = getTodayGregorian();
-        
-        var allFields = [
-            "تاریخ", "date", "تخلص", "lastName", "اسم", "firstName", "نام پدر", "fatherName",
-            "نام پدر کلان", "grandFatherName", "نام مادر", "motherName", "تماس AF", "phoneAF", "تماس ایران", "phoneIran",
-            "آدرس افغانستان", "addressAF", "آدرس ایران", "addressIran", "شغل", "job", "توضیحات", "description", 
-            "کد پیگیری", "trackingCode1", "کد اختصاصی", "specialCode", "کد رهگیری", "trackingCode2",
-            "وضعیت", "status", "مربوط نفر", "related", "کارتابل", "cartable", "مبلغ کل (AFN)", "amount"
-        ];
-        
+        var allFields = [ "تاریخ", "date", "تخلص", "lastName", "اسم", "firstName", "نام پدر", "fatherName", "نام پدر کلان", "grandFatherName", "نام مادر", "motherName", "تماس AF", "phoneAF", "تماس ایران", "phoneIran", "آدرس افغانستان", "addressAF", "آدرس ایران", "addressIran", "شغل", "job", "توضیحات", "description", "کد پیگیری", "trackingCode1", "کد اختصاصی", "specialCode", "کد رهگیری", "trackingCode2", "وضعیت", "status", "مربوط نفر", "related", "کارتابل", "cartable", "مبلغ کل (AFN)", "amount" ];
         var gridHtml = '<div class="form-grid-double">';
-        for(var i = 0; i < allFields.length; i += 2) {
-            var label = allFields[i];
-            var fieldName = allFields[i+1];
-            var value = cust ? (cust[fieldName] || '') : '';
-            
-            if(fieldName === 'date') {
-                value = value || today;
-                gridHtml += '<div class="field-group-simple"><label>' + label + ' (میلادی)</label><input type="text" name="' + fieldName + '" value="' + value + '" placeholder="مثال: 2024-01-15"></div>';
-            } else if(fieldName === 'status') {
-                var statusOptionsHtml = '';
-                var statusList = ['ثبت اولیه', 'ثبت اختصاص', 'ثبت روادید', 'تایید روادید', 'ویزه شده', 'کنسل شد', 'به تعویق افتاد'];
-                for(var s = 0; s < statusList.length; s++) {
-                    var selected = (value === statusList[s]) ? 'selected' : '';
-                    var icon = '';
-                    if(statusList[s] === 'ثبت اولیه') icon = '✅';
-                    else if(statusList[s] === 'ثبت اختصاص') icon = '🟣';
-                    else if(statusList[s] === 'ثبت روادید') icon = '🟢';
-                    else if(statusList[s] === 'تایید روادید') icon = '📋';
-                    else if(statusList[s] === 'ویزه شده') icon = '🛂';
-                    else if(statusList[s] === 'کنسل شد') icon = '❌';
-                    else if(statusList[s] === 'به تعویق افتاد') icon = '⏳';
-                    statusOptionsHtml += '<option value="' + statusList[s] + '" ' + selected + '>' + icon + ' ' + statusList[s] + '</option>';
-                }
-                gridHtml += '<div class="field-group-simple"><label>' + label + '</label><select name="' + fieldName + '">' + statusOptionsHtml + '</select></div>';
-            } else if(fieldName === 'related') {
-                var relatedOptionsHtml = '';
-                for(var r = 0; r < relatedList.length; r++) {
-                    var selected = (value === relatedList[r]) ? 'selected' : '';
-                    relatedOptionsHtml += '<option value="' + relatedList[r] + '" ' + selected + '>' + relatedList[r] + '</option>';
-                }
-                gridHtml += '<div class="field-group-simple"><label>' + label + '</label>' +
-                    '<div class="field-with-button">' +
-                    '<select name="' + fieldName + '" id="relatedSelect">' + relatedOptionsHtml + '</select>' +
-                    '<button type="button" class="add-btn" id="addRelatedBtn" title="افزودن مربوط نفر جدید"><i class="fas fa-plus"></i></button>' +
-                    '</div></div>';
-            } else if(fieldName === 'cartable') {
-                var optionsHtml = '';
-                for(var c = 0; c < cartableList.length; c++) {
-                    var selected = (value === cartableList[c]) ? 'selected' : '';
-                    optionsHtml += '<option value="' + cartableList[c] + '" ' + selected + '>' + cartableList[c] + '</option>';
-                }
-                gridHtml += '<div class="field-group-simple"><label>' + label + '</label>' +
-                    '<div class="field-with-button">' +
-                    '<select name="' + fieldName + '" id="cartableSelect">' + optionsHtml + '</select>' +
-                    '<button type="button" class="add-btn" id="addCartableBtn" title="افزودن کارتابل جدید"><i class="fas fa-plus"></i></button>' +
-                    '</div></div>';
-            } else if(fieldName === 'description') {
-                gridHtml += '<div class="field-group-simple"><label>' + label + '</label><textarea name="' + fieldName + '" rows="2" placeholder="اختیاری">' + (value || '') + '</textarea></div>';
-            } else {
-                var required = (fieldName === 'firstName') ? 'required' : '';
-                gridHtml += '<div class="field-group-simple"><label>' + label + '</label><input type="text" name="' + fieldName + '" value="' + (value || '') + '" ' + required + ' placeholder="اختیاری"></div>';
-            }
+        for(var i=0; i<allFields.length; i+=2) {
+            var label = allFields[i]; var fieldName = allFields[i+1]; var value = cust ? (cust[fieldName] || '') : '';
+            if(fieldName === 'date') { value = value || today; gridHtml += '<div class="field-group-simple"><label>' + label + ' (میلادی)</label><input type="text" name="' + fieldName + '" value="' + value + '" placeholder="مثال: 2024-01-15"></div>'; }
+            else if(fieldName === 'status') { var statusOptionsHtml = ''; var statusList = ['ثبت اولیه', 'ثبت اختصاص', 'ثبت روادید', 'تایید روادید', 'ویزه شده', 'کنسل شد', 'به تعویق افتاد']; for(var s=0; s<statusList.length; s++) { var selected = (value === statusList[s]) ? 'selected' : ''; var icon = ''; if(statusList[s] === 'ثبت اولیه') icon = '✅'; else if(statusList[s] === 'ثبت اختصاص') icon = '🟣'; else if(statusList[s] === 'ثبت روادید') icon = '🟢'; else if(statusList[s] === 'تایید روادید') icon = '📋'; else if(statusList[s] === 'ویزه شده') icon = '🛂'; else if(statusList[s] === 'کنسل شد') icon = '❌'; else if(statusList[s] === 'به تعویق افتاد') icon = '⏳'; statusOptionsHtml += '<option value="' + statusList[s] + '" ' + selected + '>' + icon + ' ' + statusList[s] + '</option>'; } gridHtml += '<div class="field-group-simple"><label>' + label + '</label><select name="' + fieldName + '">' + statusOptionsHtml + '</select></div>'; }
+            else if(fieldName === 'related') { var relatedOptionsHtml = ''; for(var r=0; r<relatedList.length; r++) { var selected = (value === relatedList[r]) ? 'selected' : ''; relatedOptionsHtml += '<option value="' + relatedList[r] + '" ' + selected + '>' + relatedList[r] + '</option>'; } gridHtml += '<div class="field-group-simple"><label>' + label + '</label><div class="field-with-button"><select name="' + fieldName + '" id="relatedSelect">' + relatedOptionsHtml + '</select><button type="button" class="add-btn" id="addRelatedBtn" title="افزودن مربوط نفر جدید"><i class="fas fa-plus"></i></button></div></div>'; }
+            else if(fieldName === 'cartable') { var optionsHtml = ''; for(var c=0; c<cartableList.length; c++) { var selected = (value === cartableList[c]) ? 'selected' : ''; optionsHtml += '<option value="' + cartableList[c] + '" ' + selected + '>' + cartableList[c] + '</option>'; } gridHtml += '<div class="field-group-simple"><label>' + label + '</label><div class="field-with-button"><select name="' + fieldName + '" id="cartableSelect">' + optionsHtml + '</select><button type="button" class="add-btn" id="addCartableBtn" title="افزودن کارتابل جدید"><i class="fas fa-plus"></i></button></div></div>'; }
+            else if(fieldName === 'description') { gridHtml += '<div class="field-group-simple"><label>' + label + '</label><textarea name="' + fieldName + '" rows="2" placeholder="اختیاری">' + (value || '') + '</textarea></div>'; }
+            else { var required = (fieldName === 'firstName') ? 'required' : ''; gridHtml += '<div class="field-group-simple"><label>' + label + '</label><input type="text" name="' + fieldName + '" value="' + (value || '') + '" ' + required + ' placeholder="اختیاری"></div>'; }
         }
         gridHtml += '</div>';
-        
-        modalDiv.innerHTML = '<div class="modal-card-sleek">' +
-            '<div class="modal-header-sleek"><h3><i class="fas fa-' + (isEdit ? 'user-edit' : 'user-plus') + '"></i> ' + (isEdit ? 'ویرایش مشتری' : 'ثبت مشتری جدید') + '</h3><div class="close-modal-x" id="closeCustModal">✕</div></div>' +
-            '<div class="info-note"><i class="fas fa-info-circle"></i> فقط نام الزامی است. تاریخ به فرمت میلادی (YYYY-MM-DD)</div>' +
-            '<form id="custForm">' + gridHtml + '<button type="submit" class="submit-gold">' + (isEdit ? 'ذخیره تغییرات' : 'ثبت مشتری') + '</button></form>' +
-            '</div>';
+        modalDiv.innerHTML = '<div class="modal-card-sleek"><div class="modal-header-sleek"><h3><i class="fas fa-' + (isEdit ? 'user-edit' : 'user-plus') + '"></i> ' + (isEdit ? 'ویرایش مشتری' : 'ثبت مشتری جدید') + '</h3><div class="close-modal-x" id="closeCustModal">✕</div></div><div class="info-note"><i class="fas fa-info-circle"></i> فقط نام الزامی است. تاریخ به فرمت میلادی (YYYY-MM-DD)</div><form id="custForm">' + gridHtml + '<button type="submit" class="submit-gold">' + (isEdit ? 'ذخیره تغییرات' : 'ثبت مشتری') + '</button></form></div>';
         document.body.appendChild(modalDiv);
-        
         document.getElementById("closeCustModal").onclick = () => modalDiv.remove();
         modalDiv.addEventListener('click', (e) => { if(e.target === modalDiv) modalDiv.remove(); });
-        
-        document.getElementById("addCartableBtn").onclick = async function() {
-            var newCartable = prompt("نام کارتابل جدید را وارد کنید:");
-            if(newCartable && newCartable.trim() !== '') {
-                newCartable = newCartable.trim();
-                await addCartableToFirebase(newCartable);
-                var select = document.getElementById("cartableSelect");
-                var option = document.createElement('option');
-                option.value = newCartable;
-                option.text = newCartable;
-                option.selected = true;
-                select.appendChild(option);
-            }
-        };
-        
-        document.getElementById("addRelatedBtn").onclick = async function() {
-            var newRelated = prompt("نام مربوط نفر جدید را وارد کنید:");
-            if(newRelated && newRelated.trim() !== '') {
-                newRelated = newRelated.trim();
-                var result = await addRelatedToFirebase(newRelated);
-                if(result) {
-                    var select = document.getElementById("relatedSelect");
-                    var option = document.createElement('option');
-                    option.value = newRelated;
-                    option.text = newRelated;
-                    option.selected = true;
-                    select.appendChild(option);
-                }
-            }
-        };
-        
+        document.getElementById("addCartableBtn").onclick = async function() { var newCartable = prompt("نام کارتابل جدید را وارد کنید:"); if(newCartable && newCartable.trim() !== '') { newCartable = newCartable.trim(); await addCartableToFirebase(newCartable); var select = document.getElementById("cartableSelect"); var option = document.createElement('option'); option.value = newCartable; option.text = newCartable; option.selected = true; select.appendChild(option); } };
+        document.getElementById("addRelatedBtn").onclick = async function() { var newRelated = prompt("نام مربوط نفر جدید را وارد کنید:"); if(newRelated && newRelated.trim() !== '') { newRelated = newRelated.trim(); var result = await addRelatedToFirebase(newRelated); if(result) { var select = document.getElementById("relatedSelect"); var option = document.createElement('option'); option.value = newRelated; option.text = newRelated; option.selected = true; select.appendChild(option); } } };
         var form = modalDiv.querySelector("#custForm");
-        form.onsubmit = async (e) => {
-            e.preventDefault();
-            var formData = {};
-            for(var i = 0; i < allFields.length; i += 2) {
-                var name = allFields[i+1];
-                var input = form.querySelector('[name="' + name + '"]');
-                if(input) formData[name] = input.value;
-            }
-            if(!formData.firstName) {
-                alert("لطفاً نام مشتری را وارد کنید");
-                return;
-            }
-            if(!formData.status) formData.status = 'ثبت اولیه';
-            
-            if(isEdit && cust) {
-                await saveCustomerToFirebase(formData, cust.firebaseId);
-            } else {
-                await saveCustomerToFirebase(formData);
-            }
-            modalDiv.remove();
-        };
+        form.onsubmit = async (e) => { e.preventDefault(); var formData = {}; for(var i=0; i<allFields.length; i+=2) { var name = allFields[i+1]; var input = form.querySelector('[name="' + name + '"]'); if(input) formData[name] = input.value; } if(!formData.firstName) { alert("لطفاً نام مشتری را وارد کنید"); return; } if(!formData.status) formData.status = 'ثبت اولیه'; if(isEdit && cust) { await saveCustomerToFirebase(formData, cust.firebaseId); } else { await saveCustomerToFirebase(formData); } modalDiv.remove(); };
     }
-    
-    document.getElementById("searchGlobal").addEventListener("input", (e) => {
-        searchKeyword = e.target.value;
-        currentPage = 1;
-        renderFullData();
+
+    // ======================== رویدادهای صفحه ========================
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("openEmployerPageBtn").addEventListener("click", function() {
+            document.getElementById("mainPage").classList.add("hidden");
+            document.getElementById("employerPage").classList.remove("hidden");
+            loadEmployersFromFirebase();
+        });
+
+        document.getElementById("backToMainBtn").addEventListener("click", function() {
+            document.getElementById("employerPage").classList.add("hidden");
+            document.getElementById("mainPage").classList.remove("hidden");
+            renderFullData();
+        });
+
+        document.getElementById("openEmployerCreateBtn").addEventListener("click", openNewEmployerModal);
+
+        document.getElementById("searchEmployer").addEventListener("input", function(e) {
+            employerSearch = e.target.value;
+            employerPage = 1;
+            renderEmployerTable();
+        });
+
+        document.getElementById("prevEmployerBtn").addEventListener("click", function() { if(employerPage > 1) { employerPage--; renderEmployerTable(); } });
+        document.getElementById("nextEmployerBtn").addEventListener("click", function() { var total = Math.ceil(getFilteredEmployers().length / employerRowsPerPage); if(employerPage < total) { employerPage++; renderEmployerTable(); } });
+
+        document.getElementById("searchGlobal").addEventListener("input", function(e) { searchKeyword = e.target.value; currentPage = 1; renderFullData(); });
+        document.getElementById("cartableFilter").addEventListener("change", function(e) { selectedCartable = e.target.value; currentPage = 1; renderFullData(); });
+        document.getElementById("statusFilter").addEventListener("change", function(e) { selectedStatus = e.target.value; currentPage = 1; renderFullData(); });
+        document.getElementById("relatedFilter").addEventListener("change", function(e) { selectedRelated = e.target.value; currentPage = 1; renderFullData(); });
+        document.getElementById("prevPageBtn").addEventListener("click", function() { if(currentPage > 1) { currentPage--; renderFullData(); } });
+        document.getElementById("nextPageBtn").addEventListener("click", function() { var total = Math.ceil(getFilteredList().length / rowsPerPage); if(currentPage < total) { currentPage++; renderFullData(); } });
+        document.getElementById("openCreateModalBtn").addEventListener("click", openNewModal);
+
+        loadFromFirebase();
     });
-    
-    document.getElementById("cartableFilter").addEventListener("change", (e) => {
-        selectedCartable = e.target.value;
-        currentPage = 1;
-        renderFullData();
-    });
-    
-    document.getElementById("statusFilter").addEventListener("change", (e) => {
-        selectedStatus = e.target.value;
-        currentPage = 1;
-        renderFullData();
-    });
-    
-    document.getElementById("relatedFilter").addEventListener("change", (e) => {
-        selectedRelated = e.target.value;
-        currentPage = 1;
-        renderFullData();
-    });
-    
-    document.getElementById("prevPageBtn").addEventListener("click", () => {
-        if(currentPage > 1) { currentPage--; renderFullData(); }
-    });
-    document.getElementById("nextPageBtn").addEventListener("click", () => {
-        var total = Math.ceil(getFilteredList().length / rowsPerPage);
-        if(currentPage < total) { currentPage++; renderFullData(); }
-    });
-    document.getElementById("openCreateModalBtn").addEventListener("click", () => openNewModal());
-    
-    loadFromFirebase();
 </script>
 </body>
 </html>
