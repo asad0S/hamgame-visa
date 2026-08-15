@@ -210,6 +210,7 @@
         .status-done { background: #e0f7fa; color: #00695c; }
         .status-canceled { background: #ffebee; color: #c62828; }
         .status-postponed { background: #fff3e0; color: #e65100; }
+        .status-problem { background: #ffcdd2; color: #b71c1c; }
 
         .loading-overlay {
             position: fixed;
@@ -290,6 +291,24 @@
         .visa-master-table tbody tr:hover td {
             background-color: #eef4fc !important;
             transition: 0.15s;
+        }
+
+        /* رنگ قرمز برای ردیف‌های مشکل‌دار (فقط کارت کارگری دارد و مشکل دیگه دارد) */
+        .visa-master-table tbody tr.has-problem td {
+            color: #b71c1c !important;
+            font-weight: 700;
+        }
+        .visa-master-table tbody tr.has-problem:hover td {
+            background-color: #ffebee !important;
+        }
+
+        /* رنگ نارنجی برای کنسلی کارت (بدون رنگ قرمز) */
+        .visa-master-table tbody tr.has-cancel-only td {
+            color: #1c4055 !important;
+            font-weight: 500 !important;
+        }
+        .visa-master-table tbody tr.has-cancel-only:hover td {
+            background-color: #eef4fc !important;
         }
 
         .scrollable-cell {
@@ -490,6 +509,33 @@
             appearance: auto;
             cursor: pointer;
         }
+
+        /* چک‌باکس‌های سفارشی */
+        .checkbox-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            padding: 10px 0;
+        }
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #0a2a3f;
+        }
+        .checkbox-item label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #1b5c7a;
+            cursor: pointer;
+        }
+
         .field-with-button {
             display: flex;
             gap: 8px;
@@ -597,6 +643,11 @@
         }
         .afghani-symbol { color: #1d7e5c; }
         .remain-af { color: #bc6f2c; }
+        .cancel-amount {
+            font-weight: 800;
+            color: #1a6b4a;
+            font-size: 1rem;
+        }
 
         .employer-table {
             width: 100%;
@@ -715,6 +766,12 @@
                 <select class="filter-select" id="relatedFilter">
                     <option value="all">همه مربوط نفر</option>
                 </select>
+                <select class="filter-select" id="problemFilter">
+                    <option value="all">همه مشتریان</option>
+                    <option value="hasCard">کارت کارگری دارد</option>
+                    <option value="hasProblem">مشکل دیگه دارد</option>
+                    <option value="cardCanceled">کنسلی کارت کار</option>
+                </select>
             </div>
             <div class="counter-badge" id="recordsCounter">۰ مشتری</div>
         </div>
@@ -745,11 +802,12 @@
                         <th style="min-width: 110px;">مبلغ کل (AFN)</th>
                         <th style="min-width: 110px;">رسید کل (AFN)</th>
                         <th style="min-width: 110px;">باقی (AFN)</th>
+                        <th style="min-width: 150px;">وضعیت کارت</th>
                         <th style="min-width: 100px;">عملیات</th>
                     </tr>
                 </thead>
                 <tbody id="tableDynamicBody">
-                    <tr><td colspan="23" style="text-align:center; padding:48px;">در حال اتصال به دیتابیس...<br><div class="spinner" style="width:30px;height:30px;margin:10px auto;"></div></td></tr>
+                    <tr><td colspan="24" style="text-align:center; padding:48px;">در حال اتصال به دیتابیس...<br><div class="spinner" style="width:30px;height:30px;margin:10px auto;"></div></td></tr>
                 </tbody>
             </table>
         </div>
@@ -849,6 +907,7 @@
     let selectedCartable = "all";
     let selectedStatus = "all";
     let selectedRelated = "all";
+    let selectedProblem = "all";
 
     let employerPage = 1;
     const employerRowsPerPage = 15;
@@ -887,6 +946,12 @@
         }).catch(function() {
             alert('کپی نشد: ' + text);
         });
+    }
+
+    function formatAfghani(amount) {
+        if(!amount && amount !== 0) return "۰";
+        var num = parseInt(amount.toString().replace(/,/g,'')) || 0;
+        return num.toLocaleString('fa-IR') + " ؋";
     }
 
     // ======================== کارفرمایان ========================
@@ -1107,7 +1172,7 @@
         };
     }
 
-    // ======================== کدهای مشتریان (همانند قبل) ========================
+    // ======================== توابع مشتریان ========================
     function loadCartablesFromFirebase() {
         onValue(cartablesRef, (snapshot) => {
             const data = snapshot.val();
@@ -1170,17 +1235,81 @@
         return `<span class="status-badge ${cls}">${icon} ${status}</span>`;
     }
 
+    function getCardStatusBadge(cust) {
+        var hasCard = cust.hasCard || false;
+        var hasProblem = cust.hasProblem || false;
+        var cardCanceled = cust.cardCanceled || false;
+        var cancelAmount = cust.cancelAmount || null;
+        
+        // اگر کنسلی کارت انجام شده باشد، فقط مبلغ کنسلی را نشان بده (با رنگ سبز)
+        if(cardCanceled && cancelAmount) {
+            var amount = parseInt(cancelAmount);
+            return '<span class="cancel-amount">' + formatAfghani(amount) + ' کنسلی</span>';
+        }
+        
+        var statuses = [];
+        if(hasCard) statuses.push('کارت کارگری');
+        if(hasProblem) statuses.push('مشکل');
+        
+        if(statuses.length === 0) return '<span style="color:#4caf50;">✔ سالم</span>';
+        
+        var color = '#b71c1c';
+        var bg = '#ffcdd2';
+        if(hasCard && !hasProblem) {
+            color = '#e65100';
+            bg = '#fff3e0';
+        }
+        return '<span style="background:'+bg+'; color:'+color+'; padding:4px 8px; border-radius:12px; font-size:0.7rem; font-weight:700;">' + statuses.join(', ') + '</span>';
+    }
+
     function formatAddressForDisplay(text, maxLen) { if(!text) return '-'; if(text.length <= maxLen) return text; return text; }
 
     function hideCode(fullCode) { if(!fullCode || fullCode === '-') return '-'; if(fullCode.length <= 6) return fullCode; return fullCode.substring(0,6) + '•••'; }
 
-    function calculateTotals(cust) { var totalReceipt = 0; if(cust.transactions && cust.transactions.length > 0) { for(var i=0; i<cust.transactions.length; i++) { totalReceipt += parseInt(cust.transactions[i].amount) || 0; } } var totalAmount = parseInt(cust.amount) || 0; var remaining = totalAmount - totalReceipt; if(remaining < 0) remaining = 0; return { totalReceipt: totalReceipt, remaining: remaining }; }
+    function calculateTotals(cust) { 
+        var totalReceipt = 0; 
+        if(cust.transactions && cust.transactions.length > 0) { 
+            for(var i=0; i<cust.transactions.length; i++) { 
+                totalReceipt += parseInt(cust.transactions[i].amount) || 0; 
+            } 
+        } 
+        var totalAmount = parseInt(cust.amount) || 0;
+        
+        // اگر مبلغ کنسلی وجود دارد، به مبلغ کل اضافه می‌شود
+        if(cust.cardCanceled && cust.cancelAmount) {
+            totalAmount += parseInt(cust.cancelAmount) || 0;
+        }
+        
+        var remaining = totalAmount - totalReceipt; 
+        if(remaining < 0) remaining = 0; 
+        return { totalReceipt: totalReceipt, remaining: remaining, totalAmount: totalAmount }; 
+    }
+
+    function hasProblem(cust) {
+        // فقط کارت کارگری دارد و مشکل دیگه دارد باعث رنگ قرمز می‌شوند
+        return cust.hasCard || cust.hasProblem;
+    }
+
+    function hasCancelOnly(cust) {
+        // فقط کنسلی کارت دارد (بدون کارت کارگری و بدون مشکل)
+        return cust.cardCanceled && !cust.hasCard && !cust.hasProblem;
+    }
 
     function getFilteredList() {
         var list = [...customers];
         if(selectedCartable !== 'all') { list = list.filter(c => c.cartable === selectedCartable); }
         if(selectedStatus !== 'all') { list = list.filter(c => c.status === selectedStatus); }
         if(selectedRelated !== 'all') { list = list.filter(c => c.related === selectedRelated); }
+        
+        // فیلتر مشکل‌دار
+        if(selectedProblem === 'hasCard') {
+            list = list.filter(c => c.hasCard === true);
+        } else if(selectedProblem === 'hasProblem') {
+            list = list.filter(c => c.hasProblem === true);
+        } else if(selectedProblem === 'cardCanceled') {
+            list = list.filter(c => c.cardCanceled === true);
+        }
+        
         if(searchKeyword.trim()) {
             var kw = searchKeyword.trim().toLowerCase(); var filtered = [];
             for(var i=0; i<list.length; i++) { var c = list[i];
@@ -1202,8 +1331,6 @@
         return list;
     }
 
-    function formatAfghani(amount) { if(!amount && amount !== 0) return "۰"; var num = parseInt(amount.toString().replace(/,/g,'')) || 0; return num.toLocaleString('fa-IR') + " ؋"; }
-
     function renderFullData() {
         var filtered = getFilteredList();
         var totalPages = Math.ceil(filtered.length / rowsPerPage) || 1;
@@ -1213,11 +1340,24 @@
         var pageItems = filtered.slice(start, start + rowsPerPage);
         var tbody = document.getElementById("tableDynamicBody");
         if(!tbody) return;
-        if(pageItems.length === 0) { tbody.innerHTML = '<tr><td colspan="23" style="text-align:center; padding:48px;">✨ هیچ مشتری یافت نشد</td></tr>'; document.getElementById("recordsCounter").innerHTML = "۰ مشتری"; document.getElementById("pageInfoText").innerHTML = "صفحه ۰ از ۰"; return; }
+        if(pageItems.length === 0) { tbody.innerHTML = '<tr><td colspan="24" style="text-align:center; padding:48px;">✨ هیچ مشتری یافت نشد</td></tr>'; document.getElementById("recordsCounter").innerHTML = "۰ مشتری"; document.getElementById("pageInfoText").innerHTML = "صفحه ۰ از ۰"; return; }
         var html = "";
         for(var i=0; i<pageItems.length; i++) {
-            var cust = pageItems[i]; var rowNumber = filtered.length - (start + i); var totals = calculateTotals(cust); var statusBadge = getStatusBadge(cust.status || 'ثبت اولیه');
-            html += '<tr>' +
+            var cust = pageItems[i]; 
+            var rowNumber = filtered.length - (start + i); 
+            var totals = calculateTotals(cust); 
+            var statusBadge = getStatusBadge(cust.status || 'ثبت اولیه');
+            var cardStatus = getCardStatusBadge(cust);
+            
+            // تعیین کلاس ردیف
+            var rowClass = '';
+            if(hasProblem(cust)) {
+                rowClass = 'has-problem'; // رنگ قرمز
+            } else if(hasCancelOnly(cust)) {
+                rowClass = 'has-cancel-only'; // بدون رنگ قرمز
+            }
+            
+            html += '<tr class="' + rowClass + '">' +
                 '<td data-copy="ردیف" data-copy-value="' + rowNumber + '">' + rowNumber + '</td>' +
                 '<td data-copy="تاریخ" data-copy-value="' + (cust.date || '') + '">' + formatGregorianDate(cust.date) + '</td>' +
                 '<td data-copy="تخلص" data-copy-value="' + (cust.lastName || '') + '">' + (cust.lastName || '-') + '</td>' +
@@ -1237,9 +1377,10 @@
                 '<td data-copy="وضعیت" data-copy-value="' + (cust.status || 'ثبت اولیه') + '">' + statusBadge + '</td>' +
                 '<td data-copy="مربوط نفر" data-copy-value="' + (cust.related || '') + '">' + (cust.related || '-') + '</td>' +
                 '<td data-copy="کارتابل" data-copy-value="' + (cust.cartable || '') + '">' + (cust.cartable || '-') + '</td>' +
-                '<td data-copy="مبلغ کل" data-copy-value="' + (cust.amount || '0') + ' افغانی" class="afghani-symbol">' + formatAfghani(cust.amount) + '</td>' +
+                '<td data-copy="مبلغ کل" data-copy-value="' + totals.totalAmount + ' افغانی" class="afghani-symbol">' + formatAfghani(totals.totalAmount) + '</td>' +
                 '<td data-copy="رسید کل" data-copy-value="' + totals.totalReceipt + ' افغانی" class="afghani-symbol">' + formatAfghani(totals.totalReceipt) + '</td>' +
                 '<td data-copy="باقی" data-copy-value="' + totals.remaining + ' افغانی" class="remain-af">' + formatAfghani(totals.remaining) + '</td>' +
+                '<td data-copy="وضعیت کارت" data-copy-value="' + (cust.hasCard ? 'کارت کارگری' : '') + (cust.hasProblem ? ' مشکل' : '') + (cust.cardCanceled ? ' کارت کنسل' : '') + '">' + cardStatus + '</td>' +
                 '<td><div class="action-flex">' +
                 '<button class="action-icon transaction" data-id="' + (cust.firebaseId || cust.id) + '" title="تراکنش‌ها / رسید"><i class="fas fa-receipt"></i></button>' +
                 '<button class="action-icon edit" data-id="' + (cust.firebaseId || cust.id) + '" title="ویرایش"><i class="fas fa-edit"></i></button>' +
@@ -1297,7 +1438,24 @@
         }, (error) => { showLoading(false); console.error(error); alert("خطا در اتصال به دیتابیس"); });
     }
 
-    async function saveCustomerToFirebase(customerData, firebaseId = null) { showLoading(true); try { if(!firebaseId) { customerData.createdAt = Date.now(); const newRef = push(customersRef); await set(newRef, customerData); showToast('مشتری با موفقیت ثبت شد'); } else { await update(ref(database, `visa_customers/${firebaseId}`), customerData); showToast('مشتری با موفقیت ویرایش شد'); } } catch(error) { console.error(error); alert("خطا در ذخیره اطلاعات: " + error.message); } showLoading(false); }
+    async function saveCustomerToFirebase(customerData, firebaseId = null) { 
+        showLoading(true); 
+        try { 
+            if(!firebaseId) { 
+                customerData.createdAt = Date.now(); 
+                const newRef = push(customersRef); 
+                await set(newRef, customerData); 
+                showToast('مشتری با موفقیت ثبت شد'); 
+            } else { 
+                await update(ref(database, `visa_customers/${firebaseId}`), customerData); 
+                showToast('مشتری با موفقیت ویرایش شد'); 
+            } 
+        } catch(error) { 
+            console.error(error); 
+            alert("خطا در ذخیره اطلاعات: " + error.message); 
+        } 
+        showLoading(false); 
+    }
 
     async function deleteCustomer(firebaseId) { showLoading(true); try { await remove(ref(database, `visa_customers/${firebaseId}`)); showToast('مشتری حذف شد'); } catch(error) { console.error(error); alert("خطا در حذف"); } showLoading(false); }
 
@@ -1335,8 +1493,36 @@
         var existing = document.querySelector('.modal-overlay-smooth'); if(existing) existing.remove();
         var isEdit = (cust !== null); var modalDiv = document.createElement('div'); modalDiv.className = 'modal-overlay-smooth';
         var today = getTodayGregorian();
-        var allFields = [ "تاریخ", "date", "تخلص", "lastName", "اسم", "firstName", "نام پدر", "fatherName", "نام پدر کلان", "grandFatherName", "نام مادر", "motherName", "تماس AF", "phoneAF", "تماس ایران", "phoneIran", "آدرس افغانستان", "addressAF", "آدرس ایران", "addressIran", "شغل", "job", "توضیحات", "description", "کد پیگیری", "trackingCode1", "کد اختصاصی", "specialCode", "کد رهگیری", "trackingCode2", "وضعیت", "status", "مربوط نفر", "related", "کارتابل", "cartable", "مبلغ کل (AFN)", "amount" ];
+        
+        var allFields = [
+            "تاریخ", "date", "تخلص", "lastName", "اسم", "firstName", "نام پدر", "fatherName", 
+            "نام پدر کلان", "grandFatherName", "نام مادر", "motherName", "تماس AF", "phoneAF", "تماس ایران", "phoneIran",
+            "آدرس افغانستان", "addressAF", "آدرس ایران", "addressIran", "شغل", "job", "توضیحات", "description", 
+            "کد پیگیری", "trackingCode1", "کد اختصاصی", "specialCode", "کد رهگیری", "trackingCode2",
+            "وضعیت", "status", "مربوط نفر", "related", "کارتابل", "cartable", "مبلغ کل (AFN)", "amount"
+        ];
+        
+        var hasCard = cust ? cust.hasCard || false : false;
+        var hasProblem = cust ? cust.hasProblem || false : false;
+        var cardCanceled = cust ? cust.cardCanceled || false : false;
+        var cancelAmount = cust ? cust.cancelAmount || '' : '';
+        
         var gridHtml = '<div class="form-grid-double">';
+        
+        // چک‌باکس‌ها در ابتدا
+        gridHtml += '<div class="field-group-simple" style="grid-column: 1 / -1;">';
+        gridHtml += '<label>وضعیت کارت کارگری</label>';
+        gridHtml += '<div class="checkbox-group">';
+        gridHtml += '<div class="checkbox-item"><input type="checkbox" id="hasCard" name="hasCard" ' + (hasCard ? 'checked' : '') + '><label for="hasCard">کارت کارگری دارد</label></div>';
+        gridHtml += '<div class="checkbox-item"><input type="checkbox" id="hasProblem" name="hasProblem" ' + (hasProblem ? 'checked' : '') + '><label for="hasProblem">مشکل دیگه دارد</label></div>';
+        gridHtml += '<div class="checkbox-item"><input type="checkbox" id="cardCanceled" name="cardCanceled" ' + (cardCanceled ? 'checked' : '') + '><label for="cardCanceled">کارت کاری اش را کنسل کردیم</label></div>';
+        gridHtml += '</div></div>';
+        
+        // فیلد مخفی برای مبلغ کنسلی
+        if(cancelAmount) {
+            gridHtml += '<input type="hidden" id="cancelAmountHidden" name="cancelAmount" value="' + cancelAmount + '">';
+        }
+        
         for(var i=0; i<allFields.length; i+=2) {
             var label = allFields[i]; var fieldName = allFields[i+1]; var value = cust ? (cust[fieldName] || '') : '';
             if(fieldName === 'date') { value = value || today; gridHtml += '<div class="field-group-simple"><label>' + label + ' (میلادی)</label><input type="text" name="' + fieldName + '" value="' + value + '" placeholder="مثال: 2024-01-15"></div>'; }
@@ -1347,14 +1533,75 @@
             else { var required = (fieldName === 'firstName') ? 'required' : ''; gridHtml += '<div class="field-group-simple"><label>' + label + '</label><input type="text" name="' + fieldName + '" value="' + (value || '') + '" ' + required + ' placeholder="اختیاری"></div>'; }
         }
         gridHtml += '</div>';
+        
         modalDiv.innerHTML = '<div class="modal-card-sleek"><div class="modal-header-sleek"><h3><i class="fas fa-' + (isEdit ? 'user-edit' : 'user-plus') + '"></i> ' + (isEdit ? 'ویرایش مشتری' : 'ثبت مشتری جدید') + '</h3><div class="close-modal-x" id="closeCustModal">✕</div></div><div class="info-note"><i class="fas fa-info-circle"></i> فقط نام الزامی است. تاریخ به فرمت میلادی (YYYY-MM-DD)</div><form id="custForm">' + gridHtml + '<button type="submit" class="submit-gold">' + (isEdit ? 'ذخیره تغییرات' : 'ثبت مشتری') + '</button></form></div>';
         document.body.appendChild(modalDiv);
         document.getElementById("closeCustModal").onclick = () => modalDiv.remove();
         modalDiv.addEventListener('click', (e) => { if(e.target === modalDiv) modalDiv.remove(); });
+        
+        // رویداد چک‌باکس کارت کنسل
+        document.getElementById("cardCanceled").addEventListener('change', function(e) {
+            var hiddenInput = document.getElementById('cancelAmountHidden');
+            if(this.checked) {
+                var amount = prompt("مقدار پول کنسلی را به افغانی وارد کنید (مثلاً 6000000):");
+                if(amount && !isNaN(parseInt(amount))) {
+                    var amountNum = parseInt(amount);
+                    showToast('مبلغ کنسلی: ' + formatAfghani(amountNum) + ' به مبلغ کل اضافه شد');
+                    if(!hiddenInput) {
+                        hiddenInput = document.createElement('input');
+                        hiddenInput.type = 'hidden';
+                        hiddenInput.name = 'cancelAmount';
+                        hiddenInput.id = 'cancelAmountHidden';
+                        document.getElementById("custForm").appendChild(hiddenInput);
+                    }
+                    hiddenInput.value = amount;
+                } else {
+                    this.checked = false;
+                    alert('مبلغ نامعتبر!');
+                    if(hiddenInput) hiddenInput.value = '';
+                }
+            } else {
+                if(hiddenInput) hiddenInput.value = '';
+            }
+        });
+        
         document.getElementById("addCartableBtn").onclick = async function() { var newCartable = prompt("نام کارتابل جدید را وارد کنید:"); if(newCartable && newCartable.trim() !== '') { newCartable = newCartable.trim(); await addCartableToFirebase(newCartable); var select = document.getElementById("cartableSelect"); var option = document.createElement('option'); option.value = newCartable; option.text = newCartable; option.selected = true; select.appendChild(option); } };
         document.getElementById("addRelatedBtn").onclick = async function() { var newRelated = prompt("نام مربوط نفر جدید را وارد کنید:"); if(newRelated && newRelated.trim() !== '') { newRelated = newRelated.trim(); var result = await addRelatedToFirebase(newRelated); if(result) { var select = document.getElementById("relatedSelect"); var option = document.createElement('option'); option.value = newRelated; option.text = newRelated; option.selected = true; select.appendChild(option); } } };
+        
         var form = modalDiv.querySelector("#custForm");
-        form.onsubmit = async (e) => { e.preventDefault(); var formData = {}; for(var i=0; i<allFields.length; i+=2) { var name = allFields[i+1]; var input = form.querySelector('[name="' + name + '"]'); if(input) formData[name] = input.value; } if(!formData.firstName) { alert("لطفاً نام مشتری را وارد کنید"); return; } if(!formData.status) formData.status = 'ثبت اولیه'; if(isEdit && cust) { await saveCustomerToFirebase(formData, cust.firebaseId); } else { await saveCustomerToFirebase(formData); } modalDiv.remove(); };
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            var formData = {};
+            for(var i=0; i<allFields.length; i+=2) {
+                var name = allFields[i+1];
+                var input = form.querySelector('[name="' + name + '"]');
+                if(input) formData[name] = input.value;
+            }
+            // چک‌باکس‌ها
+            formData.hasCard = document.getElementById("hasCard").checked || false;
+            formData.hasProblem = document.getElementById("hasProblem").checked || false;
+            formData.cardCanceled = document.getElementById("cardCanceled").checked || false;
+            
+            var cancelInput = form.querySelector('[name="cancelAmount"]');
+            if(cancelInput) {
+                formData.cancelAmount = cancelInput.value;
+            } else {
+                formData.cancelAmount = '';
+            }
+            
+            if(!formData.firstName) {
+                alert("لطفاً نام مشتری را وارد کنید");
+                return;
+            }
+            if(!formData.status) formData.status = 'ثبت اولیه';
+            
+            if(isEdit && cust) {
+                await saveCustomerToFirebase(formData, cust.firebaseId);
+            } else {
+                await saveCustomerToFirebase(formData);
+            }
+            modalDiv.remove();
+        };
     }
 
     // ======================== رویدادهای صفحه ========================
@@ -1386,6 +1633,7 @@
         document.getElementById("cartableFilter").addEventListener("change", function(e) { selectedCartable = e.target.value; currentPage = 1; renderFullData(); });
         document.getElementById("statusFilter").addEventListener("change", function(e) { selectedStatus = e.target.value; currentPage = 1; renderFullData(); });
         document.getElementById("relatedFilter").addEventListener("change", function(e) { selectedRelated = e.target.value; currentPage = 1; renderFullData(); });
+        document.getElementById("problemFilter").addEventListener("change", function(e) { selectedProblem = e.target.value; currentPage = 1; renderFullData(); });
         document.getElementById("prevPageBtn").addEventListener("click", function() { if(currentPage > 1) { currentPage--; renderFullData(); } });
         document.getElementById("nextPageBtn").addEventListener("click", function() { var total = Math.ceil(getFilteredList().length / rowsPerPage); if(currentPage < total) { currentPage++; renderFullData(); } });
         document.getElementById("openCreateModalBtn").addEventListener("click", openNewModal);
