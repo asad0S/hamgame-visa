@@ -293,7 +293,6 @@
             transition: 0.15s;
         }
 
-        /* رنگ قرمز برای ردیف‌های مشکل‌دار (فقط کارت کارگری دارد و مشکل دیگه دارد) */
         .visa-master-table tbody tr.has-problem td {
             color: #b71c1c !important;
             font-weight: 700;
@@ -302,7 +301,6 @@
             background-color: #ffebee !important;
         }
 
-        /* رنگ نارنجی برای کنسلی کارت (بدون رنگ قرمز) */
         .visa-master-table tbody tr.has-cancel-only td {
             color: #1c4055 !important;
             font-weight: 500 !important;
@@ -510,7 +508,6 @@
             cursor: pointer;
         }
 
-        /* چک‌باکس‌های سفارشی */
         .checkbox-group {
             display: flex;
             gap: 20px;
@@ -766,6 +763,9 @@
                 <select class="filter-select" id="relatedFilter">
                     <option value="all">همه مربوط نفر</option>
                 </select>
+                <select class="filter-select" id="provinceFilter">
+                    <option value="all">همه استان‌ها</option>
+                </select>
                 <select class="filter-select" id="problemFilter">
                     <option value="all">همه مشتریان</option>
                     <option value="hasCard">کارت کارگری دارد</option>
@@ -780,21 +780,10 @@
             <table class="visa-master-table" id="mainVisaTable">
                 <thead>
                     <tr>
-                        <th style="min-width: 60px;">ردیف</th>
-                        <th style="min-width: 120px;">تاریخ</th>
+                        <th style="min-width: 100px;">عملیات</th>
                         <th style="min-width: 100px;">تخلص</th>
                         <th style="min-width: 100px;">اسم</th>
                         <th style="min-width: 100px;">نام پدر</th>
-                        <th style="min-width: 120px;">نام پدر کلان</th>
-                        <th style="min-width: 100px;">نام مادر</th>
-                        <th style="min-width: 110px;">تماس AF</th>
-                        <th style="min-width: 110px;">تماس ایران</th>
-                        <th style="min-width: 180px;">آدرس افغانستان</th>
-                        <th style="min-width: 180px;">آدرس ایران</th>
-                        <th style="min-width: 100px;">شغل</th>
-                        <th style="min-width: 120px;">توضیحات</th>
-                        <th style="min-width: 130px;">کد پیگیری</th>
-                        <th style="min-width: 130px;">کد اختصاصی</th>
                         <th style="min-width: 130px;">کد رهگیری</th>
                         <th style="min-width: 120px;">وضعیت</th>
                         <th style="min-width: 110px;">مربوط نفر</th>
@@ -803,11 +792,19 @@
                         <th style="min-width: 110px;">رسید کل (AFN)</th>
                         <th style="min-width: 110px;">باقی (AFN)</th>
                         <th style="min-width: 150px;">وضعیت کارت</th>
-                        <th style="min-width: 100px;">عملیات</th>
+                        <th style="min-width: 130px;">مربوط استان</th>
+                        <th style="min-width: 120px;">نام پدر کلان</th>
+                        <th style="min-width: 100px;">نام مادر</th>
+                        <th style="min-width: 110px;">تماس AF</th>
+                        <th style="min-width: 180px;">آدرس افغانستان</th>
+                        <th style="min-width: 120px;">توضیحات</th>
+                        <th style="min-width: 130px;">کد اختصاصی</th>
+                        <th style="min-width: 120px;">تاریخ</th>
+                        <th style="min-width: 60px;">ردیف</th>
                     </tr>
                 </thead>
                 <tbody id="tableDynamicBody">
-                    <tr><td colspan="24" style="text-align:center; padding:48px;">در حال اتصال به دیتابیس...<br><div class="spinner" style="width:30px;height:30px;margin:10px auto;"></div></td></tr>
+                    <tr><td colspan="21" style="text-align:center; padding:48px;">در حال اتصال به دیتابیس...<br><div class="spinner" style="width:30px;height:30px;margin:10px auto;"></div></td></tr>
                 </tbody>
             </table>
         </div>
@@ -893,11 +890,13 @@
     const customersRef = ref(database, 'visa_customers');
     const cartablesRef = ref(database, 'visa_cartables');
     const relatedRef = ref(database, 'visa_related');
+    const provincesRef = ref(database, 'visa_provinces');
     const employersRef = ref(database, 'visa_employers');
 
     const defaultCartables = ['سید محمد', 'سید حسن', 'محمد افشار', 'مهدی', 'سید عبدالله'];
     let cartableList = [];
     let relatedList = [];
+    let provinceList = [];
 
     let customers = [];
     let employers = [];
@@ -907,6 +906,7 @@
     let selectedCartable = "all";
     let selectedStatus = "all";
     let selectedRelated = "all";
+    let selectedProvince = "all";
     let selectedProblem = "all";
 
     let employerPage = 1;
@@ -1172,6 +1172,71 @@
         };
     }
 
+    // ======================== توابع مربوط استان (ذخیره در Firebase) ========================
+    function loadProvincesFromFirebase() {
+        onValue(provincesRef, (snapshot) => {
+            const data = snapshot.val();
+            if(data) {
+                if(Array.isArray(data)) {
+                    provinceList = data;
+                } else {
+                    const keys = Object.keys(data);
+                    provinceList = [];
+                    for(var i = 0; i < keys.length; i++) {
+                        provinceList.push(data[keys[i]]);
+                    }
+                }
+            } else {
+                // استان‌ها خالی می‌گذاریم
+                provinceList = [];
+            }
+            updateProvinceFilterOptions();
+        }, (error) => {
+            console.error("خطا در بارگذاری استان‌ها:", error);
+            provinceList = [];
+            updateProvinceFilterOptions();
+        });
+    }
+
+    function updateProvinceFilterOptions() {
+        const select = document.getElementById('provinceFilter');
+        if(!select) return;
+        const currentValue = select.value;
+        select.innerHTML = '<option value="all">همه استان‌ها</option>';
+        for(var i = 0; i < provinceList.length; i++) {
+            var option = document.createElement('option');
+            option.value = provinceList[i];
+            option.text = provinceList[i];
+            select.appendChild(option);
+        }
+        if(currentValue && provinceList.indexOf(currentValue) !== -1) {
+            select.value = currentValue;
+        } else {
+            select.value = 'all';
+            selectedProvince = 'all';
+        }
+    }
+
+    async function addProvinceToFirebase(newProvince) {
+        if(provinceList.indexOf(newProvince) !== -1) {
+            alert('این استان قبلاً وجود دارد');
+            return false;
+        }
+        provinceList.push(newProvince);
+        try {
+            await set(provincesRef, provinceList);
+            updateProvinceFilterOptions();
+            showToast('استان "' + newProvince + '" در دیتابیس ذخیره شد');
+            return true;
+        } catch(error) {
+            console.error("خطا در ذخیره استان:", error);
+            // حذف از لیست در صورت خطا
+            provinceList = provinceList.filter(item => item !== newProvince);
+            alert("خطا در ذخیره استان در دیتابیس");
+            return false;
+        }
+    }
+
     // ======================== توابع مشتریان ========================
     function loadCartablesFromFirebase() {
         onValue(cartablesRef, (snapshot) => {
@@ -1241,7 +1306,6 @@
         var cardCanceled = cust.cardCanceled || false;
         var cancelAmount = cust.cancelAmount || null;
         
-        // اگر کنسلی کارت انجام شده باشد، فقط مبلغ کنسلی را نشان بده (با رنگ سبز)
         if(cardCanceled && cancelAmount) {
             var amount = parseInt(cancelAmount);
             return '<span class="cancel-amount">' + formatAfghani(amount) + ' کنسلی</span>';
@@ -1275,7 +1339,6 @@
         } 
         var totalAmount = parseInt(cust.amount) || 0;
         
-        // اگر مبلغ کنسلی وجود دارد، به مبلغ کل اضافه می‌شود
         if(cust.cardCanceled && cust.cancelAmount) {
             totalAmount += parseInt(cust.cancelAmount) || 0;
         }
@@ -1286,12 +1349,10 @@
     }
 
     function hasProblem(cust) {
-        // فقط کارت کارگری دارد و مشکل دیگه دارد باعث رنگ قرمز می‌شوند
         return cust.hasCard || cust.hasProblem;
     }
 
     function hasCancelOnly(cust) {
-        // فقط کنسلی کارت دارد (بدون کارت کارگری و بدون مشکل)
         return cust.cardCanceled && !cust.hasCard && !cust.hasProblem;
     }
 
@@ -1300,8 +1361,8 @@
         if(selectedCartable !== 'all') { list = list.filter(c => c.cartable === selectedCartable); }
         if(selectedStatus !== 'all') { list = list.filter(c => c.status === selectedStatus); }
         if(selectedRelated !== 'all') { list = list.filter(c => c.related === selectedRelated); }
+        if(selectedProvince !== 'all') { list = list.filter(c => c.province === selectedProvince); }
         
-        // فیلتر مشکل‌دار
         if(selectedProblem === 'hasCard') {
             list = list.filter(c => c.hasCard === true);
         } else if(selectedProblem === 'hasProblem') {
@@ -1314,14 +1375,19 @@
             var kw = searchKeyword.trim().toLowerCase(); var filtered = [];
             for(var i=0; i<list.length; i++) { var c = list[i];
                 if((c.firstName && c.firstName.toLowerCase().indexOf(kw) !== -1) || (c.lastName && c.lastName.toLowerCase().indexOf(kw) !== -1) ||
-                   (c.trackingCode1 && c.trackingCode1.toLowerCase().indexOf(kw) !== -1) || (c.trackingCode2 && c.trackingCode2.toLowerCase().indexOf(kw) !== -1) ||
-                   (c.specialCode && c.specialCode.toLowerCase().indexOf(kw) !== -1) || (c.phoneAF && c.phoneAF.toLowerCase().indexOf(kw) !== -1) ||
-                   (c.phoneIran && c.phoneIran.toLowerCase().indexOf(kw) !== -1) || (c.addressAF && c.addressAF.toLowerCase().indexOf(kw) !== -1) ||
-                   (c.addressIran && c.addressIran.toLowerCase().indexOf(kw) !== -1) || (c.description && c.description.toLowerCase().indexOf(kw) !== -1) ||
-                   (c.cartable && c.cartable.toLowerCase().indexOf(kw) !== -1) || (c.job && c.job.toLowerCase().indexOf(kw) !== -1) ||
-                   (c.date && c.date.toLowerCase().indexOf(kw) !== -1) || (c.status && c.status.toLowerCase().indexOf(kw) !== -1) ||
-                   (c.related && c.related.toLowerCase().indexOf(kw) !== -1) || (c.fatherName && c.fatherName.toLowerCase().indexOf(kw) !== -1) ||
-                   (c.grandFatherName && c.grandFatherName.toLowerCase().indexOf(kw) !== -1) || (c.motherName && c.motherName.toLowerCase().indexOf(kw) !== -1)) {
+                   (c.trackingCode2 && c.trackingCode2.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.specialCode && c.specialCode.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.phoneAF && c.phoneAF.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.addressAF && c.addressAF.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.description && c.description.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.cartable && c.cartable.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.date && c.date.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.status && c.status.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.related && c.related.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.province && c.province.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.fatherName && c.fatherName.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.grandFatherName && c.grandFatherName.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.motherName && c.motherName.toLowerCase().indexOf(kw) !== -1)) {
                     filtered.push(c);
                 }
             }
@@ -1340,7 +1406,7 @@
         var pageItems = filtered.slice(start, start + rowsPerPage);
         var tbody = document.getElementById("tableDynamicBody");
         if(!tbody) return;
-        if(pageItems.length === 0) { tbody.innerHTML = '<tr><td colspan="24" style="text-align:center; padding:48px;">✨ هیچ مشتری یافت نشد</td></tr>'; document.getElementById("recordsCounter").innerHTML = "۰ مشتری"; document.getElementById("pageInfoText").innerHTML = "صفحه ۰ از ۰"; return; }
+        if(pageItems.length === 0) { tbody.innerHTML = '<tr><td colspan="21" style="text-align:center; padding:48px;">✨ هیچ مشتری یافت نشد</td></tr>'; document.getElementById("recordsCounter").innerHTML = "۰ مشتری"; document.getElementById("pageInfoText").innerHTML = "صفحه ۰ از ۰"; return; }
         var html = "";
         for(var i=0; i<pageItems.length; i++) {
             var cust = pageItems[i]; 
@@ -1349,30 +1415,22 @@
             var statusBadge = getStatusBadge(cust.status || 'ثبت اولیه');
             var cardStatus = getCardStatusBadge(cust);
             
-            // تعیین کلاس ردیف
             var rowClass = '';
             if(hasProblem(cust)) {
-                rowClass = 'has-problem'; // رنگ قرمز
+                rowClass = 'has-problem';
             } else if(hasCancelOnly(cust)) {
-                rowClass = 'has-cancel-only'; // بدون رنگ قرمز
+                rowClass = 'has-cancel-only';
             }
             
             html += '<tr class="' + rowClass + '">' +
-                '<td data-copy="ردیف" data-copy-value="' + rowNumber + '">' + rowNumber + '</td>' +
-                '<td data-copy="تاریخ" data-copy-value="' + (cust.date || '') + '">' + formatGregorianDate(cust.date) + '</td>' +
+                '<td><div class="action-flex">' +
+                '<button class="action-icon transaction" data-id="' + (cust.firebaseId || cust.id) + '" title="تراکنش‌ها / رسید"><i class="fas fa-receipt"></i></button>' +
+                '<button class="action-icon edit" data-id="' + (cust.firebaseId || cust.id) + '" title="ویرایش"><i class="fas fa-edit"></i></button>' +
+                '<button class="action-icon delete" data-id="' + (cust.firebaseId || cust.id) + '" title="حذف"><i class="fas fa-trash-alt"></i></button>' +
+                '</div></td>' +
                 '<td data-copy="تخلص" data-copy-value="' + (cust.lastName || '') + '">' + (cust.lastName || '-') + '</td>' +
                 '<td data-copy="اسم" data-copy-value="' + (cust.firstName || '') + '">' + (cust.firstName || '-') + '</td>' +
                 '<td data-copy="نام پدر" data-copy-value="' + (cust.fatherName || '') + '">' + (cust.fatherName || '-') + '</td>' +
-                '<td data-copy="نام پدر کلان" data-copy-value="' + (cust.grandFatherName || '') + '">' + (cust.grandFatherName || '-') + '</td>' +
-                '<td data-copy="نام مادر" data-copy-value="' + (cust.motherName || '') + '">' + (cust.motherName || '-') + '</td>' +
-                '<td data-copy="تماس AF" data-copy-value="' + (cust.phoneAF || '') + '">' + (cust.phoneAF || '-') + '</td>' +
-                '<td data-copy="تماس ایران" data-copy-value="' + (cust.phoneIran || '') + '">' + (cust.phoneIran || '-') + '</td>' +
-                '<td class="scrollable-cell" data-copy="آدرس افغانستان" data-copy-value="' + (cust.addressAF || '') + '" title="' + (cust.addressAF || '') + '">' + formatAddressForDisplay(cust.addressAF, 30) + '</td>' +
-                '<td class="scrollable-cell" data-copy="آدرس ایران" data-copy-value="' + (cust.addressIran || '') + '" title="' + (cust.addressIran || '') + '">' + formatAddressForDisplay(cust.addressIran, 30) + '</td>' +
-                '<td data-copy="شغل" data-copy-value="' + (cust.job || '') + '">' + (cust.job || '-') + '</td>' +
-                '<td data-copy="توضیحات" data-copy-value="' + (cust.description || '') + '">' + (cust.description || '-') + '</td>' +
-                '<td data-copy="کد پیگیری" data-copy-value="' + (cust.trackingCode1 || '') + '"><span class="code-hidden" data-fullcode="' + (cust.trackingCode1 || '') + '">' + hideCode(cust.trackingCode1) + '</span></td>' +
-                '<td data-copy="کد اختصاصی" data-copy-value="' + (cust.specialCode || '') + '"><span class="code-hidden" data-fullcode="' + (cust.specialCode || '') + '">' + hideCode(cust.specialCode) + '</span></td>' +
                 '<td data-copy="کد رهگیری" data-copy-value="' + (cust.trackingCode2 || '') + '"><span class="code-hidden" data-fullcode="' + (cust.trackingCode2 || '') + '">' + hideCode(cust.trackingCode2) + '</span></td>' +
                 '<td data-copy="وضعیت" data-copy-value="' + (cust.status || 'ثبت اولیه') + '">' + statusBadge + '</td>' +
                 '<td data-copy="مربوط نفر" data-copy-value="' + (cust.related || '') + '">' + (cust.related || '-') + '</td>' +
@@ -1381,11 +1439,15 @@
                 '<td data-copy="رسید کل" data-copy-value="' + totals.totalReceipt + ' افغانی" class="afghani-symbol">' + formatAfghani(totals.totalReceipt) + '</td>' +
                 '<td data-copy="باقی" data-copy-value="' + totals.remaining + ' افغانی" class="remain-af">' + formatAfghani(totals.remaining) + '</td>' +
                 '<td data-copy="وضعیت کارت" data-copy-value="' + (cust.hasCard ? 'کارت کارگری' : '') + (cust.hasProblem ? ' مشکل' : '') + (cust.cardCanceled ? ' کارت کنسل' : '') + '">' + cardStatus + '</td>' +
-                '<td><div class="action-flex">' +
-                '<button class="action-icon transaction" data-id="' + (cust.firebaseId || cust.id) + '" title="تراکنش‌ها / رسید"><i class="fas fa-receipt"></i></button>' +
-                '<button class="action-icon edit" data-id="' + (cust.firebaseId || cust.id) + '" title="ویرایش"><i class="fas fa-edit"></i></button>' +
-                '<button class="action-icon delete" data-id="' + (cust.firebaseId || cust.id) + '" title="حذف"><i class="fas fa-trash-alt"></i></button>' +
-                '</div></td>' +
+                '<td data-copy="مربوط استان" data-copy-value="' + (cust.province || '') + '">' + (cust.province || '-') + '</td>' +
+                '<td data-copy="نام پدر کلان" data-copy-value="' + (cust.grandFatherName || '') + '">' + (cust.grandFatherName || '-') + '</td>' +
+                '<td data-copy="نام مادر" data-copy-value="' + (cust.motherName || '') + '">' + (cust.motherName || '-') + '</td>' +
+                '<td data-copy="تماس AF" data-copy-value="' + (cust.phoneAF || '') + '">' + (cust.phoneAF || '-') + '</td>' +
+                '<td class="scrollable-cell" data-copy="آدرس افغانستان" data-copy-value="' + (cust.addressAF || '') + '" title="' + (cust.addressAF || '') + '">' + formatAddressForDisplay(cust.addressAF, 30) + '</td>' +
+                '<td data-copy="توضیحات" data-copy-value="' + (cust.description || '') + '">' + (cust.description || '-') + '</td>' +
+                '<td data-copy="کد اختصاصی" data-copy-value="' + (cust.specialCode || '') + '"><span class="code-hidden" data-fullcode="' + (cust.specialCode || '') + '">' + hideCode(cust.specialCode) + '</span></td>' +
+                '<td data-copy="تاریخ" data-copy-value="' + (cust.date || '') + '">' + formatGregorianDate(cust.date) + '</td>' +
+                '<td data-copy="ردیف" data-copy-value="' + rowNumber + '">' + rowNumber + '</td>' +
                 '</tr>';
         }
         tbody.innerHTML = html;
@@ -1422,6 +1484,7 @@
         showLoading(true);
         loadCartablesFromFirebase();
         loadRelatedFromFirebase();
+        loadProvincesFromFirebase();
         loadEmployersFromFirebase();
 
         onValue(customersRef, (snapshot) => {
@@ -1496,10 +1559,10 @@
         
         var allFields = [
             "تاریخ", "date", "تخلص", "lastName", "اسم", "firstName", "نام پدر", "fatherName", 
-            "نام پدر کلان", "grandFatherName", "نام مادر", "motherName", "تماس AF", "phoneAF", "تماس ایران", "phoneIran",
-            "آدرس افغانستان", "addressAF", "آدرس ایران", "addressIran", "شغل", "job", "توضیحات", "description", 
-            "کد پیگیری", "trackingCode1", "کد اختصاصی", "specialCode", "کد رهگیری", "trackingCode2",
-            "وضعیت", "status", "مربوط نفر", "related", "کارتابل", "cartable", "مبلغ کل (AFN)", "amount"
+            "نام پدر کلان", "grandFatherName", "نام مادر", "motherName", "تماس AF", "phoneAF",
+            "آدرس افغانستان", "addressAF", "توضیحات", "description", 
+            "کد اختصاصی", "specialCode", "کد رهگیری", "trackingCode2",
+            "وضعیت", "status", "مربوط نفر", "related", "کارتابل", "cartable", "مربوط استان", "province", "مبلغ کل (AFN)", "amount"
         ];
         
         var hasCard = cust ? cust.hasCard || false : false;
@@ -1509,7 +1572,6 @@
         
         var gridHtml = '<div class="form-grid-double">';
         
-        // چک‌باکس‌ها در ابتدا
         gridHtml += '<div class="field-group-simple" style="grid-column: 1 / -1;">';
         gridHtml += '<label>وضعیت کارت کارگری</label>';
         gridHtml += '<div class="checkbox-group">';
@@ -1518,7 +1580,6 @@
         gridHtml += '<div class="checkbox-item"><input type="checkbox" id="cardCanceled" name="cardCanceled" ' + (cardCanceled ? 'checked' : '') + '><label for="cardCanceled">کارت کاری اش را کنسل کردیم</label></div>';
         gridHtml += '</div></div>';
         
-        // فیلد مخفی برای مبلغ کنسلی
         if(cancelAmount) {
             gridHtml += '<input type="hidden" id="cancelAmountHidden" name="cancelAmount" value="' + cancelAmount + '">';
         }
@@ -1529,6 +1590,7 @@
             else if(fieldName === 'status') { var statusOptionsHtml = ''; var statusList = ['ثبت اولیه', 'ثبت اختصاص', 'ثبت روادید', 'تایید روادید', 'ویزه شده', 'کنسل شد', 'به تعویق افتاد']; for(var s=0; s<statusList.length; s++) { var selected = (value === statusList[s]) ? 'selected' : ''; var icon = ''; if(statusList[s] === 'ثبت اولیه') icon = '✅'; else if(statusList[s] === 'ثبت اختصاص') icon = '🟣'; else if(statusList[s] === 'ثبت روادید') icon = '🟢'; else if(statusList[s] === 'تایید روادید') icon = '📋'; else if(statusList[s] === 'ویزه شده') icon = '🛂'; else if(statusList[s] === 'کنسل شد') icon = '❌'; else if(statusList[s] === 'به تعویق افتاد') icon = '⏳'; statusOptionsHtml += '<option value="' + statusList[s] + '" ' + selected + '>' + icon + ' ' + statusList[s] + '</option>'; } gridHtml += '<div class="field-group-simple"><label>' + label + '</label><select name="' + fieldName + '">' + statusOptionsHtml + '</select></div>'; }
             else if(fieldName === 'related') { var relatedOptionsHtml = ''; for(var r=0; r<relatedList.length; r++) { var selected = (value === relatedList[r]) ? 'selected' : ''; relatedOptionsHtml += '<option value="' + relatedList[r] + '" ' + selected + '>' + relatedList[r] + '</option>'; } gridHtml += '<div class="field-group-simple"><label>' + label + '</label><div class="field-with-button"><select name="' + fieldName + '" id="relatedSelect">' + relatedOptionsHtml + '</select><button type="button" class="add-btn" id="addRelatedBtn" title="افزودن مربوط نفر جدید"><i class="fas fa-plus"></i></button></div></div>'; }
             else if(fieldName === 'cartable') { var optionsHtml = ''; for(var c=0; c<cartableList.length; c++) { var selected = (value === cartableList[c]) ? 'selected' : ''; optionsHtml += '<option value="' + cartableList[c] + '" ' + selected + '>' + cartableList[c] + '</option>'; } gridHtml += '<div class="field-group-simple"><label>' + label + '</label><div class="field-with-button"><select name="' + fieldName + '" id="cartableSelect">' + optionsHtml + '</select><button type="button" class="add-btn" id="addCartableBtn" title="افزودن کارتابل جدید"><i class="fas fa-plus"></i></button></div></div>'; }
+            else if(fieldName === 'province') { var provinceOptionsHtml = ''; for(var p=0; p<provinceList.length; p++) { var selected = (value === provinceList[p]) ? 'selected' : ''; provinceOptionsHtml += '<option value="' + provinceList[p] + '" ' + selected + '>' + provinceList[p] + '</option>'; } gridHtml += '<div class="field-group-simple"><label>' + label + '</label><div class="field-with-button"><select name="' + fieldName + '" id="provinceSelect">' + provinceOptionsHtml + '</select><button type="button" class="add-btn" id="addProvinceBtn" title="افزودن استان جدید"><i class="fas fa-plus"></i></button></div></div>'; }
             else if(fieldName === 'description') { gridHtml += '<div class="field-group-simple"><label>' + label + '</label><textarea name="' + fieldName + '" rows="2" placeholder="اختیاری">' + (value || '') + '</textarea></div>'; }
             else { var required = (fieldName === 'firstName') ? 'required' : ''; gridHtml += '<div class="field-group-simple"><label>' + label + '</label><input type="text" name="' + fieldName + '" value="' + (value || '') + '" ' + required + ' placeholder="اختیاری"></div>'; }
         }
@@ -1539,7 +1601,6 @@
         document.getElementById("closeCustModal").onclick = () => modalDiv.remove();
         modalDiv.addEventListener('click', (e) => { if(e.target === modalDiv) modalDiv.remove(); });
         
-        // رویداد چک‌باکس کارت کنسل
         document.getElementById("cardCanceled").addEventListener('change', function(e) {
             var hiddenInput = document.getElementById('cancelAmountHidden');
             if(this.checked) {
@@ -1566,7 +1627,24 @@
         });
         
         document.getElementById("addCartableBtn").onclick = async function() { var newCartable = prompt("نام کارتابل جدید را وارد کنید:"); if(newCartable && newCartable.trim() !== '') { newCartable = newCartable.trim(); await addCartableToFirebase(newCartable); var select = document.getElementById("cartableSelect"); var option = document.createElement('option'); option.value = newCartable; option.text = newCartable; option.selected = true; select.appendChild(option); } };
+        
         document.getElementById("addRelatedBtn").onclick = async function() { var newRelated = prompt("نام مربوط نفر جدید را وارد کنید:"); if(newRelated && newRelated.trim() !== '') { newRelated = newRelated.trim(); var result = await addRelatedToFirebase(newRelated); if(result) { var select = document.getElementById("relatedSelect"); var option = document.createElement('option'); option.value = newRelated; option.text = newRelated; option.selected = true; select.appendChild(option); } } };
+        
+        document.getElementById("addProvinceBtn").onclick = async function() { 
+            var newProvince = prompt("نام استان جدید را وارد کنید:");
+            if(newProvince && newProvince.trim() !== '') {
+                newProvince = newProvince.trim();
+                var result = await addProvinceToFirebase(newProvince);
+                if(result) {
+                    var select = document.getElementById("provinceSelect");
+                    var option = document.createElement('option');
+                    option.value = newProvince;
+                    option.text = newProvince;
+                    option.selected = true;
+                    select.appendChild(option);
+                }
+            }
+        };
         
         var form = modalDiv.querySelector("#custForm");
         form.onsubmit = async (e) => {
@@ -1577,7 +1655,6 @@
                 var input = form.querySelector('[name="' + name + '"]');
                 if(input) formData[name] = input.value;
             }
-            // چک‌باکس‌ها
             formData.hasCard = document.getElementById("hasCard").checked || false;
             formData.hasProblem = document.getElementById("hasProblem").checked || false;
             formData.cardCanceled = document.getElementById("cardCanceled").checked || false;
@@ -1633,6 +1710,7 @@
         document.getElementById("cartableFilter").addEventListener("change", function(e) { selectedCartable = e.target.value; currentPage = 1; renderFullData(); });
         document.getElementById("statusFilter").addEventListener("change", function(e) { selectedStatus = e.target.value; currentPage = 1; renderFullData(); });
         document.getElementById("relatedFilter").addEventListener("change", function(e) { selectedRelated = e.target.value; currentPage = 1; renderFullData(); });
+        document.getElementById("provinceFilter").addEventListener("change", function(e) { selectedProvince = e.target.value; currentPage = 1; renderFullData(); });
         document.getElementById("problemFilter").addEventListener("change", function(e) { selectedProblem = e.target.value; currentPage = 1; renderFullData(); });
         document.getElementById("prevPageBtn").addEventListener("click", function() { if(currentPage > 1) { currentPage--; renderFullData(); } });
         document.getElementById("nextPageBtn").addEventListener("click", function() { var total = Math.ceil(getFilteredList().length / rowsPerPage); if(currentPage < total) { currentPage++; renderFullData(); } });
