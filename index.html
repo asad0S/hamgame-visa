@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>سامانه ملت ویزا | مدیریت جامع</title>
+    <title>سامانه همگام ویزا | مدیریت جامع</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -212,6 +212,12 @@
         .status-postponed { background: #fff3e0; color: #e65100; }
         .status-problem { background: #ffcdd2; color: #b71c1c; }
         .status-english { background: #ede7f6; color: #4527a0; }
+        .status-rejected { background: #fce4ec; color: #880e4f; }
+
+        /* وضعیت پرداخت */
+        .payment-full { background: #e8f5e9; color: #1b5e20; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; }
+        .payment-half { background: #fff3e0; color: #e65100; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; }
+        .payment-none { background: #ffebee; color: #b71c1c; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; }
 
         .loading-overlay {
             position: fixed;
@@ -684,6 +690,58 @@
             background-color: #eef4fc !important;
         }
 
+        /* تب‌های کارفرمایان */
+        .tabs-container {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 32px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            border: 1px solid #e2ecf5;
+        }
+
+        .tab-btn {
+            padding: 12px 32px;
+            border-radius: 40px;
+            border: none;
+            background: #f8fafd;
+            color: #1a5c7a;
+            font-weight: 700;
+            font-family: inherit;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #e2eaf1;
+        }
+
+        .tab-btn:hover {
+            background: #eaf2f9;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(105deg, #0f4b64, #0a3a4f);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+        }
+
+        .tab-btn .badge-count {
+            background: rgba(255,255,255,0.25);
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+        }
+
+        .tab-btn.active .badge-count {
+            background: rgba(255,255,255,0.3);
+        }
+
         .page-content {
             display: block;
         }
@@ -732,7 +790,7 @@
             <div class="brand">
                 <div class="brand-icon"><i class="fas fa-globe-asia"></i></div>
                 <div class="brand-text">
-                    <h1>سامانه ملت ویزا</h1>
+                    <h1>سامانه همگام ویزا</h1>
                     <p>سیستم مدیریت هوشمند مشتریان</p>
                 </div>
             </div>
@@ -760,6 +818,7 @@
                     <option value="فورم انگلیسی">📝 فورم انگلیسی</option>
                     <option value="ویزه شده">🛂 ویزه شده</option>
                     <option value="کنسل شد">❌ کنسل شد</option>
+                    <option value="رد شده از طرف سیستم">🚫 رد شده از طرف سیستم</option>
                     <option value="به تعویق افتاد">⏳ به تعویق افتاد</option>
                 </select>
                 <select class="filter-select" id="relatedFilter">
@@ -773,6 +832,12 @@
                     <option value="hasCard">کارت کارگری دارد</option>
                     <option value="hasProblem">مشکل دیگه دارد</option>
                     <option value="cardCanceled">کنسلی کارت کار</option>
+                </select>
+                <select class="filter-select" id="paymentFilter">
+                    <option value="all">همه پرداخت‌ها</option>
+                    <option value="full">رسید کل</option>
+                    <option value="half">نیمه رسید</option>
+                    <option value="none">باقی کل</option>
                 </select>
             </div>
             <div class="counter-badge" id="recordsCounter">۰ مشتری</div>
@@ -793,6 +858,7 @@
                         <th style="min-width: 110px;">مبلغ کل (AFN)</th>
                         <th style="min-width: 110px;">رسید کل (AFN)</th>
                         <th style="min-width: 110px;">باقی (AFN)</th>
+                        <th style="min-width: 140px;">وضعیت پرداخت</th>
                         <th style="min-width: 150px;">وضعیت کارت</th>
                         <th style="min-width: 130px;">مربوط استان</th>
                         <th style="min-width: 120px;">نام پدر کلان</th>
@@ -806,7 +872,7 @@
                     </tr>
                 </thead>
                 <tbody id="tableDynamicBody">
-                    <tr><td colspan="21" style="text-align:center; padding:48px;">در حال اتصال به دیتابیس...<br><div class="spinner" style="width:30px;height:30px;margin:10px auto;"></div></td></tr>
+                    <tr><td colspan="22" style="text-align:center; padding:48px;">در حال اتصال به دیتابیس...<br><div class="spinner" style="width:30px;height:30px;margin:10px auto;"></div></td></tr>
                 </tbody>
             </table>
         </div>
@@ -834,6 +900,22 @@
             </div>
         </div>
 
+        <!-- تب‌های کارفرمایان -->
+        <div class="tabs-container">
+            <button class="tab-btn active" data-tab="tehran">
+                <i class="fas fa-city"></i> تهران
+                <span class="badge-count" id="tehranCount">0</span>
+            </button>
+            <button class="tab-btn" data-tab="karaj">
+                <i class="fas fa-city"></i> کرج
+                <span class="badge-count" id="karajCount">0</span>
+            </button>
+            <button class="tab-btn" data-tab="other">
+                <i class="fas fa-map-marker-alt"></i> سایر
+                <span class="badge-count" id="otherCount">0</span>
+            </button>
+        </div>
+
         <div class="nav-search">
             <div class="search-wrapper">
                 <div class="search-field">
@@ -854,11 +936,12 @@
                         <th style="min-width: 120px;">رمز</th>
                         <th style="min-width: 130px;">شماره تماس</th>
                         <th style="min-width: 150px;">کد پستی</th>
+                        <th style="min-width: 120px;">استان</th>
                         <th style="min-width: 100px;">عملیات</th>
                     </tr>
                 </thead>
                 <tbody id="employerTableBody">
-                    <tr><td colspan="7" style="text-align:center; padding:48px;">در حال اتصال به دیتابیس...<br><div class="spinner" style="width:30px;height:30px;margin:10px auto;"></div></td></tr>
+                    <tr><td colspan="8" style="text-align:center; padding:48px;">در حال اتصال به دیتابیس...<br><div class="spinner" style="width:30px;height:30px;margin:10px auto;"></div></td></tr>
                 </tbody>
             </table>
         </div>
@@ -910,10 +993,12 @@
     let selectedRelated = "all";
     let selectedProvince = "all";
     let selectedProblem = "all";
+    let selectedPayment = "all";
 
     let employerPage = 1;
     const employerRowsPerPage = 15;
     let employerSearch = "";
+    let currentEmployerTab = "tehran"; // تب پیش‌فرض: تهران
 
     // ======================== توابع کمکی ========================
     function showToast(message) {
@@ -970,16 +1055,38 @@
                     employers.push(emp);
                 }
             }
+            updateTabCounts();
             renderEmployerTable();
         }, (error) => {
             console.error("خطا در بارگذاری کارفرمایان:", error);
             employers = [];
+            updateTabCounts();
             renderEmployerTable();
         });
     }
 
+    function updateTabCounts() {
+        var tehranCount = 0, karajCount = 0, otherCount = 0;
+        for(var i = 0; i < employers.length; i++) {
+            var prov = employers[i].province || 'other';
+            if(prov === 'tehran') tehranCount++;
+            else if(prov === 'karaj') karajCount++;
+            else otherCount++;
+        }
+        document.getElementById('tehranCount').textContent = tehranCount;
+        document.getElementById('karajCount').textContent = karajCount;
+        document.getElementById('otherCount').textContent = otherCount;
+    }
+
     function getFilteredEmployers() {
         var list = [...employers];
+        
+        // فیلتر بر اساس تب انتخاب شده
+        list = list.filter(function(e) {
+            var prov = e.province || 'other';
+            return prov === currentEmployerTab;
+        });
+        
         if(employerSearch.trim()) {
             var kw = employerSearch.trim().toLowerCase();
             var filtered = [];
@@ -1002,6 +1109,12 @@
         return list;
     }
 
+    function getProvinceLabel(prov) {
+        if(prov === 'tehran') return '<span style="background:#e3f2fd; color:#1565c0; padding:4px 10px; border-radius:12px; font-size:0.75rem; font-weight:700;">تهران</span>';
+        if(prov === 'karaj') return '<span style="background:#e8f5e9; color:#2e7d32; padding:4px 10px; border-radius:12px; font-size:0.75rem; font-weight:700;">کرج</span>';
+        return '<span style="background:#f3e5f5; color:#6a1b9a; padding:4px 10px; border-radius:12px; font-size:0.75rem; font-weight:700;">سایر</span>';
+    }
+
     function renderEmployerTable() {
         var filtered = getFilteredEmployers();
         var totalPages = Math.ceil(filtered.length / employerRowsPerPage) || 1;
@@ -1014,7 +1127,7 @@
         if(!tbody) return;
 
         if(pageItems.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:48px;">✨ هیچ کارفرمایی یافت نشد</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:48px;">✨ هیچ کارفرمایی یافت نشد</td></tr>';
             document.getElementById("employerCounter").innerHTML = "۰ کارفرما";
             document.getElementById("employerPageInfo").innerHTML = "صفحه ۰ از ۰";
             return;
@@ -1031,6 +1144,7 @@
                 '<td data-copy="رمز" data-copy-value="' + (emp.password || '') + '">' + (emp.password || '-') + '</td>' +
                 '<td data-copy="شماره تماس" data-copy-value="' + (emp.phone || '') + '">' + (emp.phone || '-') + '</td>' +
                 '<td data-copy="کد پستی" data-copy-value="' + (emp.postalCode || '') + '">' + (emp.postalCode || '-') + '</td>' +
+                '<td data-copy="استان" data-copy-value="' + (emp.province || 'other') + '">' + getProvinceLabel(emp.province) + '</td>' +
                 '<td><div class="action-flex">' +
                 '<button class="action-icon edit" data-id="' + (emp.firebaseId || emp.id) + '" title="ویرایش"><i class="fas fa-edit"></i></button>' +
                 '<button class="action-icon delete" data-id="' + (emp.firebaseId || emp.id) + '" title="حذف"><i class="fas fa-trash-alt"></i></button>' +
@@ -1132,7 +1246,20 @@
             "شماره تماس", "phone", "کد پستی", "postalCode"
         ];
 
+        // مقدار پیش‌فرض استان بر اساس تب فعلی
+        var currentProv = emp ? (emp.province || 'other') : currentEmployerTab;
+        if(!currentProv) currentProv = 'tehran';
+
         var gridHtml = '<div class="form-grid-double">';
+        
+        // سیلیکت استان
+        var provinceSelectHtml = '<div class="field-group-simple"><label>استان</label><select name="province" id="empProvinceSelect">';
+        provinceSelectHtml += '<option value="tehran" ' + (currentProv === 'tehran' ? 'selected' : '') + '>تهران</option>';
+        provinceSelectHtml += '<option value="karaj" ' + (currentProv === 'karaj' ? 'selected' : '') + '>کرج</option>';
+        provinceSelectHtml += '<option value="other" ' + (currentProv === 'other' ? 'selected' : '') + '>سایر</option>';
+        provinceSelectHtml += '</select></div>';
+        gridHtml += provinceSelectHtml;
+        
         for(var i = 0; i < allFields.length; i += 2) {
             var label = allFields[i];
             var fieldName = allFields[i+1];
@@ -1144,7 +1271,7 @@
 
         modalDiv.innerHTML = '<div class="modal-card-sleek">' +
             '<div class="modal-header-sleek"><h3><i class="fas fa-' + (isEdit ? 'user-edit' : 'user-plus') + '"></i> ' + (isEdit ? 'ویرایش کارفرما' : 'ثبت کارفرما') + '</h3><div class="close-modal-x" id="closeEmpModal">✕</div></div>' +
-            '<div class="info-note"><i class="fas fa-info-circle"></i> فقط نام کارفرما الزامی است.</div>' +
+            '<div class="info-note"><i class="fas fa-info-circle"></i> فقط نام کارفرما الزامی است. استان را انتخاب کنید.</div>' +
             '<form id="empForm">' + gridHtml + '<button type="submit" class="submit-gold">' + (isEdit ? 'ذخیره تغییرات' : 'ثبت کارفرما') + '</button></form>' +
             '</div>';
         document.body.appendChild(modalDiv);
@@ -1161,6 +1288,9 @@
                 var input = form.querySelector('[name="' + name + '"]');
                 if(input) formData[name] = input.value;
             }
+            var provinceSelect = form.querySelector('[name="province"]');
+            formData.province = provinceSelect ? provinceSelect.value : 'other';
+            
             if(!formData.employerName) {
                 alert("لطفاً نام کارفرما را وارد کنید");
                 return;
@@ -1174,7 +1304,7 @@
         };
     }
 
-    // ======================== توابع مربوط استان (ذخیره در Firebase) ========================
+    // ======================== توابع مربوط استان ========================
     function loadProvincesFromFirebase() {
         onValue(provincesRef, (snapshot) => {
             const data = snapshot.val();
@@ -1294,10 +1424,41 @@
 
     function getStatusBadge(status) {
         if(!status) return '<span class="status-badge status-registered">✅ ثبت اولیه</span>';
-        const map = { 'ثبت اولیه': 'status-registered', 'ثبت اختصاص': 'status-special', 'ثبت روادید': 'status-visa', 'تایید روادید': 'status-approved', 'فورم انگلیسی': 'status-english', 'ویزه شده': 'status-done', 'کنسل شد': 'status-canceled', 'به تعویق افتاد': 'status-postponed' };
-        const iconMap = { 'ثبت اولیه': '✅', 'ثبت اختصاص': '🟣', 'ثبت روادید': '🟢', 'تایید روادید': '📋', 'فورم انگلیسی': '📝', 'ویزه شده': '🛂', 'کنسل شد': '❌', 'به تعویق افتاد': '⏳' };
+        const map = { 
+            'ثبت اولیه': 'status-registered', 
+            'ثبت اختصاص': 'status-special', 
+            'ثبت روادید': 'status-visa', 
+            'تایید روادید': 'status-approved', 
+            'فورم انگلیسی': 'status-english', 
+            'ویزه شده': 'status-done', 
+            'کنسل شد': 'status-canceled', 
+            'رد شده از طرف سیستم': 'status-rejected',
+            'به تعویق افتاد': 'status-postponed' 
+        };
+        const iconMap = { 
+            'ثبت اولیه': '✅', 
+            'ثبت اختصاص': '🟣', 
+            'ثبت روادید': '🟢', 
+            'تایید روادید': '📋', 
+            'فورم انگلیسی': '📝', 
+            'ویزه شده': '🛂', 
+            'کنسل شد': '❌', 
+            'رد شده از طرف سیستم': '🚫',
+            'به تعویق افتاد': '⏳' 
+        };
         const cls = map[status] || 'status-registered'; const icon = iconMap[status] || '✅';
         return `<span class="status-badge ${cls}">${icon} ${status}</span>`;
+    }
+
+    function getPaymentBadge(cust) {
+        var status = cust.paymentStatus || 'none';
+        if(status === 'full') {
+            return '<span class="payment-full">رسید کل</span>';
+        } else if(status === 'half') {
+            return '<span class="payment-half">نیمه رسید</span>';
+        } else {
+            return '<span class="payment-none">باقی کل</span>';
+        }
     }
 
     function getCardStatusBadge(cust) {
@@ -1371,6 +1532,10 @@
             list = list.filter(c => c.cardCanceled === true);
         }
         
+        if(selectedPayment !== 'all') {
+            list = list.filter(c => (c.paymentStatus || 'none') === selectedPayment);
+        }
+        
         if(searchKeyword.trim()) {
             var kw = searchKeyword.trim().toLowerCase(); var filtered = [];
             for(var i=0; i<list.length; i++) { var c = list[i];
@@ -1406,7 +1571,7 @@
         var pageItems = filtered.slice(start, start + rowsPerPage);
         var tbody = document.getElementById("tableDynamicBody");
         if(!tbody) return;
-        if(pageItems.length === 0) { tbody.innerHTML = '<tr><td colspan="21" style="text-align:center; padding:48px;">✨ هیچ مشتری یافت نشد</td></tr>'; document.getElementById("recordsCounter").innerHTML = "۰ مشتری"; document.getElementById("pageInfoText").innerHTML = "صفحه ۰ از ۰"; return; }
+        if(pageItems.length === 0) { tbody.innerHTML = '<tr><td colspan="22" style="text-align:center; padding:48px;">✨ هیچ مشتری یافت نشد</td></tr>'; document.getElementById("recordsCounter").innerHTML = "۰ مشتری"; document.getElementById("pageInfoText").innerHTML = "صفحه ۰ از ۰"; return; }
         var html = "";
         for(var i=0; i<pageItems.length; i++) {
             var cust = pageItems[i]; 
@@ -1414,6 +1579,7 @@
             var totals = calculateTotals(cust); 
             var statusBadge = getStatusBadge(cust.status || 'ثبت اولیه');
             var cardStatus = getCardStatusBadge(cust);
+            var paymentBadge = getPaymentBadge(cust);
             
             var rowClass = '';
             if(hasProblem(cust)) {
@@ -1438,6 +1604,7 @@
                 '<td data-copy="مبلغ کل" data-copy-value="' + totals.totalAmount + ' افغانی" class="afghani-symbol">' + formatAfghani(totals.totalAmount) + '</td>' +
                 '<td data-copy="رسید کل" data-copy-value="' + totals.totalReceipt + ' افغانی" class="afghani-symbol">' + formatAfghani(totals.totalReceipt) + '</td>' +
                 '<td data-copy="باقی" data-copy-value="' + totals.remaining + ' افغانی" class="remain-af">' + formatAfghani(totals.remaining) + '</td>' +
+                '<td data-copy="وضعیت پرداخت" data-copy-value="' + (cust.paymentStatus || 'none') + '">' + paymentBadge + '</td>' +
                 '<td data-copy="وضعیت کارت" data-copy-value="' + (cust.hasCard ? 'کارت کارگری' : '') + (cust.hasProblem ? ' مشکل' : '') + (cust.cardCanceled ? ' کارت کنسل' : '') + '">' + cardStatus + '</td>' +
                 '<td data-copy="مربوط استان" data-copy-value="' + (cust.province || '') + '">' + (cust.province || '-') + '</td>' +
                 '<td data-copy="نام پدر کلان" data-copy-value="' + (cust.grandFatherName || '') + '">' + (cust.grandFatherName || '-') + '</td>' +
@@ -1562,13 +1729,18 @@
             "نام پدر کلان", "grandFatherName", "نام مادر", "motherName", "تماس AF", "phoneAF",
             "آدرس افغانستان", "addressAF", "توضیحات", "description", 
             "کد اختصاصی", "specialCode", "کد رهگیری", "trackingCode2",
-            "وضعیت", "status", "مربوط نفر", "related", "کارتابل", "cartable", "مربوط استان", "province", "مبلغ کل (AFN)", "amount"
+            "وضعیت", "status", "وضعیت پرداخت", "paymentStatus", "مربوط نفر", "related", "کارتابل", "cartable", "مربوط استان", "province", "مبلغ کل (AFN)", "amount"
         ];
         
         var hasCard = cust ? cust.hasCard || false : false;
         var hasProblem = cust ? cust.hasProblem || false : false;
         var cardCanceled = cust ? cust.cardCanceled || false : false;
         var cancelAmount = cust ? cust.cancelAmount || '' : '';
+        
+        var currentPaymentStatus = 'none';
+        if(cust && cust.paymentStatus) {
+            currentPaymentStatus = cust.paymentStatus;
+        }
         
         var gridHtml = '<div class="form-grid-double">';
         
@@ -1587,7 +1759,38 @@
         for(var i=0; i<allFields.length; i+=2) {
             var label = allFields[i]; var fieldName = allFields[i+1]; var value = cust ? (cust[fieldName] || '') : '';
             if(fieldName === 'date') { value = value || today; gridHtml += '<div class="field-group-simple"><label>' + label + ' (میلادی)</label><input type="text" name="' + fieldName + '" value="' + value + '" placeholder="مثال: 2024-01-15"></div>'; }
-            else if(fieldName === 'status') { var statusOptionsHtml = ''; var statusList = ['ثبت اولیه', 'ثبت اختصاص', 'ثبت روادید', 'تایید روادید', 'فورم انگلیسی', 'ویزه شده', 'کنسل شد', 'به تعویق افتاد']; for(var s=0; s<statusList.length; s++) { var selected = (value === statusList[s]) ? 'selected' : ''; var icon = ''; if(statusList[s] === 'ثبت اولیه') icon = '✅'; else if(statusList[s] === 'ثبت اختصاص') icon = '🟣'; else if(statusList[s] === 'ثبت روادید') icon = '🟢'; else if(statusList[s] === 'تایید روادید') icon = '📋'; else if(statusList[s] === 'فورم انگلیسی') icon = '📝'; else if(statusList[s] === 'ویزه شده') icon = '🛂'; else if(statusList[s] === 'کنسل شد') icon = '❌'; else if(statusList[s] === 'به تعویق افتاد') icon = '⏳'; statusOptionsHtml += '<option value="' + statusList[s] + '" ' + selected + '>' + icon + ' ' + statusList[s] + '</option>'; } gridHtml += '<div class="field-group-simple"><label>' + label + '</label><select name="' + fieldName + '">' + statusOptionsHtml + '</select></div>'; }
+            else if(fieldName === 'status') { 
+                var statusOptionsHtml = ''; 
+                var statusList = ['ثبت اولیه', 'ثبت اختصاص', 'ثبت روادید', 'تایید روادید', 'فورم انگلیسی', 'ویزه شده', 'کنسل شد', 'رد شده از طرف سیستم', 'به تعویق افتاد']; 
+                for(var s=0; s<statusList.length; s++) { 
+                    var selected = (value === statusList[s]) ? 'selected' : ''; 
+                    var icon = ''; 
+                    if(statusList[s] === 'ثبت اولیه') icon = '✅'; 
+                    else if(statusList[s] === 'ثبت اختصاص') icon = '🟣'; 
+                    else if(statusList[s] === 'ثبت روادید') icon = '🟢'; 
+                    else if(statusList[s] === 'تایید روادید') icon = '📋'; 
+                    else if(statusList[s] === 'فورم انگلیسی') icon = '📝'; 
+                    else if(statusList[s] === 'ویزه شده') icon = '🛂'; 
+                    else if(statusList[s] === 'کنسل شد') icon = '❌'; 
+                    else if(statusList[s] === 'رد شده از طرف سیستم') icon = '🚫'; 
+                    else if(statusList[s] === 'به تعویق افتاد') icon = '⏳'; 
+                    statusOptionsHtml += '<option value="' + statusList[s] + '" ' + selected + '>' + icon + ' ' + statusList[s] + '</option>'; 
+                } 
+                gridHtml += '<div class="field-group-simple"><label>' + label + '</label><select name="' + fieldName + '">' + statusOptionsHtml + '</select></div>'; 
+            }
+            else if(fieldName === 'paymentStatus') { 
+                var paymentOptionsHtml = '';
+                var paymentList = [
+                    { value: 'none', label: 'باقی کل' },
+                    { value: 'half', label: 'نیمه رسید' },
+                    { value: 'full', label: 'رسید کل' }
+                ];
+                for(var ps=0; ps<paymentList.length; ps++) {
+                    var selected = (currentPaymentStatus === paymentList[ps].value) ? 'selected' : '';
+                    paymentOptionsHtml += '<option value="' + paymentList[ps].value + '" ' + selected + '>' + paymentList[ps].label + '</option>';
+                }
+                gridHtml += '<div class="field-group-simple"><label>' + label + '</label><select name="' + fieldName + '" id="paymentStatusSelect">' + paymentOptionsHtml + '</select></div>'; 
+            }
             else if(fieldName === 'related') { var relatedOptionsHtml = ''; for(var r=0; r<relatedList.length; r++) { var selected = (value === relatedList[r]) ? 'selected' : ''; relatedOptionsHtml += '<option value="' + relatedList[r] + '" ' + selected + '>' + relatedList[r] + '</option>'; } gridHtml += '<div class="field-group-simple"><label>' + label + '</label><div class="field-with-button"><select name="' + fieldName + '" id="relatedSelect">' + relatedOptionsHtml + '</select><button type="button" class="add-btn" id="addRelatedBtn" title="افزودن مربوط نفر جدید"><i class="fas fa-plus"></i></button></div></div>'; }
             else if(fieldName === 'cartable') { var optionsHtml = ''; for(var c=0; c<cartableList.length; c++) { var selected = (value === cartableList[c]) ? 'selected' : ''; optionsHtml += '<option value="' + cartableList[c] + '" ' + selected + '>' + cartableList[c] + '</option>'; } gridHtml += '<div class="field-group-simple"><label>' + label + '</label><div class="field-with-button"><select name="' + fieldName + '" id="cartableSelect">' + optionsHtml + '</select><button type="button" class="add-btn" id="addCartableBtn" title="افزودن کارتابل جدید"><i class="fas fa-plus"></i></button></div></div>'; }
             else if(fieldName === 'province') { var provinceOptionsHtml = ''; for(var p=0; p<provinceList.length; p++) { var selected = (value === provinceList[p]) ? 'selected' : ''; provinceOptionsHtml += '<option value="' + provinceList[p] + '" ' + selected + '>' + provinceList[p] + '</option>'; } gridHtml += '<div class="field-group-simple"><label>' + label + '</label><div class="field-with-button"><select name="' + fieldName + '" id="provinceSelect">' + provinceOptionsHtml + '</select><button type="button" class="add-btn" id="addProvinceBtn" title="افزودن استان جدید"><i class="fas fa-plus"></i></button></div></div>'; }
@@ -1596,7 +1799,7 @@
         }
         gridHtml += '</div>';
         
-        modalDiv.innerHTML = '<div class="modal-card-sleek"><div class="modal-header-sleek"><h3><i class="fas fa-' + (isEdit ? 'user-edit' : 'user-plus') + '"></i> ' + (isEdit ? 'ویرایش مشتری' : 'ثبت مشتری جدید') + '</h3><div class="close-modal-x" id="closeCustModal">✕</div></div><div class="info-note"><i class="fas fa-info-circle"></i> فقط نام الزامی است. تاریخ به فرمت میلادی (YYYY-MM-DD)</div><form id="custForm">' + gridHtml + '<button type="submit" class="submit-gold">' + (isEdit ? 'ذخیره تغییرات' : 'ثبت مشتری') + '</button></form></div>';
+        modalDiv.innerHTML = '<div class="modal-card-sleek"><div class="modal-header-sleek"><h3><i class="fas fa-' + (isEdit ? 'user-edit' : 'user-plus') + '"></i> ' + (isEdit ? 'ویرایش مشتری' : 'ثبت مشتری جدید') + '</h3><div class="close-modal-x" id="closeCustModal">✕</div></div><div class="info-note"><i class="fas fa-info-circle"></i> فقط نام الزامی است. تاریخ به فرمت میلادی (YYYY-MM-DD) | در ثبت جدید وضعیت پرداخت پیش‌فرض «باقی کل» است</div><form id="custForm">' + gridHtml + '<button type="submit" class="submit-gold">' + (isEdit ? 'ذخیره تغییرات' : 'ثبت مشتری') + '</button></form></div>';
         document.body.appendChild(modalDiv);
         document.getElementById("closeCustModal").onclick = () => modalDiv.remove();
         modalDiv.addEventListener('click', (e) => { if(e.target === modalDiv) modalDiv.remove(); });
@@ -1671,6 +1874,7 @@
                 return;
             }
             if(!formData.status) formData.status = 'ثبت اولیه';
+            if(!formData.paymentStatus) formData.paymentStatus = 'none';
             
             if(isEdit && cust) {
                 await saveCustomerToFirebase(formData, cust.firebaseId);
@@ -1697,6 +1901,17 @@
 
         document.getElementById("openEmployerCreateBtn").addEventListener("click", openNewEmployerModal);
 
+        // رویداد تب‌های کارفرمایان
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentEmployerTab = this.getAttribute('data-tab');
+                employerPage = 1;
+                renderEmployerTable();
+            });
+        });
+
         document.getElementById("searchEmployer").addEventListener("input", function(e) {
             employerSearch = e.target.value;
             employerPage = 1;
@@ -1712,6 +1927,7 @@
         document.getElementById("relatedFilter").addEventListener("change", function(e) { selectedRelated = e.target.value; currentPage = 1; renderFullData(); });
         document.getElementById("provinceFilter").addEventListener("change", function(e) { selectedProvince = e.target.value; currentPage = 1; renderFullData(); });
         document.getElementById("problemFilter").addEventListener("change", function(e) { selectedProblem = e.target.value; currentPage = 1; renderFullData(); });
+        document.getElementById("paymentFilter").addEventListener("change", function(e) { selectedPayment = e.target.value; currentPage = 1; renderFullData(); });
         document.getElementById("prevPageBtn").addEventListener("click", function() { if(currentPage > 1) { currentPage--; renderFullData(); } });
         document.getElementById("nextPageBtn").addEventListener("click", function() { var total = Math.ceil(getFilteredList().length / rowsPerPage); if(currentPage < total) { currentPage++; renderFullData(); } });
         document.getElementById("openCreateModalBtn").addEventListener("click", openNewModal);
