@@ -7,7 +7,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
             background: linear-gradient(145deg, #f4f9ff 0%, #eef3fc 100%);
@@ -16,115 +20,11 @@
             min-height: 100vh;
         }
 
-        .master-container { max-width: 100%; margin: 0 auto; }
-
-        /* ============ صفحه لاگین ============ */
-        .login-wrapper {
-            min-height: 80vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .login-card {
-            background: white;
-            border-radius: 40px;
-            padding: 48px 40px;
-            max-width: 420px;
-            width: 100%;
-            box-shadow: 0 20px 50px rgba(10, 42, 63, 0.12);
-            border: 1px solid rgba(255,255,255,0.8);
-            text-align: center;
-        }
-        .login-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(145deg, #0a2a3b, #0f3e55);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 24px;
-            color: white;
-            font-size: 34px;
-            box-shadow: 0 10px 24px rgba(10,42,63,0.25);
-        }
-        .login-card h2 {
-            font-size: 1.6rem;
-            font-weight: 800;
-            color: #0c3b4f;
-            margin-bottom: 8px;
-        }
-        .login-card p.sub {
-            color: #8aaec4;
-            font-size: 0.85rem;
-            margin-bottom: 32px;
-        }
-        .login-card label {
-            display: block;
-            text-align: right;
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: #1b5c7a;
-            margin-bottom: 8px;
-        }
-        .login-card input {
-            width: 100%;
-            padding: 14px 20px;
-            border-radius: 30px;
-            border: 1.5px solid #e0ecf5;
-            font-family: inherit;
-            font-size: 0.95rem;
-            margin-bottom: 18px;
-            transition: 0.15s;
-        }
-        .login-card input:focus {
-            border-color: #1a6e8c;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(26,110,140,0.12);
-        }
-        .login-btn {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 40px;
-            background: linear-gradient(105deg, #0f4b64, #0a3a4f);
-            color: white;
-            font-weight: 800;
-            font-size: 1rem;
-            font-family: inherit;
-            cursor: pointer;
-            transition: 0.2s;
-            margin-top: 8px;
-        }
-        .login-btn:hover:not(:disabled) {
-            background: linear-gradient(105deg, #166d8f, #0e5270);
-            transform: translateY(-2px);
-            box-shadow: 0 12px 24px -8px rgba(10,42,63,0.4);
-        }
-        .login-btn:disabled {
-            opacity: 0.6;
-            cursor: wait;
-        }
-        .login-error {
-            background: #ffebee;
-            color: #b71c1c;
-            padding: 12px 18px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-bottom: 18px;
-            display: none;
-        }
-        .login-error.show { display: block; }
-        .login-note {
-            font-size: 0.72rem;
-            color: #8aaec4;
-            margin-top: 22px;
-            line-height: 1.7;
+        .master-container {
+            max-width: 100%;
+            margin: 0 auto;
         }
 
-        /* ============ Header اصلی ============ */
         .header-elegant {
             display: flex;
             justify-content: space-between;
@@ -139,42 +39,59 @@
             box-shadow: 0 8px 20px rgba(0,0,0,0.04);
             border: 1px solid rgba(255,255,255,0.8);
         }
-        .brand { display: flex; align-items: center; gap: 14px; }
-        .brand-icon {
-            background: linear-gradient(145deg, #0a2a3b, #0f3e55);
-            width: 52px; height: 52px; border-radius: 28px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 26px; box-shadow: 0 8px 14px rgba(0,0,0,0.1);
-            color: white;
-        }
-        .brand-text h1 {
-            font-size: 1.85rem; font-weight: 800;
-            background: linear-gradient(120deg, #0c3b4f, #1b6c8a);
-            background-clip: text; -webkit-background-clip: text;
-            color: transparent; letter-spacing: -0.5px;
-        }
-        .brand-text p { font-size: 0.7rem; color: #8aaec4; font-weight: 500; }
 
-        .header-buttons { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
-
-        .user-badge {
-            background: #eaf4fb;
-            color: #1b5c7a;
-            padding: 8px 16px;
-            border-radius: 40px;
-            font-size: 0.78rem;
-            font-weight: 700;
+        .brand {
             display: flex;
             align-items: center;
-            gap: 8px;
-            border: 1px solid #d4e6f1;
+            gap: 14px;
+        }
+
+        .brand-icon {
+            background: linear-gradient(145deg, #0a2a3b, #0f3e55);
+            width: 52px;
+            height: 52px;
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            box-shadow: 0 8px 14px rgba(0,0,0,0.1);
+            color: white;
+        }
+
+        .brand-text h1 {
+            font-size: 1.85rem;
+            font-weight: 800;
+            background: linear-gradient(120deg, #0c3b4f, #1b6c8a);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+        .brand-text p {
+            font-size: 0.7rem;
+            color: #8aaec4;
+            font-weight: 500;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
         }
 
         .btn-modern {
             background: linear-gradient(105deg, #0f4b64, #0a3a4f);
-            border: none; padding: 14px 34px; border-radius: 44px;
-            color: white; font-weight: 700; font-size: 0.95rem;
-            display: flex; align-items: center; gap: 10px; cursor: pointer;
+            border: none;
+            padding: 14px 34px;
+            border-radius: 44px;
+            color: white;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
             transition: all 0.25s ease;
             box-shadow: 0 8px 18px rgba(0,0,0,0.1);
             border: 1px solid rgba(255,255,255,0.2);
@@ -184,55 +101,107 @@
             background: linear-gradient(105deg, #166d8f, #0e5270);
             box-shadow: 0 14px 24px -6px rgba(0,0,0,0.2);
         }
-        .btn-employer { background: linear-gradient(105deg, #1a6b4a, #0f4f35); }
-        .btn-employer:hover { background: linear-gradient(105deg, #228a5e, #156b47); }
+
+        .btn-employer {
+            background: linear-gradient(105deg, #1a6b4a, #0f4f35);
+        }
+        .btn-employer:hover {
+            background: linear-gradient(105deg, #228a5e, #156b47);
+        }
+
         .btn-back {
             background: linear-gradient(105deg, #6b6b6b, #4a4a4a);
-            padding: 10px 24px; font-size: 0.85rem;
+            padding: 10px 24px;
+            font-size: 0.85rem;
         }
-        .btn-back:hover { background: linear-gradient(105deg, #8a8a8a, #5a5a5a); }
-        .btn-logout {
-            background: linear-gradient(105deg, #b23a3a, #8a1f1f);
-            padding: 10px 20px; font-size: 0.8rem;
+        .btn-back:hover {
+            background: linear-gradient(105deg, #8a8a8a, #5a5a5a);
         }
-        .btn-logout:hover { background: linear-gradient(105deg, #d14b4b, #a52a2a); }
 
         .nav-search {
-            background: white; border-radius: 32px; padding: 12px 28px;
-            margin-bottom: 28px; display: flex; justify-content: space-between;
-            align-items: center; flex-wrap: wrap; gap: 12px;
+            background: white;
+            border-radius: 32px;
+            padding: 12px 28px;
+            margin-bottom: 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
             border: 1px solid #e2ecf5;
         }
-        .search-wrapper { display: flex; align-items: center; gap: 12px; flex: 1; flex-wrap: wrap; }
+
+        .search-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            flex-wrap: wrap;
+        }
+
         .search-field {
-            display: flex; align-items: center; background: #f8fafd;
-            border-radius: 48px; padding: 6px 24px; gap: 12px; flex: 1;
-            min-width: 180px; border: 1px solid #e2eaf1;
+            display: flex;
+            align-items: center;
+            background: #f8fafd;
+            border-radius: 48px;
+            padding: 6px 24px;
+            gap: 12px;
+            flex: 1;
+            min-width: 180px;
+            border: 1px solid #e2eaf1;
         }
-        .search-field i { color: #8aaec4; font-size: 1rem; }
+        .search-field i {
+            color: #8aaec4;
+            font-size: 1rem;
+        }
         .search-field input {
-            border: none; background: transparent; padding: 12px 0;
-            width: 100%; font-size: 0.9rem; font-weight: 500;
-            font-family: inherit; outline: none;
+            border: none;
+            background: transparent;
+            padding: 12px 0;
+            width: 100%;
+            font-size: 0.9rem;
+            font-weight: 500;
+            font-family: inherit;
+            outline: none;
         }
+
         .filter-select {
-            padding: 10px 18px; border-radius: 48px; border: 1px solid #e2eaf1;
-            background: #f8fafd; font-family: inherit; font-size: 0.85rem;
-            font-weight: 500; color: #1a5c7a; cursor: pointer; outline: none;
-            min-width: 140px; transition: 0.15s;
+            padding: 10px 18px;
+            border-radius: 48px;
+            border: 1px solid #e2eaf1;
+            background: #f8fafd;
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #1a5c7a;
+            cursor: pointer;
+            outline: none;
+            min-width: 140px;
+            transition: 0.15s;
         }
         .filter-select:focus {
             border-color: #1a6e8c;
             box-shadow: 0 0 0 3px rgba(26,110,140,0.12);
         }
+
         .counter-badge {
-            background: #eef2f9; padding: 8px 24px; border-radius: 50px;
-            font-weight: 700; font-size: 0.85rem; color: #1a5c7a; white-space: nowrap;
+            background: #eef2f9;
+            padding: 8px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #1a5c7a;
+            white-space: nowrap;
         }
+
         .status-badge {
-            display: inline-block; padding: 4px 12px; border-radius: 20px;
-            font-size: 0.75rem; font-weight: 700; white-space: nowrap;
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            white-space: nowrap;
         }
         .status-registered { background: #e3f2fd; color: #1565c0; }
         .status-special { background: #f3e5f5; color: #6a1b9a; }
@@ -244,19 +213,34 @@
         .status-problem { background: #ffcdd2; color: #b71c1c; }
         .status-english { background: #ede7f6; color: #4527a0; }
         .status-rejected { background: #fce4ec; color: #880e4f; }
+
+        /* وضعیت پرداخت */
         .payment-full { background: #e8f5e9; color: #1b5e20; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; }
         .payment-half { background: #fff3e0; color: #e65100; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; }
         .payment-none { background: #ffebee; color: #b71c1c; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; }
 
         .loading-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); display: flex; align-items: center;
-            justify-content: center; z-index: 9999;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
         }
         .spinner {
-            width: 50px; height: 50px; border: 4px solid #f3f3f3;
-            border-top: 4px solid #0f4b64; border-radius: 50%;
-            animation: spin 1s linear infinite; background: white; padding: 10px;
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #0f4b64;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            background: white;
+            padding: 10px;
+            border-radius: 50%;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
@@ -264,228 +248,518 @@
         }
 
         .table-responsive {
-            overflow-x: auto; border-radius: 28px; background: transparent;
-            margin-bottom: 32px; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+            overflow-x: auto;
+            border-radius: 28px;
+            background: transparent;
+            margin-bottom: 32px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
         }
+
         .visa-master-table {
-            width: 100%; border-collapse: collapse; background: white;
-            border-radius: 28px; overflow: hidden; table-layout: auto;
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 28px;
+            overflow: hidden;
+            table-layout: auto;
         }
-        .visa-master-table thead tr { background: #0a2a3f; }
+
+        .visa-master-table thead tr {
+            background: #0a2a3f;
+        }
+
         .visa-master-table th {
-            padding: 20px 12px; font-weight: 700; font-size: 0.9rem;
-            letter-spacing: 0.3px; color: white !important; text-align: center;
-            white-space: nowrap; background: #0a2a3f;
-            border-bottom: 2px solid #1c4e6e; position: relative;
+            padding: 20px 12px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 0.3px;
+            color: white !important;
+            text-align: center;
+            white-space: nowrap;
+            background: #0a2a3f;
+            border-bottom: 2px solid #1c4e6e;
+            position: relative;
         }
+
         .visa-master-table td {
-            padding: 16px 12px; text-align: center; font-size: 0.85rem;
-            font-weight: 500; color: #1c4055; border-bottom: 1px solid #eff3f8;
-            background-color: white; white-space: nowrap;
-            transition: all 0.2s ease; cursor: pointer; max-width: 250px;
+            padding: 16px 12px;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #1c4055;
+            border-bottom: 1px solid #eff3f8;
+            background-color: white;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            max-width: 250px;
         }
-        .visa-master-table tbody tr:hover td { background-color: #eef4fc !important; }
-        .visa-master-table tbody tr.has-problem td { color: #b71c1c !important; font-weight: 700; }
-        .visa-master-table tbody tr.has-problem:hover td { background-color: #ffebee !important; }
-        .visa-master-table tbody tr.has-cancel-only td { color: #1c4055 !important; font-weight: 500 !important; }
-        .visa-master-table tbody tr.has-cancel-only:hover td { background-color: #eef4fc !important; }
+
+        .visa-master-table tbody tr:hover td {
+            background-color: #eef4fc !important;
+            transition: 0.15s;
+        }
+
+        .visa-master-table tbody tr.has-problem td {
+            color: #b71c1c !important;
+            font-weight: 700;
+        }
+        .visa-master-table tbody tr.has-problem:hover td {
+            background-color: #ffebee !important;
+        }
+
+        .visa-master-table tbody tr.has-cancel-only td {
+            color: #1c4055 !important;
+            font-weight: 500 !important;
+        }
+        .visa-master-table tbody tr.has-cancel-only:hover td {
+            background-color: #eef4fc !important;
+        }
 
         .scrollable-cell {
-            max-width: 200px; overflow-x: auto; white-space: nowrap;
-            cursor: pointer; scrollbar-width: thin;
+            max-width: 200px;
+            overflow-x: auto;
+            white-space: nowrap;
+            cursor: pointer;
+            scrollbar-width: thin;
         }
-        .scrollable-cell::-webkit-scrollbar { height: 4px; }
-        .scrollable-cell::-webkit-scrollbar-track { background: #e0e0e0; border-radius: 4px; }
-        .scrollable-cell::-webkit-scrollbar-thumb { background: #a0a0a0; border-radius: 4px; }
+        .scrollable-cell::-webkit-scrollbar {
+            height: 4px;
+        }
+        .scrollable-cell::-webkit-scrollbar-track {
+            background: #e0e0e0;
+            border-radius: 4px;
+        }
+        .scrollable-cell::-webkit-scrollbar-thumb {
+            background: #a0a0a0;
+            border-radius: 4px;
+        }
 
         .code-hidden {
-            font-family: monospace; font-weight: 700; cursor: pointer;
-            background: #f0f4f9; padding: 4px 8px; border-radius: 12px;
-            display: inline-block; transition: all 0.1s; white-space: nowrap;
+            font-family: monospace;
+            font-weight: 700;
+            cursor: pointer;
+            background: #f0f4f9;
+            padding: 4px 8px;
+            border-radius: 12px;
+            display: inline-block;
+            transition: all 0.1s;
+            white-space: nowrap;
         }
-        .code-hidden:hover { background: #e0e8f0; }
+        .code-hidden:hover {
+            background: #e0e8f0;
+        }
 
-        .action-flex { display: flex; gap: 8px; justify-content: center; flex-wrap: nowrap; }
-        .action-icon {
-            width: 34px; height: 34px; border-radius: 16px;
-            display: inline-flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: all 0.2s; border: none;
-            background: #f0f5fa; color: #2a6d8a; font-size: 0.95rem;
+        .action-flex {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: nowrap;
         }
-        .action-icon.transaction { background: #e8f3e8; color: #2d7a4b; }
-        .action-icon.transaction:hover { background: #c8e6d9; transform: translateY(-2px); }
-        .action-icon.edit:hover { background: #fee2c2; color: #c26e1a; transform: translateY(-2px); }
-        .action-icon.delete:hover { background: #ffe0e0; color: #d14545; transform: translateY(-2px); }
+        .action-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            background: #f0f5fa;
+            color: #2a6d8a;
+            font-size: 0.95rem;
+        }
+        .action-icon.transaction {
+            background: #e8f3e8;
+            color: #2d7a4b;
+        }
+        .action-icon.transaction:hover {
+            background: #c8e6d9;
+            transform: translateY(-2px);
+        }
+        .action-icon.edit:hover {
+            background: #fee2c2;
+            color: #c26e1a;
+            transform: translateY(-2px);
+        }
+        .action-icon.delete:hover {
+            background: #ffe0e0;
+            color: #d14545;
+            transform: translateY(-2px);
+        }
 
         .pagination-panel {
-            display: flex; justify-content: center; align-items: center;
-            gap: 22px; margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 22px;
+            margin-top: 20px;
         }
         .page-button {
-            background: white; border: 1px solid #d4e2ef; padding: 10px 28px;
-            border-radius: 48px; font-weight: 700; font-family: inherit;
-            font-size: 0.85rem; cursor: pointer; transition: 0.15s; color: #1b5a76;
+            background: white;
+            border: 1px solid #d4e2ef;
+            padding: 10px 28px;
+            border-radius: 48px;
+            font-weight: 700;
+            font-family: inherit;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.15s;
+            color: #1b5a76;
         }
-        .page-button:disabled { opacity: 0.5; cursor: not-allowed; }
-        .page-button:not(:disabled):hover { background: #eaf2f9; border-color: #b9d1e2; }
+        .page-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .page-button:not(:disabled):hover {
+            background: #eaf2f9;
+            border-color: #b9d1e2;
+        }
         .page-info {
-            background: white; padding: 8px 24px; border-radius: 60px;
-            font-weight: 600; font-size: 0.85rem; color: #1a607d;
+            background: white;
+            padding: 8px 24px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #1a607d;
         }
 
         .modal-overlay-smooth {
-            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(6px); display: flex; align-items: center;
-            justify-content: center; z-index: 2000; padding: 20px;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
         }
         .modal-card-sleek {
-            background: white; max-width: 900px; width: 100%;
-            max-height: 85vh; overflow-y: auto; border-radius: 48px;
+            background: white;
+            max-width: 900px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            border-radius: 48px;
             box-shadow: 0 30px 50px rgba(0,0,0,0.3);
             animation: modalPop 0.2s ease-out;
         }
-        .modal-card-large { max-width: 1000px; }
+        .modal-card-large {
+            max-width: 1000px;
+        }
         @keyframes modalPop {
-            from { opacity: 0; transform: scale(0.96); }
-            to { opacity: 1; transform: scale(1); }
+            from { opacity: 0; transform: scale(0.96);}
+            to { opacity: 1; transform: scale(1);}
         }
         .modal-header-sleek {
-            background: #0a2a3f; padding: 22px 32px;
-            border-radius: 48px 48px 0 0; display: flex;
-            justify-content: space-between; align-items: center; color: white;
+            background: #0a2a3f;
+            padding: 22px 32px;
+            border-radius: 48px 48px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
         }
         .modal-header-sleek h3 {
-            font-weight: 800; font-size: 1.3rem;
-            display: flex; gap: 12px; align-items: center;
+            font-weight: 800;
+            font-size: 1.3rem;
+            display: flex;
+            gap: 12px;
+            align-items: center;
         }
         .close-modal-x {
-            background: rgba(255,255,255,0.15); width: 40px; height: 40px;
-            border-radius: 30px; display: flex; align-items: center;
-            justify-content: center; cursor: pointer; font-size: 26px;
+            background: rgba(255,255,255,0.15);
+            width: 40px;
+            height: 40px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 26px;
         }
         .form-grid-double {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 22px 28px; padding: 34px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 22px 28px;
+            padding: 34px;
         }
-        .field-group-simple { display: flex; flex-direction: column; gap: 8px; }
-        .field-group-simple label { font-size: 0.75rem; font-weight: 800; color: #1b5c7a; }
+        .field-group-simple {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .field-group-simple label {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: #1b5c7a;
+        }
         .field-group-simple input, .field-group-simple textarea, .field-group-simple select {
-            border: 1.5px solid #e0ecf5; border-radius: 28px;
-            padding: 12px 18px; font-family: inherit; font-size: 0.9rem;
-            transition: 0.15s; background: white;
+            border: 1.5px solid #e0ecf5;
+            border-radius: 28px;
+            padding: 12px 18px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: 0.15s;
+            background: white;
         }
         .field-group-simple input:focus, .field-group-simple textarea:focus, .field-group-simple select:focus {
-            border-color: #1a6e8c; outline: none;
+            border-color: #1a6e8c;
+            outline: none;
             box-shadow: 0 0 0 3px rgba(26,110,140,0.12);
         }
-        .field-group-simple select { appearance: auto; cursor: pointer; }
+        .field-group-simple select {
+            appearance: auto;
+            cursor: pointer;
+        }
 
-        .checkbox-group { display: flex; gap: 20px; flex-wrap: wrap; padding: 10px 0; }
-        .checkbox-item { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+        .checkbox-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            padding: 10px 0;
+        }
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
         .checkbox-item input[type="checkbox"] {
-            width: 18px; height: 18px; cursor: pointer; accent-color: #0a2a3f;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #0a2a3f;
         }
-        .checkbox-item label { font-size: 0.85rem; font-weight: 600; color: #1b5c7a; cursor: pointer; }
+        .checkbox-item label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #1b5c7a;
+            cursor: pointer;
+        }
 
-        .field-with-button { display: flex; gap: 8px; align-items: center; }
-        .field-with-button input, .field-with-button select { flex: 1; }
+        .field-with-button {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .field-with-button input, .field-with-button select {
+            flex: 1;
+        }
         .field-with-button .add-btn {
-            background: #0a2a3f; color: white; border: none;
-            width: 44px; height: 44px; border-radius: 28px;
-            cursor: pointer; font-size: 1.2rem; display: flex;
-            align-items: center; justify-content: center;
-            transition: 0.2s; flex-shrink: 0;
+            background: #0a2a3f;
+            color: white;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 28px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+            flex-shrink: 0;
         }
-        .field-with-button .add-btn:hover { background: #1a5c7a; transform: scale(1.05); }
+        .field-with-button .add-btn:hover {
+            background: #1a5c7a;
+            transform: scale(1.05);
+        }
         .submit-gold {
-            background: linear-gradient(105deg, #0f4b64, #0a3a4f); border: none;
-            padding: 14px 28px; width: 260px; margin: 10px auto 40px;
-            display: flex; align-items: center; justify-content: center;
-            gap: 12px; border-radius: 48px; color: white;
-            font-weight: 800; font-size: 1rem; cursor: pointer;
+            background: linear-gradient(105deg, #0f4b64, #0a3a4f);
+            border: none;
+            padding: 14px 28px;
+            width: 260px;
+            margin: 10px auto 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            border-radius: 48px;
+            color: white;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
         }
-        .submit-gold:hover { background: linear-gradient(105deg, #186f8f, #0f5470); }
+        .submit-gold:hover {
+            background: linear-gradient(105deg, #186f8f, #0f5470);
+        }
         .info-note {
-            background: #f0f6fd; padding: 10px 22px;
-            margin: 0 34px 24px 34px; border-radius: 28px;
-            font-size: 0.75rem; color: #2a6b89;
-            display: flex; align-items: center; gap: 10px;
+            background: #f0f6fd;
+            padding: 10px 22px;
+            margin: 0 34px 24px 34px;
+            border-radius: 28px;
+            font-size: 0.75rem;
+            color: #2a6b89;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        .transactions-list { padding: 20px 30px; border-top: 1px solid #e0ecef; }
+        .transactions-list {
+            padding: 20px 30px;
+            border-top: 1px solid #e0ecef;
+        }
         .transaction-item {
-            background: #f9fbfe; border-radius: 20px; padding: 14px 18px;
-            margin-bottom: 12px; display: flex; justify-content: space-between;
-            align-items: center; flex-wrap: wrap; gap: 12px;
+            background: #f9fbfe;
+            border-radius: 20px;
+            padding: 14px 18px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
             border-right: 4px solid #2d7a4b;
         }
-        .transaction-date { font-weight: 700; color: #1a5c7a; }
-        .transaction-amount { font-weight: 800; color: #2d7a4b; font-size: 1.1rem; }
-        .transaction-desc { color: #6f8fa0; font-size: 0.8rem; }
+        .transaction-date {
+            font-weight: 700;
+            color: #1a5c7a;
+        }
+        .transaction-amount {
+            font-weight: 800;
+            color: #2d7a4b;
+            font-size: 1.1rem;
+        }
+        .transaction-desc {
+            color: #6f8fa0;
+            font-size: 0.8rem;
+        }
         .delete-trans {
-            background: none; border: none; color: #c96f5c;
-            cursor: pointer; font-size: 1.1rem;
+            background: none;
+            border: none;
+            color: #c96f5c;
+            cursor: pointer;
+            font-size: 1.1rem;
         }
         .total-paid {
-            background: #eef2f9; padding: 12px 20px; border-radius: 32px;
-            margin: 10px 30px 20px; font-weight: 700;
-            display: flex; justify-content: space-between;
+            background: #eef2f9;
+            padding: 12px 20px;
+            border-radius: 32px;
+            margin: 10px 30px 20px;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
         }
-        .afghani-symbol, .remain-af { font-weight: 700; }
+        .afghani-symbol, .remain-af {
+            font-weight: 700;
+        }
         .afghani-symbol { color: #1d7e5c; }
         .remain-af { color: #bc6f2c; }
-        .cancel-amount { font-weight: 800; color: #1a6b4a; font-size: 1rem; }
+        .cancel-amount {
+            font-weight: 800;
+            color: #1a6b4a;
+            font-size: 1rem;
+        }
 
         .employer-table {
-            width: 100%; border-collapse: collapse; background: white;
-            border-radius: 28px; overflow: hidden;
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 28px;
+            overflow: hidden;
         }
-        .employer-table thead tr { background: #0a2a3f; }
+        .employer-table thead tr {
+            background: #0a2a3f;
+        }
         .employer-table th {
-            padding: 20px 12px; font-weight: 700; font-size: 0.9rem;
-            letter-spacing: 0.3px; color: white !important; text-align: center;
-            white-space: nowrap; background: #0a2a3f;
+            padding: 20px 12px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 0.3px;
+            color: white !important;
+            text-align: center;
+            white-space: nowrap;
+            background: #0a2a3f;
             border-bottom: 2px solid #1c4e6e;
         }
         .employer-table td {
-            padding: 16px 12px; text-align: center; font-size: 0.85rem;
-            font-weight: 500; color: #1c4055; border-bottom: 1px solid #eff3f8;
-            background-color: white; white-space: nowrap; cursor: pointer;
+            padding: 16px 12px;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #1c4055;
+            border-bottom: 1px solid #eff3f8;
+            background-color: white;
+            white-space: nowrap;
+            cursor: pointer;
             transition: all 0.2s ease;
         }
-        .employer-table tbody tr:hover td { background-color: #eef4fc !important; }
+        .employer-table tbody tr:hover td {
+            background-color: #eef4fc !important;
+        }
 
+        /* تب‌های کارفرمایان */
         .tabs-container {
-            display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;
-            background: white; padding: 10px 20px; border-radius: 32px;
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 32px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
             border: 1px solid #e2ecf5;
         }
+
         .tab-btn {
-            padding: 12px 32px; border-radius: 40px; border: none;
-            background: #f8fafd; color: #1a5c7a; font-weight: 700;
-            font-family: inherit; font-size: 0.9rem; cursor: pointer;
-            transition: all 0.2s; display: flex; align-items: center;
-            gap: 8px; border: 1px solid #e2eaf1;
+            padding: 12px 32px;
+            border-radius: 40px;
+            border: none;
+            background: #f8fafd;
+            color: #1a5c7a;
+            font-weight: 700;
+            font-family: inherit;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #e2eaf1;
         }
-        .tab-btn:hover { background: #eaf2f9; }
+
+        .tab-btn:hover {
+            background: #eaf2f9;
+        }
+
         .tab-btn.active {
             background: linear-gradient(105deg, #0f4b64, #0a3a4f);
-            color: white; border-color: transparent;
+            color: white;
+            border-color: transparent;
             box-shadow: 0 6px 14px rgba(0,0,0,0.15);
         }
-        .tab-btn .badge-count {
-            background: rgba(255,255,255,0.25); padding: 2px 10px;
-            border-radius: 20px; font-size: 0.75rem;
-        }
-        .tab-btn.active .badge-count { background: rgba(255,255,255,0.3); }
 
-        .page-content { display: block; }
-        .page-content.hidden { display: none; }
+        .tab-btn .badge-count {
+            background: rgba(255,255,255,0.25);
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+        }
+
+        .tab-btn.active .badge-count {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .page-content {
+            display: block;
+        }
+        .page-content.hidden {
+            display: none;
+        }
 
         .toast-message {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            background: #1a5c7a; color: white; padding: 10px 24px;
-            border-radius: 40px; font-size: 0.85rem; z-index: 3000;
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a5c7a;
+            color: white;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            z-index: 3000;
             animation: fadeOut 2s ease forwards;
         }
         @keyframes fadeOut {
@@ -495,39 +769,21 @@
         }
 
         @media (max-width: 1200px) {
-            .visa-master-table th, .employer-table th { font-size: 0.8rem; padding: 15px 8px; }
-            .visa-master-table td, .employer-table td { padding: 12px 8px; font-size: 0.8rem; }
+            .visa-master-table th,
+            .employer-table th {
+                font-size: 0.8rem;
+                padding: 15px 8px;
+            }
+            .visa-master-table td,
+            .employer-table td {
+                padding: 12px 8px;
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
 <body>
-
-<!-- ============ صفحه لاگین ============ -->
-<div id="loginPage" class="login-wrapper">
-    <div class="login-card">
-        <div class="login-icon"><i class="fas fa-lock"></i></div>
-        <h2>ورود به سامانه</h2>
-        <p class="sub">سامانه همگام ویزا · مدیریت جامع</p>
-        <div id="loginError" class="login-error"></div>
-        <form id="loginForm">
-            <label for="loginEmail">ایمیل</label>
-            <input type="email" id="loginEmail" required autocomplete="username" placeholder="example@mail.com" value="hamgam2026@gmail.com">
-            <label for="loginPassword">رمز عبور</label>
-            <input type="password" id="loginPassword" required autocomplete="current-password" placeholder="••••••••">
-            <button type="submit" class="login-btn" id="loginSubmitBtn">
-                <i class="fas fa-sign-in-alt"></i> ورود
-            </button>
-        </form>
-        <p class="login-note">
-            <i class="fas fa-info-circle"></i>
-            فقط کاربر مجاز (<span style="font-family:monospace;">hamgam2026@gmail.com</span>) می‌تواند وارد شود.
-        </p>
-    </div>
-</div>
-
-<!-- ============ اپ اصلی (بعد از لاگین نمایش داده می‌شود) ============ -->
-<div class="master-container" id="app" style="display:none;">
-
+<div class="master-container" id="app">
     <!-- ======================== صفحه اصلی مشتریان ======================== -->
     <div id="mainPage" class="page-content">
         <div class="header-elegant">
@@ -539,10 +795,8 @@
                 </div>
             </div>
             <div class="header-buttons">
-                <span class="user-badge"><i class="fas fa-user-check"></i> <span id="userEmailLabel">—</span></span>
                 <button class="btn-modern btn-employer" id="openEmployerPageBtn"><i class="fas fa-users"></i> اطلاعات کارفرمایان</button>
                 <button class="btn-modern" id="openCreateModalBtn"><i class="fas fa-user-plus"></i> ثبت مشتری جدید</button>
-                <button class="btn-modern btn-logout" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> خروج</button>
             </div>
         </div>
 
@@ -643,10 +897,10 @@
             <div class="header-buttons">
                 <button class="btn-modern btn-back" id="backToMainBtn"><i class="fas fa-arrow-right"></i> بازگشت</button>
                 <button class="btn-modern" id="openEmployerCreateBtn"><i class="fas fa-user-plus"></i> ثبت کارفرما</button>
-                <button class="btn-modern btn-logout" id="logoutBtn2"><i class="fas fa-sign-out-alt"></i> خروج</button>
             </div>
         </div>
 
+        <!-- تب‌های کارفرمایان -->
         <div class="tabs-container">
             <button class="tab-btn active" data-tab="tehran">
                 <i class="fas fa-city"></i> تهران
@@ -700,33 +954,24 @@
     </div>
 </div>
 
+<!-- Firebase SDK -->
 <script type="module">
-    // ==================== Firebase imports ====================
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import {
-        getDatabase, ref, onValue, set, push, remove, update
-    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-    import {
-        getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged,
-        setPersistence, browserLocalPersistence
-    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getDatabase, ref, onValue, set, push, remove, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-    // ==================== Firebase config ====================
     const firebaseConfig = {
-        apiKey: "AIzaSyAig_hyBCH-lsb917lr4D0H7g90kD45OL4",
-        authDomain: "hamgam-visa.firebaseapp.com",
-        databaseURL: "https://hamgam-visa-default-rtdb.firebaseio.com",
-        projectId: "hamgam-visa",
-        storageBucket: "hamgam-visa.firebasestorage.app",
-        messagingSenderId: "632563672833",
-        appId: "1:632563672833:web:9e3de3d2ce015f9f3b9d00",
-        measurementId: "G-TZP65N3M1Q"
+        apiKey: "AIzaSyDXMJHyJy-fl2MyWQjO52ETxzgf8wVL2zs",
+        authDomain: "manage-wifi.firebaseapp.com",
+        databaseURL: "https://manage-wifi-default-rtdb.firebaseio.com",
+        projectId: "manage-wifi",
+        storageBucket: "manage-wifi.firebasestorage.app",
+        messagingSenderId: "194323383151",
+        appId: "1:194323383151:web:9b31f966fdcaa5e7539e9a",
+        measurementId: "G-JFX10T49LZ"
     };
 
     const app = initializeApp(firebaseConfig);
     const database = getDatabase(app);
-    const auth = getAuth(app);
-
     const customersRef = ref(database, 'visa_customers');
     const cartablesRef = ref(database, 'visa_cartables');
     const relatedRef = ref(database, 'visa_related');
@@ -753,49 +998,46 @@
     let employerPage = 1;
     const employerRowsPerPage = 15;
     let employerSearch = "";
-    let currentEmployerTab = "tehran";
-
-    // آیا داده‌ها بارگذاری شده‌اند؟
-    let dataLoaded = false;
+    let currentEmployerTab = "tehran"; // تب پیش‌فرض: تهران
 
     // ======================== توابع کمکی ========================
     function showToast(message) {
         var existingToast = document.querySelector('.toast-message');
-        if (existingToast) existingToast.remove();
+        if(existingToast) existingToast.remove();
         var toast = document.createElement('div');
         toast.className = 'toast-message';
         toast.innerHTML = '<i class="fas fa-check-circle"></i> ' + message;
         document.body.appendChild(toast);
-        setTimeout(function () { if (toast) toast.remove(); }, 2000);
+        setTimeout(function() { if(toast) toast.remove(); }, 2000);
     }
 
     function showLoading(show) {
         var existing = document.querySelector('.loading-overlay');
-        if (show && !existing) {
+        if(show && !existing) {
             var div = document.createElement('div');
             div.className = 'loading-overlay';
             div.innerHTML = '<div class="spinner"></div>';
             document.body.appendChild(div);
-        } else if (!show && existing) {
+        } else if(!show && existing) {
             existing.remove();
         }
     }
 
     function copyToClipboard(text, fieldName) {
-        if (!text || text === '-' || text === '') {
+        if(!text || text === '-' || text === '') {
             showToast('متن قابل کپی نیست');
             return;
         }
-        navigator.clipboard.writeText(text).then(function () {
+        navigator.clipboard.writeText(text).then(function() {
             showToast((fieldName ? fieldName + ': ' : '') + text);
-        }).catch(function () {
+        }).catch(function() {
             alert('کپی نشد: ' + text);
         });
     }
 
     function formatAfghani(amount) {
-        if (!amount && amount !== 0) return "۰";
-        var num = parseInt(amount.toString().replace(/,/g, '')) || 0;
+        if(!amount && amount !== 0) return "۰";
+        var num = parseInt(amount.toString().replace(/,/g,'')) || 0;
         return num.toLocaleString('fa-IR') + " ؋";
     }
 
@@ -804,9 +1046,9 @@
         onValue(employersRef, (snapshot) => {
             const data = snapshot.val();
             employers = [];
-            if (data) {
+            if(data) {
                 const keys = Object.keys(data);
-                for (var i = 0; i < keys.length; i++) {
+                for(var i = 0; i < keys.length; i++) {
                     const key = keys[i];
                     const emp = data[key];
                     emp.firebaseId = key;
@@ -825,61 +1067,66 @@
 
     function updateTabCounts() {
         var tehranCount = 0, karajCount = 0, otherCount = 0;
-        for (var i = 0; i < employers.length; i++) {
+        for(var i = 0; i < employers.length; i++) {
             var prov = employers[i].province || 'other';
-            if (prov === 'tehran') tehranCount++;
-            else if (prov === 'karaj') karajCount++;
+            if(prov === 'tehran') tehranCount++;
+            else if(prov === 'karaj') karajCount++;
             else otherCount++;
         }
-        var el1 = document.getElementById('tehranCount'); if (el1) el1.textContent = tehranCount;
-        var el2 = document.getElementById('karajCount'); if (el2) el2.textContent = karajCount;
-        var el3 = document.getElementById('otherCount'); if (el3) el3.textContent = otherCount;
+        document.getElementById('tehranCount').textContent = tehranCount;
+        document.getElementById('karajCount').textContent = karajCount;
+        document.getElementById('otherCount').textContent = otherCount;
     }
 
     function getFilteredEmployers() {
         var list = [...employers];
-        list = list.filter(function (e) {
+        
+        // فیلتر بر اساس تب انتخاب شده
+        list = list.filter(function(e) {
             var prov = e.province || 'other';
             return prov === currentEmployerTab;
         });
-        if (employerSearch.trim()) {
+        
+        if(employerSearch.trim()) {
             var kw = employerSearch.trim().toLowerCase();
             var filtered = [];
-            for (var i = 0; i < list.length; i++) {
+            for(var i = 0; i < list.length; i++) {
                 var e = list[i];
-                if ((e.employerName && e.employerName.toLowerCase().indexOf(kw) !== -1) ||
-                    (e.username && e.username.toLowerCase().indexOf(kw) !== -1) ||
-                    (e.phone && e.phone.toLowerCase().indexOf(kw) !== -1) ||
-                    (e.postalCode && e.postalCode.toLowerCase().indexOf(kw) !== -1)) {
+                if((e.employerName && e.employerName.toLowerCase().indexOf(kw) !== -1) ||
+                   (e.username && e.username.toLowerCase().indexOf(kw) !== -1) ||
+                   (e.phone && e.phone.toLowerCase().indexOf(kw) !== -1) ||
+                   (e.postalCode && e.postalCode.toLowerCase().indexOf(kw) !== -1)) {
                     filtered.push(e);
                 }
             }
             list = filtered;
         }
-        list.sort(function (a, b) {
-            return (b.createdAt || 0) - (a.createdAt || 0);
+        list.sort(function(a, b) {
+            var timeA = a.createdAt || 0;
+            var timeB = b.createdAt || 0;
+            return timeB - timeA;
         });
         return list;
     }
 
     function getProvinceLabel(prov) {
-        if (prov === 'tehran') return '<span style="background:#e3f2fd; color:#1565c0; padding:4px 10px; border-radius:12px; font-size:0.75rem; font-weight:700;">تهران</span>';
-        if (prov === 'karaj') return '<span style="background:#e8f5e9; color:#2e7d32; padding:4px 10px; border-radius:12px; font-size:0.75rem; font-weight:700;">کرج</span>';
+        if(prov === 'tehran') return '<span style="background:#e3f2fd; color:#1565c0; padding:4px 10px; border-radius:12px; font-size:0.75rem; font-weight:700;">تهران</span>';
+        if(prov === 'karaj') return '<span style="background:#e8f5e9; color:#2e7d32; padding:4px 10px; border-radius:12px; font-size:0.75rem; font-weight:700;">کرج</span>';
         return '<span style="background:#f3e5f5; color:#6a1b9a; padding:4px 10px; border-radius:12px; font-size:0.75rem; font-weight:700;">سایر</span>';
     }
 
     function renderEmployerTable() {
         var filtered = getFilteredEmployers();
         var totalPages = Math.ceil(filtered.length / employerRowsPerPage) || 1;
-        if (employerPage > totalPages) employerPage = totalPages;
-        if (employerPage < 1) employerPage = 1;
+        if(employerPage > totalPages) employerPage = totalPages;
+        if(employerPage < 1) employerPage = 1;
         var start = (employerPage - 1) * employerRowsPerPage;
         var pageItems = filtered.slice(start, start + employerRowsPerPage);
 
         var tbody = document.getElementById("employerTableBody");
-        if (!tbody) return;
+        if(!tbody) return;
 
-        if (pageItems.length === 0) {
+        if(pageItems.length === 0) {
             tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:48px;">✨ هیچ کارفرمایی یافت نشد</td></tr>';
             document.getElementById("employerCounter").innerHTML = "۰ کارفرما";
             document.getElementById("employerPageInfo").innerHTML = "صفحه ۰ از ۰";
@@ -887,7 +1134,7 @@
         }
 
         var html = "";
-        for (var i = 0; i < pageItems.length; i++) {
+        for(var i = 0; i < pageItems.length; i++) {
             var emp = pageItems[i];
             var rowNumber = filtered.length - (start + i);
             html += '<tr>' +
@@ -911,21 +1158,21 @@
         document.getElementById("nextEmployerBtn").disabled = (employerPage === totalPages);
 
         var allCells = tbody.querySelectorAll('td');
-        for (var j = 0; j < allCells.length; j++) {
+        for(var j = 0; j < allCells.length; j++) {
             var cell = allCells[j];
             var isActionCell = cell.querySelector('.action-flex') !== null;
-            if (!isActionCell) {
+            if(!isActionCell) {
                 cell.style.cursor = 'copy';
-                cell.ondblclick = (function (c) {
-                    return function (e) {
+                cell.ondblclick = (function(c) {
+                    return function(e) {
                         e.stopPropagation();
                         var copyLabel = c.getAttribute('data-copy');
                         var copyValue = c.getAttribute('data-copy-value');
-                        if (copyValue && copyValue !== '') {
+                        if(copyValue && copyValue !== '') {
                             copyToClipboard(copyValue, copyLabel);
                         } else {
                             var textValue = c.innerText.trim();
-                            if (textValue && textValue !== '-' && textValue !== '') {
+                            if(textValue && textValue !== '-' && textValue !== '') {
                                 copyToClipboard(textValue, copyLabel);
                             }
                         }
@@ -938,9 +1185,11 @@
             btn.onclick = (e) => { e.stopPropagation(); openEditEmployerModal(btn.getAttribute('data-id')); };
         });
         document.querySelectorAll('#employerTableBody .action-icon.delete').forEach(btn => {
-            btn.onclick = (e) => {
-                e.stopPropagation();
-                if (confirm("حذف شود؟")) deleteEmployer(btn.getAttribute('data-id'));
+            btn.onclick = (e) => { 
+                e.stopPropagation(); 
+                if(confirm("حذف شود؟")) {
+                    deleteEmployer(btn.getAttribute('data-id'));
+                }
             };
         });
     }
@@ -948,7 +1197,7 @@
     async function saveEmployerToFirebase(employerData, firebaseId = null) {
         showLoading(true);
         try {
-            if (!firebaseId) {
+            if(!firebaseId) {
                 employerData.createdAt = Date.now();
                 const newRef = push(employersRef);
                 await set(newRef, employerData);
@@ -957,7 +1206,7 @@
                 await update(ref(database, `visa_employers/${firebaseId}`), employerData);
                 showToast('کارفرما با موفقیت ویرایش شد');
             }
-        } catch (error) {
+        } catch(error) {
             console.error(error);
             alert("خطا در ذخیره اطلاعات: " + error.message);
         }
@@ -971,9 +1220,9 @@
             await remove(ref(database, `visa_employers/${firebaseId}`));
             showToast('کارفرما حذف شد');
             loadEmployersFromFirebase();
-        } catch (error) {
+        } catch(error) {
             console.error(error);
-            alert("خطا در حذف: " + error.message);
+            alert("خطا در حذف");
         }
         showLoading(false);
     }
@@ -982,12 +1231,12 @@
 
     function openEditEmployerModal(firebaseId) {
         var employer = employers.find(e => e.firebaseId === firebaseId);
-        if (employer) showEmployerModal(employer);
+        if(employer) showEmployerModal(employer);
     }
 
     function showEmployerModal(emp) {
         var existing = document.querySelector('.modal-overlay-smooth');
-        if (existing) existing.remove();
+        if(existing) existing.remove();
         var isEdit = (emp !== null);
         var modalDiv = document.createElement('div');
         modalDiv.className = 'modal-overlay-smooth';
@@ -997,20 +1246,23 @@
             "شماره تماس", "phone", "کد پستی", "postalCode"
         ];
 
+        // مقدار پیش‌فرض استان بر اساس تب فعلی
         var currentProv = emp ? (emp.province || 'other') : currentEmployerTab;
-        if (!currentProv) currentProv = 'tehran';
+        if(!currentProv) currentProv = 'tehran';
 
         var gridHtml = '<div class="form-grid-double">';
+        
+        // سیلیکت استان
         var provinceSelectHtml = '<div class="field-group-simple"><label>استان</label><select name="province" id="empProvinceSelect">';
         provinceSelectHtml += '<option value="tehran" ' + (currentProv === 'tehran' ? 'selected' : '') + '>تهران</option>';
         provinceSelectHtml += '<option value="karaj" ' + (currentProv === 'karaj' ? 'selected' : '') + '>کرج</option>';
         provinceSelectHtml += '<option value="other" ' + (currentProv === 'other' ? 'selected' : '') + '>سایر</option>';
         provinceSelectHtml += '</select></div>';
         gridHtml += provinceSelectHtml;
-
-        for (var i = 0; i < allFields.length; i += 2) {
+        
+        for(var i = 0; i < allFields.length; i += 2) {
             var label = allFields[i];
-            var fieldName = allFields[i + 1];
+            var fieldName = allFields[i+1];
             var value = emp ? (emp[fieldName] || '') : '';
             var required = (fieldName === 'employerName') ? 'required' : '';
             gridHtml += '<div class="field-group-simple"><label>' + label + (required ? ' *' : '') + '</label><input type="text" name="' + fieldName + '" value="' + (value || '') + '" ' + required + ' placeholder="' + (required ? 'الزامی' : 'اختیاری') + '"></div>';
@@ -1025,40 +1277,46 @@
         document.body.appendChild(modalDiv);
 
         document.getElementById("closeEmpModal").onclick = () => modalDiv.remove();
-        modalDiv.addEventListener('click', (e) => { if (e.target === modalDiv) modalDiv.remove(); });
+        modalDiv.addEventListener('click', (e) => { if(e.target === modalDiv) modalDiv.remove(); });
 
         var form = modalDiv.querySelector("#empForm");
         form.onsubmit = async (e) => {
             e.preventDefault();
             var formData = {};
-            for (var i = 0; i < allFields.length; i += 2) {
-                var name = allFields[i + 1];
+            for(var i = 0; i < allFields.length; i += 2) {
+                var name = allFields[i+1];
                 var input = form.querySelector('[name="' + name + '"]');
-                if (input) formData[name] = input.value;
+                if(input) formData[name] = input.value;
             }
             var provinceSelect = form.querySelector('[name="province"]');
             formData.province = provinceSelect ? provinceSelect.value : 'other';
-
-            if (!formData.employerName) {
+            
+            if(!formData.employerName) {
                 alert("لطفاً نام کارفرما را وارد کنید");
                 return;
             }
-            if (isEdit && emp) await saveEmployerToFirebase(formData, emp.firebaseId);
-            else await saveEmployerToFirebase(formData);
+            if(isEdit && emp) {
+                await saveEmployerToFirebase(formData, emp.firebaseId);
+            } else {
+                await saveEmployerToFirebase(formData);
+            }
             modalDiv.remove();
         };
     }
 
-    // ======================== استان‌ها ========================
+    // ======================== توابع مربوط استان ========================
     function loadProvincesFromFirebase() {
         onValue(provincesRef, (snapshot) => {
             const data = snapshot.val();
-            if (data) {
-                if (Array.isArray(data)) provinceList = data;
-                else {
+            if(data) {
+                if(Array.isArray(data)) {
+                    provinceList = data;
+                } else {
                     const keys = Object.keys(data);
                     provinceList = [];
-                    for (var i = 0; i < keys.length; i++) provinceList.push(data[keys[i]]);
+                    for(var i = 0; i < keys.length; i++) {
+                        provinceList.push(data[keys[i]]);
+                    }
                 }
             } else {
                 provinceList = [];
@@ -1073,21 +1331,25 @@
 
     function updateProvinceFilterOptions() {
         const select = document.getElementById('provinceFilter');
-        if (!select) return;
+        if(!select) return;
         const currentValue = select.value;
         select.innerHTML = '<option value="all">همه استان‌ها</option>';
-        for (var i = 0; i < provinceList.length; i++) {
+        for(var i = 0; i < provinceList.length; i++) {
             var option = document.createElement('option');
             option.value = provinceList[i];
             option.text = provinceList[i];
             select.appendChild(option);
         }
-        if (currentValue && provinceList.indexOf(currentValue) !== -1) select.value = currentValue;
-        else { select.value = 'all'; selectedProvince = 'all'; }
+        if(currentValue && provinceList.indexOf(currentValue) !== -1) {
+            select.value = currentValue;
+        } else {
+            select.value = 'all';
+            selectedProvince = 'all';
+        }
     }
 
     async function addProvinceToFirebase(newProvince) {
-        if (provinceList.indexOf(newProvince) !== -1) {
+        if(provinceList.indexOf(newProvince) !== -1) {
             alert('این استان قبلاً وجود دارد');
             return false;
         }
@@ -1097,154 +1359,106 @@
             updateProvinceFilterOptions();
             showToast('استان "' + newProvince + '" در دیتابیس ذخیره شد');
             return true;
-        } catch (error) {
+        } catch(error) {
             console.error("خطا در ذخیره استان:", error);
             provinceList = provinceList.filter(item => item !== newProvince);
-            alert("خطا در ذخیره استان: " + error.message);
+            alert("خطا در ذخیره استان در دیتابیس");
             return false;
         }
     }
 
-    // ======================== کارتابل و مربوط نفر ========================
+    // ======================== توابع مشتریان ========================
     function loadCartablesFromFirebase() {
         onValue(cartablesRef, (snapshot) => {
             const data = snapshot.val();
-            if (data) {
-                if (Array.isArray(data)) cartableList = data;
-                else {
-                    const keys = Object.keys(data);
-                    cartableList = [];
-                    for (var i = 0; i < keys.length; i++) cartableList.push(data[keys[i]]);
-                }
-            } else {
-                cartableList = [...defaultCartables];
-                saveCartablesToFirebase();
-            }
+            if(data) {
+                if(Array.isArray(data)) { cartableList = data; }
+                else { const keys = Object.keys(data); cartableList = []; for(var i=0; i<keys.length; i++) cartableList.push(data[keys[i]]); }
+            } else { cartableList = [...defaultCartables]; saveCartablesToFirebase(); }
             updateFilterOptions();
-        }, (error) => {
-            console.error("خطا در بارگذاری کارتابل‌ها:", error);
-            cartableList = [...defaultCartables];
-            updateFilterOptions();
-        });
+        }, (error) => { console.error("خطا در بارگذاری کارتابل‌ها:", error); cartableList = [...defaultCartables]; updateFilterOptions(); });
     }
 
-    async function saveCartablesToFirebase() {
-        try { await set(cartablesRef, cartableList); }
-        catch (e) { console.error(e); }
-    }
+    async function saveCartablesToFirebase() { try { await set(cartablesRef, cartableList); } catch(e) { console.error(e); } }
 
     async function addCartableToFirebase(newCartable) {
-        if (cartableList.indexOf(newCartable) !== -1) { alert('این کارتابل قبلاً وجود دارد'); return false; }
-        cartableList.push(newCartable);
-        await saveCartablesToFirebase();
-        updateFilterOptions();
-        showToast('کارتابل "' + newCartable + '" اضافه شد');
-        return true;
+        if(cartableList.indexOf(newCartable) !== -1) { alert('این کارتابل قبلاً وجود دارد'); return false; }
+        cartableList.push(newCartable); await saveCartablesToFirebase(); updateFilterOptions(); showToast('کارتابل "' + newCartable + '" اضافه شد'); return true;
     }
 
     function loadRelatedFromFirebase() {
         onValue(relatedRef, (snapshot) => {
             const data = snapshot.val();
-            if (data) {
-                if (Array.isArray(data)) relatedList = data;
-                else {
-                    const keys = Object.keys(data);
-                    relatedList = [];
-                    for (var i = 0; i < keys.length; i++) relatedList.push(data[keys[i]]);
-                }
-            } else {
-                relatedList = [];
-                saveRelatedToFirebase();
-            }
+            if(data) { if(Array.isArray(data)) { relatedList = data; } else { const keys = Object.keys(data); relatedList = []; for(var i=0; i<keys.length; i++) relatedList.push(data[keys[i]]); } }
+            else { relatedList = []; saveRelatedToFirebase(); }
             updateRelatedFilterOptions();
-        }, (error) => {
-            console.error("خطا در بارگذاری مربوط نفرها:", error);
-            relatedList = [];
-            updateRelatedFilterOptions();
-        });
+        }, (error) => { console.error("خطا در بارگذاری مربوط نفرها:", error); relatedList = []; updateRelatedFilterOptions(); });
     }
 
-    async function saveRelatedToFirebase() {
-        try { await set(relatedRef, relatedList); }
-        catch (e) { console.error(e); }
-    }
+    async function saveRelatedToFirebase() { try { await set(relatedRef, relatedList); } catch(e) { console.error(e); } }
 
     async function addRelatedToFirebase(newRelated) {
-        if (relatedList.indexOf(newRelated) !== -1) { alert('این مربوط نفر قبلاً وجود دارد'); return false; }
-        relatedList.push(newRelated);
-        await saveRelatedToFirebase();
-        updateRelatedFilterOptions();
-        showToast('مربوط نفر "' + newRelated + '" اضافه شد');
-        return true;
+        if(relatedList.indexOf(newRelated) !== -1) { alert('این مربوط نفر قبلاً وجود دارد'); return false; }
+        relatedList.push(newRelated); await saveRelatedToFirebase(); updateRelatedFilterOptions(); showToast('مربوط نفر "' + newRelated + '" اضافه شد'); return true;
     }
 
     function updateFilterOptions() {
-        const select = document.getElementById('cartableFilter');
-        if (!select) return;
+        const select = document.getElementById('cartableFilter'); if(!select) return;
         const currentValue = select.value;
         select.innerHTML = '<option value="all">همه کارتابل‌ها</option>';
-        for (var i = 0; i < cartableList.length; i++) {
-            var option = document.createElement('option');
-            option.value = cartableList[i];
-            option.text = cartableList[i];
-            select.appendChild(option);
-        }
-        if (currentValue && cartableList.indexOf(currentValue) !== -1) select.value = currentValue;
-        else { select.value = 'all'; selectedCartable = 'all'; }
+        for(var i=0; i<cartableList.length; i++) { var option = document.createElement('option'); option.value = cartableList[i]; option.text = cartableList[i]; select.appendChild(option); }
+        if(currentValue && cartableList.indexOf(currentValue) !== -1) { select.value = currentValue; } else { select.value = 'all'; selectedCartable = 'all'; }
     }
 
     function updateRelatedFilterOptions() {
-        const select = document.getElementById('relatedFilter');
-        if (!select) return;
+        const select = document.getElementById('relatedFilter'); if(!select) return;
         const currentValue = select.value;
         select.innerHTML = '<option value="all">همه مربوط نفر</option>';
-        for (var i = 0; i < relatedList.length; i++) {
-            var option = document.createElement('option');
-            option.value = relatedList[i];
-            option.text = relatedList[i];
-            select.appendChild(option);
-        }
-        if (currentValue && relatedList.indexOf(currentValue) !== -1) select.value = currentValue;
-        else { select.value = 'all'; selectedRelated = 'all'; }
+        for(var i=0; i<relatedList.length; i++) { var option = document.createElement('option'); option.value = relatedList[i]; option.text = relatedList[i]; select.appendChild(option); }
+        if(currentValue && relatedList.indexOf(currentValue) !== -1) { select.value = currentValue; } else { select.value = 'all'; selectedRelated = 'all'; }
     }
 
-    // ======================== توابع مشتریان ========================
-    function getTodayGregorian() {
-        const today = new Date();
-        return today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
-    }
+    function getTodayGregorian() { const today = new Date(); return today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0'); }
 
-    function formatGregorianDate(dateStr) {
-        if (!dateStr) return '-';
-        const parts = dateStr.split('-');
-        if (parts.length === 3) return parts[0] + '/' + parts[1] + '/' + parts[2];
-        return dateStr;
-    }
+    function formatGregorianDate(dateStr) { if(!dateStr) return '-'; const parts = dateStr.split('-'); if(parts.length === 3) return parts[0] + '/' + parts[1] + '/' + parts[2]; return dateStr; }
 
     function getStatusBadge(status) {
-        if (!status) return '<span class="status-badge status-registered">✅ ثبت اولیه</span>';
-        const map = {
-            'ثبت اولیه': 'status-registered', 'ثبت اختصاص': 'status-special',
-            'ثبت روادید': 'status-visa', 'تایید روادید': 'status-approved',
-            'فورم انگلیسی': 'status-english', 'ویزه شده': 'status-done',
-            'کنسل شد': 'status-canceled', 'رد شده از طرف سیستم': 'status-rejected',
-            'به تعویق افتاد': 'status-postponed'
+        if(!status) return '<span class="status-badge status-registered">✅ ثبت اولیه</span>';
+        const map = { 
+            'ثبت اولیه': 'status-registered', 
+            'ثبت اختصاص': 'status-special', 
+            'ثبت روادید': 'status-visa', 
+            'تایید روادید': 'status-approved', 
+            'فورم انگلیسی': 'status-english', 
+            'ویزه شده': 'status-done', 
+            'کنسل شد': 'status-canceled', 
+            'رد شده از طرف سیستم': 'status-rejected',
+            'به تعویق افتاد': 'status-postponed' 
         };
-        const iconMap = {
-            'ثبت اولیه': '✅', 'ثبت اختصاص': '🟣', 'ثبت روادید': '🟢',
-            'تایید روادید': '📋', 'فورم انگلیسی': '📝', 'ویزه شده': '🛂',
-            'کنسل شد': '❌', 'رد شده از طرف سیستم': '🚫', 'به تعویق افتاد': '⏳'
+        const iconMap = { 
+            'ثبت اولیه': '✅', 
+            'ثبت اختصاص': '🟣', 
+            'ثبت روادید': '🟢', 
+            'تایید روادید': '📋', 
+            'فورم انگلیسی': '📝', 
+            'ویزه شده': '🛂', 
+            'کنسل شد': '❌', 
+            'رد شده از طرف سیستم': '🚫',
+            'به تعویق افتاد': '⏳' 
         };
-        const cls = map[status] || 'status-registered';
-        const icon = iconMap[status] || '✅';
+        const cls = map[status] || 'status-registered'; const icon = iconMap[status] || '✅';
         return `<span class="status-badge ${cls}">${icon} ${status}</span>`;
     }
 
     function getPaymentBadge(cust) {
         var status = cust.paymentStatus || 'none';
-        if (status === 'full') return '<span class="payment-full">رسید کل</span>';
-        if (status === 'half') return '<span class="payment-half">نیمه رسید</span>';
-        return '<span class="payment-none">باقی کل</span>';
+        if(status === 'full') {
+            return '<span class="payment-full">رسید کل</span>';
+        } else if(status === 'half') {
+            return '<span class="payment-half">نیمه رسید</span>';
+        } else {
+            return '<span class="payment-none">باقی کل</span>';
+        }
     }
 
     function getCardStatusBadge(cust) {
@@ -1252,118 +1466,128 @@
         var hasProblem = cust.hasProblem || false;
         var cardCanceled = cust.cardCanceled || false;
         var cancelAmount = cust.cancelAmount || null;
-
-        if (cardCanceled && cancelAmount) {
+        
+        if(cardCanceled && cancelAmount) {
             var amount = parseInt(cancelAmount);
             return '<span class="cancel-amount">' + formatAfghani(amount) + ' کنسلی</span>';
         }
+        
         var statuses = [];
-        if (hasCard) statuses.push('کارت کارگری');
-        if (hasProblem) statuses.push('مشکل');
-        if (statuses.length === 0) return '<span style="color:#4caf50;">✔ سالم</span>';
-        var color = '#b71c1c', bg = '#ffcdd2';
-        if (hasCard && !hasProblem) { color = '#e65100'; bg = '#fff3e0'; }
-        return '<span style="background:' + bg + '; color:' + color + '; padding:4px 8px; border-radius:12px; font-size:0.7rem; font-weight:700;">' + statuses.join(', ') + '</span>';
-    }
-
-    function formatAddressForDisplay(text, maxLen) {
-        if (!text) return '-';
-        return text;
-    }
-
-    function hideCode(fullCode) {
-        if (!fullCode || fullCode === '-') return '-';
-        if (fullCode.length <= 6) return fullCode;
-        return fullCode.substring(0, 6) + '•••';
-    }
-
-    function calculateTotals(cust) {
-        var totalReceipt = 0;
-        if (cust.transactions && cust.transactions.length > 0) {
-            for (var i = 0; i < cust.transactions.length; i++) {
-                totalReceipt += parseInt(cust.transactions[i].amount) || 0;
-            }
+        if(hasCard) statuses.push('کارت کارگری');
+        if(hasProblem) statuses.push('مشکل');
+        
+        if(statuses.length === 0) return '<span style="color:#4caf50;">✔ سالم</span>';
+        
+        var color = '#b71c1c';
+        var bg = '#ffcdd2';
+        if(hasCard && !hasProblem) {
+            color = '#e65100';
+            bg = '#fff3e0';
         }
-        var totalAmount = parseInt(cust.amount) || 0;
-        if (cust.cardCanceled && cust.cancelAmount) totalAmount += parseInt(cust.cancelAmount) || 0;
-        var remaining = totalAmount - totalReceipt;
-        if (remaining < 0) remaining = 0;
-        return { totalReceipt: totalReceipt, remaining: remaining, totalAmount: totalAmount };
+        return '<span style="background:'+bg+'; color:'+color+'; padding:4px 8px; border-radius:12px; font-size:0.7rem; font-weight:700;">' + statuses.join(', ') + '</span>';
     }
 
-    function hasProblem(cust) { return cust.hasCard || cust.hasProblem; }
-    function hasCancelOnly(cust) { return cust.cardCanceled && !cust.hasCard && !cust.hasProblem; }
+    function formatAddressForDisplay(text, maxLen) { if(!text) return '-'; if(text.length <= maxLen) return text; return text; }
+
+    function hideCode(fullCode) { if(!fullCode || fullCode === '-') return '-'; if(fullCode.length <= 6) return fullCode; return fullCode.substring(0,6) + '•••'; }
+
+    function calculateTotals(cust) { 
+        var totalReceipt = 0; 
+        if(cust.transactions && cust.transactions.length > 0) { 
+            for(var i=0; i<cust.transactions.length; i++) { 
+                totalReceipt += parseInt(cust.transactions[i].amount) || 0; 
+            } 
+        } 
+        var totalAmount = parseInt(cust.amount) || 0;
+        
+        if(cust.cardCanceled && cust.cancelAmount) {
+            totalAmount += parseInt(cust.cancelAmount) || 0;
+        }
+        
+        var remaining = totalAmount - totalReceipt; 
+        if(remaining < 0) remaining = 0; 
+        return { totalReceipt: totalReceipt, remaining: remaining, totalAmount: totalAmount }; 
+    }
+
+    function hasProblem(cust) {
+        return cust.hasCard || cust.hasProblem;
+    }
+
+    function hasCancelOnly(cust) {
+        return cust.cardCanceled && !cust.hasCard && !cust.hasProblem;
+    }
 
     function getFilteredList() {
         var list = [...customers];
-        if (selectedCartable !== 'all') list = list.filter(c => c.cartable === selectedCartable);
-        if (selectedStatus !== 'all') list = list.filter(c => c.status === selectedStatus);
-        if (selectedRelated !== 'all') list = list.filter(c => c.related === selectedRelated);
-        if (selectedProvince !== 'all') list = list.filter(c => c.province === selectedProvince);
-
-        if (selectedProblem === 'hasCard') list = list.filter(c => c.hasCard === true);
-        else if (selectedProblem === 'hasProblem') list = list.filter(c => c.hasProblem === true);
-        else if (selectedProblem === 'cardCanceled') list = list.filter(c => c.cardCanceled === true);
-
-        if (selectedPayment !== 'all') list = list.filter(c => (c.paymentStatus || 'none') === selectedPayment);
-
-        if (searchKeyword.trim()) {
-            var kw = searchKeyword.trim().toLowerCase();
-            var filtered = [];
-            for (var i = 0; i < list.length; i++) {
-                var c = list[i];
-                if ((c.firstName && c.firstName.toLowerCase().indexOf(kw) !== -1) ||
-                    (c.lastName && c.lastName.toLowerCase().indexOf(kw) !== -1) ||
-                    (c.trackingCode2 && c.trackingCode2.toLowerCase().indexOf(kw) !== -1) ||
-                    (c.specialCode && c.specialCode.toLowerCase().indexOf(kw) !== -1) ||
-                    (c.phoneAF && c.phoneAF.toLowerCase().indexOf(kw) !== -1) ||
-                    (c.addressAF && c.addressAF.toLowerCase().indexOf(kw) !== -1) ||
-                    (c.description && c.description.toLowerCase().indexOf(kw) !== -1) ||
-                    (c.cartable && c.cartable.toLowerCase().indexOf(kw) !== -1) ||
-                    (c.date && c.date.toLowerCase().indexOf(kw) !== -1) ||
-                    (c.status && c.status.toLowerCase().indexOf(kw) !== -1) ||
-                    (c.related && c.related.toLowerCase().indexOf(kw) !== -1) ||
-                    (c.province && c.province.toLowerCase().indexOf(kw) !== -1) ||
-                    (c.fatherName && c.fatherName.toLowerCase().indexOf(kw) !== -1) ||
-                    (c.grandFatherName && c.grandFatherName.toLowerCase().indexOf(kw) !== -1) ||
-                    (c.motherName && c.motherName.toLowerCase().indexOf(kw) !== -1)) {
+        if(selectedCartable !== 'all') { list = list.filter(c => c.cartable === selectedCartable); }
+        if(selectedStatus !== 'all') { list = list.filter(c => c.status === selectedStatus); }
+        if(selectedRelated !== 'all') { list = list.filter(c => c.related === selectedRelated); }
+        if(selectedProvince !== 'all') { list = list.filter(c => c.province === selectedProvince); }
+        
+        if(selectedProblem === 'hasCard') {
+            list = list.filter(c => c.hasCard === true);
+        } else if(selectedProblem === 'hasProblem') {
+            list = list.filter(c => c.hasProblem === true);
+        } else if(selectedProblem === 'cardCanceled') {
+            list = list.filter(c => c.cardCanceled === true);
+        }
+        
+        if(selectedPayment !== 'all') {
+            list = list.filter(c => (c.paymentStatus || 'none') === selectedPayment);
+        }
+        
+        if(searchKeyword.trim()) {
+            var kw = searchKeyword.trim().toLowerCase(); var filtered = [];
+            for(var i=0; i<list.length; i++) { var c = list[i];
+                if((c.firstName && c.firstName.toLowerCase().indexOf(kw) !== -1) || (c.lastName && c.lastName.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.trackingCode2 && c.trackingCode2.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.specialCode && c.specialCode.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.phoneAF && c.phoneAF.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.addressAF && c.addressAF.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.description && c.description.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.cartable && c.cartable.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.date && c.date.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.status && c.status.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.related && c.related.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.province && c.province.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.fatherName && c.fatherName.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.grandFatherName && c.grandFatherName.toLowerCase().indexOf(kw) !== -1) ||
+                   (c.motherName && c.motherName.toLowerCase().indexOf(kw) !== -1)) {
                     filtered.push(c);
                 }
             }
             list = filtered;
         }
-        list.sort(function (a, b) { return (b.createdAt || 0) - (a.createdAt || 0); });
+        list.sort(function(a,b) { var timeA = a.createdAt || 0; var timeB = b.createdAt || 0; return timeB - timeA; });
         return list;
     }
 
     function renderFullData() {
         var filtered = getFilteredList();
         var totalPages = Math.ceil(filtered.length / rowsPerPage) || 1;
-        if (currentPage > totalPages) currentPage = totalPages;
-        if (currentPage < 1) currentPage = 1;
+        if(currentPage > totalPages) currentPage = totalPages;
+        if(currentPage < 1) currentPage = 1;
         var start = (currentPage - 1) * rowsPerPage;
         var pageItems = filtered.slice(start, start + rowsPerPage);
         var tbody = document.getElementById("tableDynamicBody");
-        if (!tbody) return;
-        if (pageItems.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="22" style="text-align:center; padding:48px;">✨ هیچ مشتری یافت نشد</td></tr>';
-            document.getElementById("recordsCounter").innerHTML = "۰ مشتری";
-            document.getElementById("pageInfoText").innerHTML = "صفحه ۰ از ۰";
-            return;
-        }
+        if(!tbody) return;
+        if(pageItems.length === 0) { tbody.innerHTML = '<tr><td colspan="22" style="text-align:center; padding:48px;">✨ هیچ مشتری یافت نشد</td></tr>'; document.getElementById("recordsCounter").innerHTML = "۰ مشتری"; document.getElementById("pageInfoText").innerHTML = "صفحه ۰ از ۰"; return; }
         var html = "";
-        for (var i = 0; i < pageItems.length; i++) {
-            var cust = pageItems[i];
-            var rowNumber = filtered.length - (start + i);
-            var totals = calculateTotals(cust);
+        for(var i=0; i<pageItems.length; i++) {
+            var cust = pageItems[i]; 
+            var rowNumber = filtered.length - (start + i); 
+            var totals = calculateTotals(cust); 
             var statusBadge = getStatusBadge(cust.status || 'ثبت اولیه');
             var cardStatus = getCardStatusBadge(cust);
             var paymentBadge = getPaymentBadge(cust);
-
+            
             var rowClass = '';
-            if (hasProblem(cust)) rowClass = 'has-problem';
-            else if (hasCancelOnly(cust)) rowClass = 'has-cancel-only';
-
+            if(hasProblem(cust)) {
+                rowClass = 'has-problem';
+            } else if(hasCancelOnly(cust)) {
+                rowClass = 'has-cancel-only';
+            }
+            
             html += '<tr class="' + rowClass + '">' +
                 '<td><div class="action-flex">' +
                 '<button class="action-icon transaction" data-id="' + (cust.firebaseId || cust.id) + '" title="تراکنش‌ها / رسید"><i class="fas fa-receipt"></i></button>' +
@@ -1400,55 +1624,30 @@
         document.getElementById("nextPageBtn").disabled = (currentPage === totalPages);
 
         var allCells = tbody.querySelectorAll('td');
-        for (var j = 0; j < allCells.length; j++) {
-            var cell = allCells[j];
-            var isActionCell = cell.querySelector('.action-flex') !== null;
-            if (!isActionCell) {
+        for(var j=0; j<allCells.length; j++) {
+            var cell = allCells[j]; var isActionCell = cell.querySelector('.action-flex') !== null;
+            if(!isActionCell) {
                 cell.style.cursor = 'copy';
-                cell.ondblclick = (function (c) {
-                    return function (e) {
-                        e.stopPropagation();
-                        var copyLabel = c.getAttribute('data-copy');
-                        var copyValue = c.getAttribute('data-copy-value');
-                        if (copyValue && copyValue !== '') copyToClipboard(copyValue, copyLabel);
-                        else {
-                            var textValue = c.innerText.trim();
-                            if (textValue && textValue !== '-' && textValue !== '') copyToClipboard(textValue, copyLabel);
-                        }
-                    };
+                cell.ondblclick = (function(c) {
+                    return function(e) { e.stopPropagation(); var copyLabel = c.getAttribute('data-copy'); var copyValue = c.getAttribute('data-copy-value'); if(copyValue && copyValue !== '') { copyToClipboard(copyValue, copyLabel); } else { var textValue = c.innerText.trim(); if(textValue && textValue !== '-' && textValue !== '') { copyToClipboard(textValue, copyLabel); } } };
                 })(cell);
             }
         }
 
         var codeSpans = tbody.querySelectorAll('.code-hidden');
-        for (var k = 0; k < codeSpans.length; k++) {
-            codeSpans[k].ondblclick = function (e) {
-                e.stopPropagation();
-                var fullCode = this.getAttribute('data-fullcode');
-                if (fullCode && fullCode !== '') copyToClipboard(fullCode, 'کد');
-            };
+        for(var k=0; k<codeSpans.length; k++) {
+            codeSpans[k].ondblclick = function(e) { e.stopPropagation(); var fullCode = this.getAttribute('data-fullcode'); if(fullCode && fullCode !== '') { copyToClipboard(fullCode, 'کد'); } };
         }
         attachButtonEvents(tbody);
     }
 
     function attachButtonEvents(container) {
-        container.querySelectorAll('.action-icon.transaction').forEach(btn => {
-            btn.onclick = (e) => { e.stopPropagation(); openTransactionModal(btn.getAttribute('data-id')); };
-        });
-        container.querySelectorAll('.action-icon.edit').forEach(btn => {
-            btn.onclick = (e) => { e.stopPropagation(); openEditModal(btn.getAttribute('data-id')); };
-        });
-        container.querySelectorAll('.action-icon.delete').forEach(btn => {
-            btn.onclick = (e) => {
-                e.stopPropagation();
-                if (confirm("حذف شود؟")) deleteCustomer(btn.getAttribute('data-id'));
-            };
-        });
+        container.querySelectorAll('.action-icon.transaction').forEach(btn => { btn.onclick = (e) => { e.stopPropagation(); openTransactionModal(btn.getAttribute('data-id')); }; });
+        container.querySelectorAll('.action-icon.edit').forEach(btn => { btn.onclick = (e) => { e.stopPropagation(); openEditModal(btn.getAttribute('data-id')); }; });
+        container.querySelectorAll('.action-icon.delete').forEach(btn => { btn.onclick = (e) => { e.stopPropagation(); if(confirm("حذف شود؟")) { deleteCustomer(btn.getAttribute('data-id')); } }; });
     }
 
-    function loadFromFirebase() {
-        if (dataLoaded) return;
-        dataLoaded = true;
+    async function loadFromFirebase() {
         showLoading(true);
         loadCartablesFromFirebase();
         loadRelatedFromFirebase();
@@ -1458,92 +1657,47 @@
         onValue(customersRef, (snapshot) => {
             const data = snapshot.val();
             customers = [];
-            if (data) {
-                const keys = Object.keys(data);
-                const tempCustomers = [];
-                for (var i = 0; i < keys.length; i++) {
-                    const key = keys[i];
-                    const cust = data[key];
-                    cust.firebaseId = key;
-                    tempCustomers.push(cust);
-                }
-                const now = Date.now();
-                const baseTime = now - (tempCustomers.length * 1000 * 60 * 60 * 24 * 30);
-                for (var j = 0; j < tempCustomers.length; j++) {
-                    const cust = tempCustomers[j];
-                    if (!cust.createdAt) cust.createdAt = baseTime + (j * 1000 * 60 * 60 * 24 * 30);
-                    if (!cust.status) cust.status = 'ثبت اولیه';
-                    customers.push(cust);
-                }
+            if(data) {
+                const keys = Object.keys(data); const tempCustomers = [];
+                for(var i=0; i<keys.length; i++) { const key = keys[i]; const cust = data[key]; cust.firebaseId = key; tempCustomers.push(cust); }
+                const now = Date.now(); const baseTime = now - (tempCustomers.length * 1000 * 60 * 60 * 24 * 30);
+                for(var j=0; j<tempCustomers.length; j++) { const cust = tempCustomers[j]; if(!cust.createdAt) { cust.createdAt = baseTime + (j * 1000 * 60 * 60 * 24 * 30); } if(!cust.status) { cust.status = 'ثبت اولیه'; } customers.push(cust); }
             }
             showLoading(false);
             renderFullData();
-        }, (error) => {
-            showLoading(false);
-            console.error("خطا در خواندن مشتریان:", error);
-            alert("خطا در اتصال به دیتابیس: " + error.message + "\n\nمطمئن شوید که در Firebase Console → Authentication → Sign-in method → Email/Password فعال است و کاربر شما وجود دارد.");
-        });
+        }, (error) => { showLoading(false); console.error(error); alert("خطا در اتصال به دیتابیس"); });
     }
 
-    async function saveCustomerToFirebase(customerData, firebaseId = null) {
-        showLoading(true);
-        try {
-            if (!firebaseId) {
-                customerData.createdAt = Date.now();
-                const newRef = push(customersRef);
-                await set(newRef, customerData);
-                showToast('مشتری با موفقیت ثبت شد');
-            } else {
-                await update(ref(database, `visa_customers/${firebaseId}`), customerData);
-                showToast('مشتری با موفقیت ویرایش شد');
-            }
-        } catch (error) {
-            console.error(error);
-            alert("خطا در ذخیره اطلاعات: " + error.message);
-        }
-        showLoading(false);
+    async function saveCustomerToFirebase(customerData, firebaseId = null) { 
+        showLoading(true); 
+        try { 
+            if(!firebaseId) { 
+                customerData.createdAt = Date.now(); 
+                const newRef = push(customersRef); 
+                await set(newRef, customerData); 
+                showToast('مشتری با موفقیت ثبت شد'); 
+            } else { 
+                await update(ref(database, `visa_customers/${firebaseId}`), customerData); 
+                showToast('مشتری با موفقیت ویرایش شد'); 
+            } 
+        } catch(error) { 
+            console.error(error); 
+            alert("خطا در ذخیره اطلاعات: " + error.message); 
+        } 
+        showLoading(false); 
     }
 
-    async function deleteCustomer(firebaseId) {
-        showLoading(true);
-        try {
-            await remove(ref(database, `visa_customers/${firebaseId}`));
-            showToast('مشتری حذف شد');
-        } catch (error) {
-            console.error(error);
-            alert("خطا در حذف: " + error.message);
-        }
-        showLoading(false);
-    }
+    async function deleteCustomer(firebaseId) { showLoading(true); try { await remove(ref(database, `visa_customers/${firebaseId}`)); showToast('مشتری حذف شد'); } catch(error) { console.error(error); alert("خطا در حذف"); } showLoading(false); }
 
-    async function updateTransactions(firebaseId, transactions) {
-        showLoading(true);
-        try {
-            await update(ref(database, `visa_customers/${firebaseId}`), { transactions: transactions });
-            showToast('رسید ثبت شد');
-        } catch (error) {
-            console.error(error);
-            alert("خطا در ثبت رسید: " + error.message);
-        }
-        showLoading(false);
-    }
+    async function updateTransactions(firebaseId, transactions) { showLoading(true); try { await update(ref(database, `visa_customers/${firebaseId}`), { transactions: transactions }); showToast('رسید ثبت شد'); } catch(error) { console.error(error); alert("خطا در ثبت رسید"); } showLoading(false); }
 
     function openTransactionModal(firebaseId) {
-        var cust = customers.find(c => c.firebaseId === firebaseId);
-        if (!cust) return;
-        var existing = document.querySelector('.modal-overlay-smooth');
-        if (existing) existing.remove();
-        var totals = calculateTotals(cust);
-        var today = getTodayGregorian();
+        var cust = customers.find(c => c.firebaseId === firebaseId); if(!cust) return;
+        var existing = document.querySelector('.modal-overlay-smooth'); if(existing) existing.remove();
+        var totals = calculateTotals(cust); var today = getTodayGregorian();
         var transactionsHtml = '<div class="transactions-list"><h4 style="margin-bottom:16px;"><i class="fas fa-history"></i> تاریخچه رسیدها</h4>';
-        if (!cust.transactions || cust.transactions.length === 0) {
-            transactionsHtml += '<div style="padding:20px; text-align:center; color:#999;">هیچ رسیدی ثبت نشده است</div>';
-        } else {
-            for (var i = cust.transactions.length - 1; i >= 0; i--) {
-                var t = cust.transactions[i];
-                transactionsHtml += '<div class="transaction-item"><div><span class="transaction-date">📅 ' + formatGregorianDate(t.date) + '</span><div class="transaction-desc">' + (t.description || 'بدون توضیح') + '</div></div><div><span class="transaction-amount">' + formatAfghani(t.amount) + '</span></div><button class="delete-trans" data-trans-index="' + i + '"><i class="fas fa-trash-can"></i></button></div>';
-            }
-        }
+        if(!cust.transactions || cust.transactions.length === 0) { transactionsHtml += '<div style="padding:20px; text-align:center; color:#999;">هیچ رسیدی ثبت نشده است</div>'; }
+        else { for(var i=cust.transactions.length-1; i>=0; i--) { var t = cust.transactions[i]; transactionsHtml += '<div class="transaction-item"><div><span class="transaction-date">📅 ' + formatGregorianDate(t.date) + '</span><div class="transaction-desc">' + (t.description || 'بدون توضیح') + '</div></div><div><span class="transaction-amount">' + formatAfghani(t.amount) + '</span></div><button class="delete-trans" data-trans-index="' + i + '"><i class="fas fa-trash-can"></i></button></div>'; } }
         transactionsHtml += '<div class="total-paid">مجموع رسیدها: <strong>' + formatAfghani(totals.totalReceipt) + '</strong> | باقیمانده: ' + formatAfghani(totals.remaining) + '</div>';
         transactionsHtml += '<hr style="margin:15px 0;"><h4><i class="fas fa-plus-circle"></i> ثبت رسید جدید</h4>' +
             '<div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:12px;">' +
@@ -1552,68 +1706,44 @@
             '<input type="text" id="transDesc" placeholder="توضیح (اختیاری)" style="flex:2; padding:10px; border-radius:24px; border:1px solid #ddd;">' +
             '<button id="addReceiptBtn" style="background:#0a2a3f; color:white; border:none; padding:0 24px; border-radius:40px; cursor:pointer;">➕ افزودن</button>' +
             '</div>';
-        var modalDiv = document.createElement('div');
-        modalDiv.className = 'modal-overlay-smooth';
-        modalDiv.innerHTML = '<div class="modal-card-sleek modal-card-large"><div class="modal-header-sleek"><h3><i class="fas fa-receipt"></i> مدیریت رسیدها · ' + cust.firstName + ' ' + cust.lastName + '</h3><div class="close-modal-x" id="closeTransModal">✕</div></div><div style="padding:0 0 20px 0;">' + transactionsHtml + '</div><button class="submit-gold" id="closeTransBtn" style="margin-bottom:30px;">بستن</button></div>';
+        var modalDiv = document.createElement('div'); modalDiv.className = 'modal-overlay-smooth'; modalDiv.innerHTML = '<div class="modal-card-sleek modal-card-large"><div class="modal-header-sleek"><h3><i class="fas fa-receipt"></i> مدیریت رسیدها · ' + cust.firstName + ' ' + cust.lastName + '</h3><div class="close-modal-x" id="closeTransModal">✕</div></div><div style="padding:0 0 20px 0;">' + transactionsHtml + '</div><button class="submit-gold" id="closeTransBtn" style="margin-bottom:30px;">بستن</button></div>';
         document.body.appendChild(modalDiv);
         var closeModal = () => modalDiv.remove();
         document.getElementById("closeTransModal").onclick = closeModal;
         document.getElementById("closeTransBtn").onclick = closeModal;
-        modalDiv.addEventListener('click', (e) => { if (e.target === modalDiv) closeModal(); });
-        document.getElementById("addReceiptBtn").onclick = async () => {
-            var date = document.getElementById("transDate").value.trim();
-            var amount = document.getElementById("transAmount").value.trim();
-            var desc = document.getElementById("transDesc").value.trim() || "";
-            if (!date) { alert("تاریخ را وارد کنید"); return; }
-            if (!amount || isNaN(parseInt(amount))) { alert("مبلغ معتبر وارد کنید"); return; }
-            var newTransaction = { date: date, amount: parseInt(amount).toString(), description: desc };
-            var newTransactions = cust.transactions ? [...cust.transactions, newTransaction] : [newTransaction];
-            await updateTransactions(firebaseId, newTransactions);
-            closeModal();
-        };
-        modalDiv.querySelectorAll('.delete-trans').forEach(btn => {
-            btn.onclick = async (e) => {
-                e.stopPropagation();
-                var idx = parseInt(btn.getAttribute('data-trans-index'));
-                if (confirm("حذف این رسید؟")) {
-                    var newTransactions = cust.transactions.filter((_, i) => i !== idx);
-                    await updateTransactions(firebaseId, newTransactions);
-                    closeModal();
-                }
-            };
-        });
+        modalDiv.addEventListener('click', (e) => { if(e.target === modalDiv) closeModal(); });
+        document.getElementById("addReceiptBtn").onclick = async () => { var date = document.getElementById("transDate").value.trim(); var amount = document.getElementById("transAmount").value.trim(); var desc = document.getElementById("transDesc").value.trim() || ""; if(!date) { alert("تاریخ را وارد کنید"); return; } if(!amount || isNaN(parseInt(amount))) { alert("مبلغ معتبر وارد کنید"); return; } var newTransaction = { date: date, amount: parseInt(amount).toString(), description: desc }; var newTransactions = cust.transactions ? [...cust.transactions, newTransaction] : [newTransaction]; await updateTransactions(firebaseId, newTransactions); closeModal(); };
+        modalDiv.querySelectorAll('.delete-trans').forEach(btn => { btn.onclick = async (e) => { e.stopPropagation(); var idx = parseInt(btn.getAttribute('data-trans-index')); if(confirm("حذف این رسید؟")) { var newTransactions = cust.transactions.filter((_, i) => i !== idx); await updateTransactions(firebaseId, newTransactions); closeModal(); } }; });
     }
 
-    function openEditModal(firebaseId) {
-        var customer = customers.find(c => c.firebaseId === firebaseId);
-        if (customer) showCustomerModal(customer);
-    }
+    function openEditModal(firebaseId) { var customer = customers.find(c => c.firebaseId === firebaseId); if(customer) showCustomerModal(customer); }
     function openNewModal() { showCustomerModal(null); }
 
     function showCustomerModal(cust) {
-        var existing = document.querySelector('.modal-overlay-smooth');
-        if (existing) existing.remove();
-        var isEdit = (cust !== null);
-        var modalDiv = document.createElement('div');
-        modalDiv.className = 'modal-overlay-smooth';
+        var existing = document.querySelector('.modal-overlay-smooth'); if(existing) existing.remove();
+        var isEdit = (cust !== null); var modalDiv = document.createElement('div'); modalDiv.className = 'modal-overlay-smooth';
         var today = getTodayGregorian();
-
+        
         var allFields = [
-            "تاریخ", "date", "تخلص", "lastName", "اسم", "firstName", "نام پدر", "fatherName",
+            "تاریخ", "date", "تخلص", "lastName", "اسم", "firstName", "نام پدر", "fatherName", 
             "نام پدر کلان", "grandFatherName", "نام مادر", "motherName", "تماس AF", "phoneAF",
-            "آدرس افغانستان", "addressAF", "توضیحات", "description",
+            "آدرس افغانستان", "addressAF", "توضیحات", "description", 
             "کد اختصاصی", "specialCode", "کد رهگیری", "trackingCode2",
-            "وضعیت", "status", "وضعیت پرداخت", "paymentStatus", "مربوط نفر", "related",
-            "کارتابل", "cartable", "مربوط استان", "province", "مبلغ کل (AFN)", "amount"
+            "وضعیت", "status", "وضعیت پرداخت", "paymentStatus", "مربوط نفر", "related", "کارتابل", "cartable", "مربوط استان", "province", "مبلغ کل (AFN)", "amount"
         ];
-
+        
         var hasCard = cust ? cust.hasCard || false : false;
         var hasProblem = cust ? cust.hasProblem || false : false;
         var cardCanceled = cust ? cust.cardCanceled || false : false;
         var cancelAmount = cust ? cust.cancelAmount || '' : '';
-        var currentPaymentStatus = (cust && cust.paymentStatus) ? cust.paymentStatus : 'none';
-
+        
+        var currentPaymentStatus = 'none';
+        if(cust && cust.paymentStatus) {
+            currentPaymentStatus = cust.paymentStatus;
+        }
+        
         var gridHtml = '<div class="form-grid-double">';
+        
         gridHtml += '<div class="field-group-simple" style="grid-column: 1 / -1;">';
         gridHtml += '<label>وضعیت کارت کارگری</label>';
         gridHtml += '<div class="checkbox-group">';
@@ -1621,92 +1751,67 @@
         gridHtml += '<div class="checkbox-item"><input type="checkbox" id="hasProblem" name="hasProblem" ' + (hasProblem ? 'checked' : '') + '><label for="hasProblem">مشکل دیگه دارد</label></div>';
         gridHtml += '<div class="checkbox-item"><input type="checkbox" id="cardCanceled" name="cardCanceled" ' + (cardCanceled ? 'checked' : '') + '><label for="cardCanceled">کارت کاری اش را کنسل کردیم</label></div>';
         gridHtml += '</div></div>';
-
-        if (cancelAmount) {
+        
+        if(cancelAmount) {
             gridHtml += '<input type="hidden" id="cancelAmountHidden" name="cancelAmount" value="' + cancelAmount + '">';
         }
-
-        for (var i = 0; i < allFields.length; i += 2) {
-            var label = allFields[i];
-            var fieldName = allFields[i + 1];
-            var value = cust ? (cust[fieldName] || '') : '';
-
-            if (fieldName === 'date') {
-                value = value || today;
-                gridHtml += '<div class="field-group-simple"><label>' + label + ' (میلادی)</label><input type="text" name="' + fieldName + '" value="' + value + '" placeholder="مثال: 2024-01-15"></div>';
-            } else if (fieldName === 'status') {
-                var statusOptionsHtml = '';
-                var statusList = ['ثبت اولیه', 'ثبت اختصاص', 'ثبت روادید', 'تایید روادید', 'فورم انگلیسی', 'ویزه شده', 'کنسل شد', 'رد شده از طرف سیستم', 'به تعویق افتاد'];
-                for (var s = 0; s < statusList.length; s++) {
-                    var selected = (value === statusList[s]) ? 'selected' : '';
-                    var icon = '';
-                    if (statusList[s] === 'ثبت اولیه') icon = '✅';
-                    else if (statusList[s] === 'ثبت اختصاص') icon = '🟣';
-                    else if (statusList[s] === 'ثبت روادید') icon = '🟢';
-                    else if (statusList[s] === 'تایید روادید') icon = '📋';
-                    else if (statusList[s] === 'فورم انگلیسی') icon = '📝';
-                    else if (statusList[s] === 'ویزه شده') icon = '🛂';
-                    else if (statusList[s] === 'کنسل شد') icon = '❌';
-                    else if (statusList[s] === 'رد شده از طرف سیستم') icon = '🚫';
-                    else if (statusList[s] === 'به تعویق افتاد') icon = '⏳';
-                    statusOptionsHtml += '<option value="' + statusList[s] + '" ' + selected + '>' + icon + ' ' + statusList[s] + '</option>';
-                }
-                gridHtml += '<div class="field-group-simple"><label>' + label + '</label><select name="' + fieldName + '">' + statusOptionsHtml + '</select></div>';
-            } else if (fieldName === 'paymentStatus') {
+        
+        for(var i=0; i<allFields.length; i+=2) {
+            var label = allFields[i]; var fieldName = allFields[i+1]; var value = cust ? (cust[fieldName] || '') : '';
+            if(fieldName === 'date') { value = value || today; gridHtml += '<div class="field-group-simple"><label>' + label + ' (میلادی)</label><input type="text" name="' + fieldName + '" value="' + value + '" placeholder="مثال: 2024-01-15"></div>'; }
+            else if(fieldName === 'status') { 
+                var statusOptionsHtml = ''; 
+                var statusList = ['ثبت اولیه', 'ثبت اختصاص', 'ثبت روادید', 'تایید روادید', 'فورم انگلیسی', 'ویزه شده', 'کنسل شد', 'رد شده از طرف سیستم', 'به تعویق افتاد']; 
+                for(var s=0; s<statusList.length; s++) { 
+                    var selected = (value === statusList[s]) ? 'selected' : ''; 
+                    var icon = ''; 
+                    if(statusList[s] === 'ثبت اولیه') icon = '✅'; 
+                    else if(statusList[s] === 'ثبت اختصاص') icon = '🟣'; 
+                    else if(statusList[s] === 'ثبت روادید') icon = '🟢'; 
+                    else if(statusList[s] === 'تایید روادید') icon = '📋'; 
+                    else if(statusList[s] === 'فورم انگلیسی') icon = '📝'; 
+                    else if(statusList[s] === 'ویزه شده') icon = '🛂'; 
+                    else if(statusList[s] === 'کنسل شد') icon = '❌'; 
+                    else if(statusList[s] === 'رد شده از طرف سیستم') icon = '🚫'; 
+                    else if(statusList[s] === 'به تعویق افتاد') icon = '⏳'; 
+                    statusOptionsHtml += '<option value="' + statusList[s] + '" ' + selected + '>' + icon + ' ' + statusList[s] + '</option>'; 
+                } 
+                gridHtml += '<div class="field-group-simple"><label>' + label + '</label><select name="' + fieldName + '">' + statusOptionsHtml + '</select></div>'; 
+            }
+            else if(fieldName === 'paymentStatus') { 
                 var paymentOptionsHtml = '';
                 var paymentList = [
                     { value: 'none', label: 'باقی کل' },
                     { value: 'half', label: 'نیمه رسید' },
                     { value: 'full', label: 'رسید کل' }
                 ];
-                for (var ps = 0; ps < paymentList.length; ps++) {
+                for(var ps=0; ps<paymentList.length; ps++) {
                     var selected = (currentPaymentStatus === paymentList[ps].value) ? 'selected' : '';
                     paymentOptionsHtml += '<option value="' + paymentList[ps].value + '" ' + selected + '>' + paymentList[ps].label + '</option>';
                 }
-                gridHtml += '<div class="field-group-simple"><label>' + label + '</label><select name="' + fieldName + '" id="paymentStatusSelect">' + paymentOptionsHtml + '</select></div>';
-            } else if (fieldName === 'related') {
-                var relatedOptionsHtml = '';
-                for (var r = 0; r < relatedList.length; r++) {
-                    var selected = (value === relatedList[r]) ? 'selected' : '';
-                    relatedOptionsHtml += '<option value="' + relatedList[r] + '" ' + selected + '>' + relatedList[r] + '</option>';
-                }
-                gridHtml += '<div class="field-group-simple"><label>' + label + '</label><div class="field-with-button"><select name="' + fieldName + '" id="relatedSelect">' + relatedOptionsHtml + '</select><button type="button" class="add-btn" id="addRelatedBtn" title="افزودن مربوط نفر جدید"><i class="fas fa-plus"></i></button></div></div>';
-            } else if (fieldName === 'cartable') {
-                var optionsHtml = '';
-                for (var c = 0; c < cartableList.length; c++) {
-                    var selected = (value === cartableList[c]) ? 'selected' : '';
-                    optionsHtml += '<option value="' + cartableList[c] + '" ' + selected + '>' + cartableList[c] + '</option>';
-                }
-                gridHtml += '<div class="field-group-simple"><label>' + label + '</label><div class="field-with-button"><select name="' + fieldName + '" id="cartableSelect">' + optionsHtml + '</select><button type="button" class="add-btn" id="addCartableBtn" title="افزودن کارتابل جدید"><i class="fas fa-plus"></i></button></div></div>';
-            } else if (fieldName === 'province') {
-                var provinceOptionsHtml = '';
-                for (var p = 0; p < provinceList.length; p++) {
-                    var selected = (value === provinceList[p]) ? 'selected' : '';
-                    provinceOptionsHtml += '<option value="' + provinceList[p] + '" ' + selected + '>' + provinceList[p] + '</option>';
-                }
-                gridHtml += '<div class="field-group-simple"><label>' + label + '</label><div class="field-with-button"><select name="' + fieldName + '" id="provinceSelect">' + provinceOptionsHtml + '</select><button type="button" class="add-btn" id="addProvinceBtn" title="افزودن استان جدید"><i class="fas fa-plus"></i></button></div></div>';
-            } else if (fieldName === 'description') {
-                gridHtml += '<div class="field-group-simple"><label>' + label + '</label><textarea name="' + fieldName + '" rows="2" placeholder="اختیاری">' + (value || '') + '</textarea></div>';
-            } else {
-                var required = (fieldName === 'firstName') ? 'required' : '';
-                gridHtml += '<div class="field-group-simple"><label>' + label + '</label><input type="text" name="' + fieldName + '" value="' + (value || '') + '" ' + required + ' placeholder="اختیاری"></div>';
+                gridHtml += '<div class="field-group-simple"><label>' + label + '</label><select name="' + fieldName + '" id="paymentStatusSelect">' + paymentOptionsHtml + '</select></div>'; 
             }
+            else if(fieldName === 'related') { var relatedOptionsHtml = ''; for(var r=0; r<relatedList.length; r++) { var selected = (value === relatedList[r]) ? 'selected' : ''; relatedOptionsHtml += '<option value="' + relatedList[r] + '" ' + selected + '>' + relatedList[r] + '</option>'; } gridHtml += '<div class="field-group-simple"><label>' + label + '</label><div class="field-with-button"><select name="' + fieldName + '" id="relatedSelect">' + relatedOptionsHtml + '</select><button type="button" class="add-btn" id="addRelatedBtn" title="افزودن مربوط نفر جدید"><i class="fas fa-plus"></i></button></div></div>'; }
+            else if(fieldName === 'cartable') { var optionsHtml = ''; for(var c=0; c<cartableList.length; c++) { var selected = (value === cartableList[c]) ? 'selected' : ''; optionsHtml += '<option value="' + cartableList[c] + '" ' + selected + '>' + cartableList[c] + '</option>'; } gridHtml += '<div class="field-group-simple"><label>' + label + '</label><div class="field-with-button"><select name="' + fieldName + '" id="cartableSelect">' + optionsHtml + '</select><button type="button" class="add-btn" id="addCartableBtn" title="افزودن کارتابل جدید"><i class="fas fa-plus"></i></button></div></div>'; }
+            else if(fieldName === 'province') { var provinceOptionsHtml = ''; for(var p=0; p<provinceList.length; p++) { var selected = (value === provinceList[p]) ? 'selected' : ''; provinceOptionsHtml += '<option value="' + provinceList[p] + '" ' + selected + '>' + provinceList[p] + '</option>'; } gridHtml += '<div class="field-group-simple"><label>' + label + '</label><div class="field-with-button"><select name="' + fieldName + '" id="provinceSelect">' + provinceOptionsHtml + '</select><button type="button" class="add-btn" id="addProvinceBtn" title="افزودن استان جدید"><i class="fas fa-plus"></i></button></div></div>'; }
+            else if(fieldName === 'description') { gridHtml += '<div class="field-group-simple"><label>' + label + '</label><textarea name="' + fieldName + '" rows="2" placeholder="اختیاری">' + (value || '') + '</textarea></div>'; }
+            else { var required = (fieldName === 'firstName') ? 'required' : ''; gridHtml += '<div class="field-group-simple"><label>' + label + '</label><input type="text" name="' + fieldName + '" value="' + (value || '') + '" ' + required + ' placeholder="اختیاری"></div>'; }
         }
         gridHtml += '</div>';
-
+        
         modalDiv.innerHTML = '<div class="modal-card-sleek"><div class="modal-header-sleek"><h3><i class="fas fa-' + (isEdit ? 'user-edit' : 'user-plus') + '"></i> ' + (isEdit ? 'ویرایش مشتری' : 'ثبت مشتری جدید') + '</h3><div class="close-modal-x" id="closeCustModal">✕</div></div><div class="info-note"><i class="fas fa-info-circle"></i> فقط نام الزامی است. تاریخ به فرمت میلادی (YYYY-MM-DD) | در ثبت جدید وضعیت پرداخت پیش‌فرض «باقی کل» است</div><form id="custForm">' + gridHtml + '<button type="submit" class="submit-gold">' + (isEdit ? 'ذخیره تغییرات' : 'ثبت مشتری') + '</button></form></div>';
         document.body.appendChild(modalDiv);
         document.getElementById("closeCustModal").onclick = () => modalDiv.remove();
-        modalDiv.addEventListener('click', (e) => { if (e.target === modalDiv) modalDiv.remove(); });
-
-        document.getElementById("cardCanceled").addEventListener('change', function (e) {
+        modalDiv.addEventListener('click', (e) => { if(e.target === modalDiv) modalDiv.remove(); });
+        
+        document.getElementById("cardCanceled").addEventListener('change', function(e) {
             var hiddenInput = document.getElementById('cancelAmountHidden');
-            if (this.checked) {
+            if(this.checked) {
                 var amount = prompt("مقدار پول کنسلی را به افغانی وارد کنید (مثلاً 6000000):");
-                if (amount && !isNaN(parseInt(amount))) {
+                if(amount && !isNaN(parseInt(amount))) {
                     var amountNum = parseInt(amount);
                     showToast('مبلغ کنسلی: ' + formatAfghani(amountNum) + ' به مبلغ کل اضافه شد');
-                    if (!hiddenInput) {
+                    if(!hiddenInput) {
                         hiddenInput = document.createElement('input');
                         hiddenInput.type = 'hidden';
                         hiddenInput.name = 'cancelAmount';
@@ -1717,49 +1822,23 @@
                 } else {
                     this.checked = false;
                     alert('مبلغ نامعتبر!');
-                    if (hiddenInput) hiddenInput.value = '';
+                    if(hiddenInput) hiddenInput.value = '';
                 }
             } else {
-                if (hiddenInput) hiddenInput.value = '';
+                if(hiddenInput) hiddenInput.value = '';
             }
         });
-
-        document.getElementById("addCartableBtn").onclick = async function () {
-            var newCartable = prompt("نام کارتابل جدید را وارد کنید:");
-            if (newCartable && newCartable.trim() !== '') {
-                newCartable = newCartable.trim();
-                await addCartableToFirebase(newCartable);
-                var select = document.getElementById("cartableSelect");
-                var option = document.createElement('option');
-                option.value = newCartable;
-                option.text = newCartable;
-                option.selected = true;
-                select.appendChild(option);
-            }
-        };
-
-        document.getElementById("addRelatedBtn").onclick = async function () {
-            var newRelated = prompt("نام مربوط نفر جدید را وارد کنید:");
-            if (newRelated && newRelated.trim() !== '') {
-                newRelated = newRelated.trim();
-                var result = await addRelatedToFirebase(newRelated);
-                if (result) {
-                    var select = document.getElementById("relatedSelect");
-                    var option = document.createElement('option');
-                    option.value = newRelated;
-                    option.text = newRelated;
-                    option.selected = true;
-                    select.appendChild(option);
-                }
-            }
-        };
-
-        document.getElementById("addProvinceBtn").onclick = async function () {
+        
+        document.getElementById("addCartableBtn").onclick = async function() { var newCartable = prompt("نام کارتابل جدید را وارد کنید:"); if(newCartable && newCartable.trim() !== '') { newCartable = newCartable.trim(); await addCartableToFirebase(newCartable); var select = document.getElementById("cartableSelect"); var option = document.createElement('option'); option.value = newCartable; option.text = newCartable; option.selected = true; select.appendChild(option); } };
+        
+        document.getElementById("addRelatedBtn").onclick = async function() { var newRelated = prompt("نام مربوط نفر جدید را وارد کنید:"); if(newRelated && newRelated.trim() !== '') { newRelated = newRelated.trim(); var result = await addRelatedToFirebase(newRelated); if(result) { var select = document.getElementById("relatedSelect"); var option = document.createElement('option'); option.value = newRelated; option.text = newRelated; option.selected = true; select.appendChild(option); } } };
+        
+        document.getElementById("addProvinceBtn").onclick = async function() { 
             var newProvince = prompt("نام استان جدید را وارد کنید:");
-            if (newProvince && newProvince.trim() !== '') {
+            if(newProvince && newProvince.trim() !== '') {
                 newProvince = newProvince.trim();
                 var result = await addProvinceToFirebase(newProvince);
-                if (result) {
+                if(result) {
                     var select = document.getElementById("provinceSelect");
                     var option = document.createElement('option');
                     option.value = newProvince;
@@ -1769,168 +1848,92 @@
                 }
             }
         };
-
+        
         var form = modalDiv.querySelector("#custForm");
         form.onsubmit = async (e) => {
             e.preventDefault();
             var formData = {};
-            for (var i = 0; i < allFields.length; i += 2) {
-                var name = allFields[i + 1];
+            for(var i=0; i<allFields.length; i+=2) {
+                var name = allFields[i+1];
                 var input = form.querySelector('[name="' + name + '"]');
-                if (input) formData[name] = input.value;
+                if(input) formData[name] = input.value;
             }
             formData.hasCard = document.getElementById("hasCard").checked || false;
             formData.hasProblem = document.getElementById("hasProblem").checked || false;
             formData.cardCanceled = document.getElementById("cardCanceled").checked || false;
-
+            
             var cancelInput = form.querySelector('[name="cancelAmount"]');
-            formData.cancelAmount = cancelInput ? cancelInput.value : '';
-
-            if (!formData.firstName) { alert("لطفاً نام مشتری را وارد کنید"); return; }
-            if (!formData.status) formData.status = 'ثبت اولیه';
-            if (!formData.paymentStatus) formData.paymentStatus = 'none';
-
-            if (isEdit && cust) await saveCustomerToFirebase(formData, cust.firebaseId);
-            else await saveCustomerToFirebase(formData);
+            if(cancelInput) {
+                formData.cancelAmount = cancelInput.value;
+            } else {
+                formData.cancelAmount = '';
+            }
+            
+            if(!formData.firstName) {
+                alert("لطفاً نام مشتری را وارد کنید");
+                return;
+            }
+            if(!formData.status) formData.status = 'ثبت اولیه';
+            if(!formData.paymentStatus) formData.paymentStatus = 'none';
+            
+            if(isEdit && cust) {
+                await saveCustomerToFirebase(formData, cust.firebaseId);
+            } else {
+                await saveCustomerToFirebase(formData);
+            }
             modalDiv.remove();
         };
     }
 
-    // ======================== مدیریت لاگین ========================
-    const loginPage = document.getElementById('loginPage');
-    const appContainer = document.getElementById('app');
-    const loginForm = document.getElementById('loginForm');
-    const loginError = document.getElementById('loginError');
-    const loginSubmitBtn = document.getElementById('loginSubmitBtn');
-    const userEmailLabel = document.getElementById('userEmailLabel');
-
-    function showLoginError(msg) {
-        loginError.textContent = msg;
-        loginError.classList.add('show');
-    }
-    function hideLoginError() {
-        loginError.classList.remove('show');
-        loginError.textContent = '';
-    }
-
-    // تلاش برای حفظ نشست در مرورگر
-    setPersistence(auth, browserLocalPersistence).catch(console.error);
-
-    loginForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        hideLoginError();
-        const email = document.getElementById('loginEmail').value.trim();
-        const password = document.getElementById('loginPassword').value;
-        if (!email || !password) {
-            showLoginError('ایمیل و رمز عبور را وارد کنید.');
-            return;
-        }
-        loginSubmitBtn.disabled = true;
-        loginSubmitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> در حال ورود...';
-        try {
-            await signInWithEmailAndPassword(auth, email, password);
-            // onAuthStateChanged بقیه کارها را انجام می‌دهد
-        } catch (err) {
-            console.error(err);
-            let msg = 'خطا در ورود.';
-            if (err.code === 'auth/invalid-email') msg = 'ایمیل نامعتبر است.';
-            else if (err.code === 'auth/user-not-found') msg = 'کاربری با این ایمیل یافت نشد.';
-            else if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') msg = 'رمز عبور اشتباه است.';
-            else if (err.code === 'auth/too-many-requests') msg = 'تعداد تلاش‌ها زیاد شد. کمی صبر کنید.';
-            else if (err.code === 'auth/network-request-failed') msg = 'خطای شبکه. اتصال اینترنت را بررسی کنید.';
-            else msg = err.message;
-            showLoginError(msg);
-        } finally {
-            loginSubmitBtn.disabled = false;
-            loginSubmitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> ورود';
-        }
-    });
-
-    // گوش دادن به وضعیت ورود
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            // فقط ایمیل مجاز
-            const allowed = 'hamgam2026@gmail.com';
-            if ((user.email || '').toLowerCase() !== allowed.toLowerCase()) {
-                signOut(auth);
-                showLoginError('این ایمیل مجاز به ورود نیست.');
-                return;
-            }
-            loginPage.style.display = 'none';
-            appContainer.style.display = 'block';
-            userEmailLabel.textContent = user.email;
-            dataLoaded = false;
-            // اطمینان از اینکه داده‌ها فقط یک بار لود شوند
-            setTimeout(() => { loadFromFirebase(); }, 100);
-        } else {
-            // خروج
-            appContainer.style.display = 'none';
-            loginPage.style.display = 'flex';
-            dataLoaded = false;
-        }
-    });
-
-    // دکمه خروج
-    document.getElementById('logoutBtn').addEventListener('click', async () => {
-        if (!confirm('از حساب کاربری خارج می‌شوید؟')) return;
-        try { await signOut(auth); }
-        catch (e) { console.error(e); }
-    });
-    document.getElementById('logoutBtn2').addEventListener('click', async () => {
-        if (!confirm('از حساب کاربری خارج می‌شوید؟')) return;
-        try { await signOut(auth); }
-        catch (e) { console.error(e); }
-    });
-
     // ======================== رویدادهای صفحه ========================
-    document.getElementById("openEmployerPageBtn").addEventListener("click", function () {
-        document.getElementById("mainPage").classList.add("hidden");
-        document.getElementById("employerPage").classList.remove("hidden");
-        loadEmployersFromFirebase();
-    });
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("openEmployerPageBtn").addEventListener("click", function() {
+            document.getElementById("mainPage").classList.add("hidden");
+            document.getElementById("employerPage").classList.remove("hidden");
+            loadEmployersFromFirebase();
+        });
 
-    document.getElementById("backToMainBtn").addEventListener("click", function () {
-        document.getElementById("employerPage").classList.add("hidden");
-        document.getElementById("mainPage").classList.remove("hidden");
-        renderFullData();
-    });
+        document.getElementById("backToMainBtn").addEventListener("click", function() {
+            document.getElementById("employerPage").classList.add("hidden");
+            document.getElementById("mainPage").classList.remove("hidden");
+            renderFullData();
+        });
 
-    document.getElementById("openEmployerCreateBtn").addEventListener("click", openNewEmployerModal);
+        document.getElementById("openEmployerCreateBtn").addEventListener("click", openNewEmployerModal);
 
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            currentEmployerTab = this.getAttribute('data-tab');
+        // رویداد تب‌های کارفرمایان
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentEmployerTab = this.getAttribute('data-tab');
+                employerPage = 1;
+                renderEmployerTable();
+            });
+        });
+
+        document.getElementById("searchEmployer").addEventListener("input", function(e) {
+            employerSearch = e.target.value;
             employerPage = 1;
             renderEmployerTable();
         });
-    });
 
-    document.getElementById("searchEmployer").addEventListener("input", function (e) {
-        employerSearch = e.target.value;
-        employerPage = 1;
-        renderEmployerTable();
-    });
+        document.getElementById("prevEmployerBtn").addEventListener("click", function() { if(employerPage > 1) { employerPage--; renderEmployerTable(); } });
+        document.getElementById("nextEmployerBtn").addEventListener("click", function() { var total = Math.ceil(getFilteredEmployers().length / employerRowsPerPage); if(employerPage < total) { employerPage++; renderEmployerTable(); } });
 
-    document.getElementById("prevEmployerBtn").addEventListener("click", function () {
-        if (employerPage > 1) { employerPage--; renderEmployerTable(); }
-    });
-    document.getElementById("nextEmployerBtn").addEventListener("click", function () {
-        var total = Math.ceil(getFilteredEmployers().length / employerRowsPerPage);
-        if (employerPage < total) { employerPage++; renderEmployerTable(); }
-    });
+        document.getElementById("searchGlobal").addEventListener("input", function(e) { searchKeyword = e.target.value; currentPage = 1; renderFullData(); });
+        document.getElementById("cartableFilter").addEventListener("change", function(e) { selectedCartable = e.target.value; currentPage = 1; renderFullData(); });
+        document.getElementById("statusFilter").addEventListener("change", function(e) { selectedStatus = e.target.value; currentPage = 1; renderFullData(); });
+        document.getElementById("relatedFilter").addEventListener("change", function(e) { selectedRelated = e.target.value; currentPage = 1; renderFullData(); });
+        document.getElementById("provinceFilter").addEventListener("change", function(e) { selectedProvince = e.target.value; currentPage = 1; renderFullData(); });
+        document.getElementById("problemFilter").addEventListener("change", function(e) { selectedProblem = e.target.value; currentPage = 1; renderFullData(); });
+        document.getElementById("paymentFilter").addEventListener("change", function(e) { selectedPayment = e.target.value; currentPage = 1; renderFullData(); });
+        document.getElementById("prevPageBtn").addEventListener("click", function() { if(currentPage > 1) { currentPage--; renderFullData(); } });
+        document.getElementById("nextPageBtn").addEventListener("click", function() { var total = Math.ceil(getFilteredList().length / rowsPerPage); if(currentPage < total) { currentPage++; renderFullData(); } });
+        document.getElementById("openCreateModalBtn").addEventListener("click", openNewModal);
 
-    document.getElementById("searchGlobal").addEventListener("input", function (e) { searchKeyword = e.target.value; currentPage = 1; renderFullData(); });
-    document.getElementById("cartableFilter").addEventListener("change", function (e) { selectedCartable = e.target.value; currentPage = 1; renderFullData(); });
-    document.getElementById("statusFilter").addEventListener("change", function (e) { selectedStatus = e.target.value; currentPage = 1; renderFullData(); });
-    document.getElementById("relatedFilter").addEventListener("change", function (e) { selectedRelated = e.target.value; currentPage = 1; renderFullData(); });
-    document.getElementById("provinceFilter").addEventListener("change", function (e) { selectedProvince = e.target.value; currentPage = 1; renderFullData(); });
-    document.getElementById("problemFilter").addEventListener("change", function (e) { selectedProblem = e.target.value; currentPage = 1; renderFullData(); });
-    document.getElementById("paymentFilter").addEventListener("change", function (e) { selectedPayment = e.target.value; currentPage = 1; renderFullData(); });
-    document.getElementById("prevPageBtn").addEventListener("click", function () { if (currentPage > 1) { currentPage--; renderFullData(); } });
-    document.getElementById("nextPageBtn").addEventListener("click", function () { var total = Math.ceil(getFilteredList().length / rowsPerPage); if (currentPage < total) { currentPage++; renderFullData(); } });
-    document.getElementById("openCreateModalBtn").addEventListener("click", openNewModal);
+        loadFromFirebase();
+    });
 </script>
 </body>
 </html>
